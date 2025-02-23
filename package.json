@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DocFoxHound/BeowulfAPI/issues"
   },
-  "homepage": "https://github.com/DocFoxHound/BeowulfAPI#readme"
+  "homepage": "https://github.com/DocFoxHound/BeowulfAPI#readme",
+  "dependencies": {
+    "@sequelize/postgres": "^7.0.0-alpha.45"
+  }
 }
