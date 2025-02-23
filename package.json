@@ -18,6 +18,11 @@
   },
   "homepage": "https://github.com/DocFoxHound/BeowulfAPI#readme",
   "dependencies": {
-    "@sequelize/postgres": "^7.0.0-alpha.45"
+    "@sequelize/postgres": "^7.0.0-alpha.45",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express-generator": "^4.16.1",
+    "jsonify": "^0.0.1",
+    "morgan": "^1.10.0"
   }
 }
