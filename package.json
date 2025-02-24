@@ -21,8 +21,10 @@
     "@sequelize/postgres": "^7.0.0-alpha.45",
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "express-generator": "^4.16.1",
     "jsonify": "^0.0.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "sequelize": "^6.37.5"
   }
 }
