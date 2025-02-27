@@ -35,10 +35,11 @@ User.init({
         allowNull: true,
         unique: false
     },
-    date: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        unique: false
+    rank: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        unique: true,
+        primaryKey: true
     },
     // Add more fields as necessary
 }, {

@@ -1,9 +1,9 @@
-const UserInQueueModel = require('../models/userInQueueModel');
+const Queue = require('../models/queueModel');
 
 // Handle GET request for all users
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await UserInQueueModel.find();
+        const users = await Queue.find();
         res.status(200).json(users);
     } catch (error) {
         res.status(500).send(error.message);
@@ -13,7 +13,7 @@ exports.getAllUsers = async (req, res) => {
 // Handle POST request to create a new user in the queue
 exports.createUser = async (req, res) => {
     try {
-        const newUser = new UserInQueueModel(req.body);
+        const newUser = new Queue(req.body);
         const savedUser = await newUser.save();
         res.status(201).json(savedUser);
     } catch (error) {
@@ -24,7 +24,7 @@ exports.createUser = async (req, res) => {
 // Handle DELETE request to delete a user by ID
 exports.deleteUser = async (req, res) => {
     try {
-        const deletedUser = await UserInQueueModel.findByIdAndDelete(req.params.id);
+        const deletedUser = await Queue.findByIdAndDelete(req.params.id);
         if (deletedUser) {
             res.status(200).send('User deleted');
         } else {

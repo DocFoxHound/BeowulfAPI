@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Assuming you have a config file for Sequelize
 
-class UserInQueue extends Model {}
+class Queue extends Model {}
 
-UserInQueue.init({
+Queue.init({
     id: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -20,18 +20,8 @@ UserInQueue.init({
         allowNull: true,
         unique: false
     },
-    corsair_level: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        unique: false
-    },
-    raptor_level: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        unique: false
-    },
-    raider_level: {
-        type: DataTypes.INTEGER,
+    createdAt: {
+        type: DataTypes.DATE,
         allowNull: true,
         unique: false
     },
@@ -40,8 +30,18 @@ UserInQueue.init({
         allowNull: true,
         unique: false
     },
+    queue_corsair_desc: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
     queue_raptor: {
         type: DataTypes.BOOLEAN,
+        allowNull: true,
+        unique: false
+    },
+    queue_raptor_desc: {
+        type: DataTypes.STRING,
         allowNull: true,
         unique: false
     },
@@ -50,33 +50,29 @@ UserInQueue.init({
         allowNull: true,
         unique: false
     },
-    queue_promote_crew: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-        unique: false
-    },
-    queue_promote_marauder: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-        unique: false
-    },
-    queue_description: {
+    queue_raider_desc: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: false
     },
-    date: {
-        type: DataTypes.DATE,
+    queue_promote: {
+        type: DataTypes.BOOLEAN,
         allowNull: true,
         unique: false
     },
+    queue_promote_desc: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
-    modelName: 'User', // We need to choose the model name
-    tableName: 'queue_help', // Specify the table name
-    timestamps: true // Turn on Sequelize auto creating updatedAt and createdAt
+    modelName: 'Queue', // We need to choose the model name
+    tableName: 'queue', // Specify the table name
+    timestamps: false // Turn on Sequelize auto creating updatedAt and createdAt
 });
 
 // Export the model
-module.exports = UserInQueue;
+module.exports = Queue;
