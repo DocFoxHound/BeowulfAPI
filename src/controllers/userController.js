@@ -35,11 +35,28 @@ exports.createUser = async (req, res) => {
     }
 };
 
+// // Handle PUT request to update a user by ID
+// exports.updateUser = async (req, res) => {
+//     try {
+//         const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+//         if (updatedUser) {
+//             res.status(200).json(updatedUser);
+//         } else {
+//             res.status(404).send('User not found');
+//         }
+//     } catch (error) {
+//         res.status(500).send(error.message);
+//     }
+// };
+
 // Handle PUT request to update a user by ID
 exports.updateUser = async (req, res) => {
     try {
-        const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (updatedUser) {
+        // Find the user first
+        const user = await UserModel.findByPk(req.params.id);
+        if (user) {
+            // Update the user with new data from req.body
+            const updatedUser = await user.update(req.body);
             res.status(200).json(updatedUser);
         } else {
             res.status(404).send('User not found');
@@ -51,9 +68,10 @@ exports.updateUser = async (req, res) => {
 
 // Handle DELETE request to delete a user by ID
 exports.deleteUser = async (req, res) => {
+    const userId = req.params.id;
     try {
-        const deletedUser = await UserModel.findByIdAndDelete(req.params.id);
-        if (deletedUser) {
+        const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *;', [userId]);
+        if (result.rows.length > 0) {
             res.status(200).send('User deleted');
         } else {
             res.status(404).send('User not found');

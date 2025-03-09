@@ -6,7 +6,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     host: process.env.DB_HOST,
     dialect: 'postgres',  // Specify using PostgreSQL
     port: process.env.DB_PORT || 5432,  // Default PostgreSQL port
-    logging: console.log,  // Toggle logging SQL statements
+    // logging: console.log,  // Toggle logging SQL statements
     dialectOptions: {
         ssl: {
             require: process.env.DB_SSL === 'true',  // Require SSL if the environment variable is set to true

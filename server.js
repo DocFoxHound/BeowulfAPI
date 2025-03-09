@@ -7,10 +7,12 @@ const morgan = require('morgan');
 // Import route files
 const userRoutes = require('./src/routes/userRoutes');
 const queueRoutes = require('./src/routes/queueRoutes');
+const rankRoutes = require("./src/routes/rankRolesRoutes")
+const prestigeRoutes = require("./src/routes/prestigeRolesRoutes")
+const completedEntry = require("./src/routes/completedQueueRoutes")
 
 // Load environment variables
 dotenv.config();
-console.log("Test")
 // Create an Express application
 const app = express();
 
@@ -20,7 +22,10 @@ app.use(bodyParser.json());           // Parses JSON data in requests
 app.use(bodyParser.urlencoded({ extended: true })); // Parses URL-encoded data
 
 // Routes
+app.use('/api/ranks', rankRoutes);
+app.use('/api/prestiges', prestigeRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/completedentry', completedEntry);
 app.use('/api/queue', queueRoutes);
 
 // Catch 404 and forward to error handler
