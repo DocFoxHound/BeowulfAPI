@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 
 // Import route files
+const classRoutes = require("./src/routes/classRoutes")
 const userRoutes = require('./src/routes/userRoutes');
 const queueRoutes = require('./src/routes/queueRoutes');
 const rankRoutes = require("./src/routes/rankRolesRoutes")
@@ -22,6 +23,7 @@ app.use(bodyParser.json());           // Parses JSON data in requests
 app.use(bodyParser.urlencoded({ extended: true })); // Parses URL-encoded data
 
 // Routes
+app.use('/api/class', classRoutes);
 app.use('/api/ranks', rankRoutes);
 app.use('/api/prestiges', prestigeRoutes);
 app.use('/api/users', userRoutes);
