@@ -2,19 +2,22 @@ const express = require('express');
 const router = express.Router();
 const completedQueueController = require('../controllers/completedQueueController');
 
-// GET request for retrieving a list of all users
-router.get('/', completedQueueController.getAllUsers);
+// GET request for retrieving a list of all entries
+router.get('/', completedQueueController.getAllEntries);
 
-// GET request for retrieving a single user by ID
-router.get('/:id', completedQueueController.getUserById);
+// GET request for retrieving a single entry by ID
+router.get('/:id', completedQueueController.getEntryById);
 
-// POST request for creating a new user
-router.post('/', completedQueueController.createUser);
+// GET request for retrieving a list of entries by userId and classId
+router.get('/:userid/:classid', completedQueueController.getEntryByUserAndClassIds);
 
-// DELETE request for deleting a user by ID
-router.delete('/:id', completedQueueController.deleteUser);
+// POST request for creating a new entry
+router.post('/', completedQueueController.createEntry);
 
-// PUT request for updating an existing user by ID
-router.put('/:id', completedQueueController.updateUser);
+// DELETE request for deleting a entry by ID
+router.delete('/:id', completedQueueController.deleteEntry);
+
+// PUT request for updating an existing entry by ID
+router.put('/:id', completedQueueController.updateEntry);
 
 module.exports = router;

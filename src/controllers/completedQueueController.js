@@ -1,7 +1,8 @@
 const CompletedQueue = require('../models/completedQueueModel');
+const pool = require('../config/database');
 
 // Handle GET request for all users
-exports.getAllUsers = async (req, res) => {
+exports.getAllEntries = async (req, res) => {
     try {
         const users = await CompletedQueue.findAll();
         res.status(200).json(users);
@@ -11,21 +12,37 @@ exports.getAllUsers = async (req, res) => {
 };
 
 // Handle GET request for a single user by ID
-exports.getUserById = async (req, res) => {
+exports.getEntryById = async (req, res) => {
     try {
         const user = await CompletedQueue.findByPk(req.params.id);
         if (user) {
             res.status(200).json(user);
         } else {
-            res.status(404).send('User not found');
+            res.status(404).send('Entry not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
+// Handle GET request for a single user by ID
+exports.getEntryByUserAndClassIds = async (req, res) => {
+    const { userid, classid } = req.params;
+    try {
+        const entries = await CompletedQueue.findAll({
+            where: {
+                user_id: userid,
+                class_id: classid
+            }
+        });
+        res.status(200).json(entries);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 // Handle POST request to create a new user in the queue
-exports.createUser = async (req, res) => {
+exports.createEntry = async (req, res) => {
     console.log("Create entry for completed queue")
     try {
         const newUser = new CompletedQueue(req.body);
@@ -37,22 +54,23 @@ exports.createUser = async (req, res) => {
 };
 
 // Handle DELETE request to delete a user by ID
-exports.deleteUser = async (req, res) => {
-    const userId = req.params.id;
+exports.deleteEntry = async (req, res) => {
+    const entryId = req.params.id;
+    console.log(`Received entryId: ${entryId}`);
+    if (!entryId) {
+        return res.status(400).send('Entry ID is required');
+    }
+
     try {
-        const result = await pool.query('DELETE FROM completed_queue_tickets WHERE id = $1 RETURNING *;', [userId]);
-        if (result.rows.length > 0) {
-            res.status(200).send('User deleted');
-        } else {
-            res.status(404).send('User not found');
-        }
+        const result = await pool.query(`DELETE FROM completed_queue_tickets WHERE ticket_id = ${entryId} RETURNING *;`);
     } catch (error) {
+        console.error(`Error executing query: ${error.message}`);
         res.status(500).send(error.message);
     }
 };
 
 // Handle PUT request to update a user by ID
-exports.updateUser = async (req, res) => {
+exports.updateEntry = async (req, res) => {
     try {
         // Find the user first
         const user = await CompletedQueue.findByPk(req.params.id);
@@ -61,7 +79,7 @@ exports.updateUser = async (req, res) => {
             const updatedUser = await user.update(req.body);
             res.status(200).json(updatedUser);
         } else {
-            res.status(404).send('User not found');
+            res.status(404).send('Entry not found');
         }
     } catch (error) {
         res.status(500).send(error.message);

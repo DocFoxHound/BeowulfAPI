@@ -45,9 +45,9 @@ CompletedQueue.init({
         allowNull: true,
         unique: false
     },
-    ticket_name: {
-        type: DataTypes.STRING,
-        allowNull: true,
+    class_id: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
         unique: false
     },
     // Add more fields as necessary
