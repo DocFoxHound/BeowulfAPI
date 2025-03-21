@@ -1,5 +1,6 @@
 const CompletedQueue = require('../models/completedQueueModel');
 const pool = require('../config/database');
+const { Op } = require('sequelize');
 
 // Handle GET request for all users
 exports.getAllEntries = async (req, res) => {
@@ -33,6 +34,23 @@ exports.getEntryByUserAndClassIds = async (req, res) => {
             where: {
                 user_id: userid,
                 class_id: classid
+            }
+        });
+        res.status(200).json(entries);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Handle GET request for a single user by ID
+exports.getEntriesBetweenDates = async (req, res) => {
+    const { startdate, enddate } = req.query;
+    try {
+        const entries = await CompletedQueue.findAll({
+            where: {
+                createdAt: {
+                    [Op.between]: [new Date(startdate), new Date(enddate)]
+                }
             }
         });
         res.status(200).json(entries);
