@@ -12,6 +12,7 @@ const rankRoutes = require("./src/routes/rankRolesRoutes")
 const prestigeRoutes = require("./src/routes/prestigeRolesRoutes")
 const completedEntryRoutes = require("./src/routes/completedQueueRoutes")
 const badgeRoutes = require("./src/routes/badgeRoutes")
+const uexRoutes = require("./src/routes/uexRoutes")
 
 // Load environment variables
 dotenv.config();
@@ -31,6 +32,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/completedentry', completedEntryRoutes);
 app.use('/api/queue', queueRoutes);
 app.use('/api/badges', badgeRoutes)
+app.use('/api/uex', uexRoutes)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -1,3 +1,4 @@
+const pool = require('../config/database');
 const BadgeModel = require('../models/badgeModel');
 
 // Handle GET request for all __badge
@@ -52,24 +53,45 @@ exports.updateBadge = async (req, res) => {
     }
 };
 
-// Handle DELETE request to delete a __badge by ID
+// // Handle DELETE request to delete a __badge by ID
+// exports.deleteBadge = async (req, res) => {
+//     const __badgeId = req.params.id;
+//     console.log(__badgeId);
+//     try {
+//         const result = await pool.query('DELETE FROM badges WHERE id = $1 RETURNING *;', [__badgeId]);
+//         if (result.rows.length > 0) {
+//             res.status(200).send('Badge deleted');
+//         } else {
+//             res.status(404).send('Badge not found');
+//         }
+//     } catch (error) {
+//         res.status(500).send(error.message);
+//     }
+// };
+
+// Handle DELETE request to delete a badge by ID
 exports.deleteBadge = async (req, res) => {
-    const __badgeId = req.params.id;
+    const badgeId = req.params.id;
+    if (!badgeId) {
+        return res.status(400).send('Badge ID is required');
+    }
     try {
-        const result = await pool.query('DELETE FROM badges WHERE id = $1 RETURNING *;', [__badgeId]);
-        if (result.rows.length > 0) {
+        const badge = await BadgeModel.findByPk(badgeId);
+        if (badge) {
+            await badge.destroy();
             res.status(200).send('Badge deleted');
         } else {
             res.status(404).send('Badge not found');
         }
     } catch (error) {
+        console.error(`Error deleting badge: ${error.message}`);
         res.status(500).send(error.message);
     }
 };
 
 // Handle GET request for badges by user ID
 exports.getBadgesByUserId = async (req, res) => {
-    const { user_id } = req.params;
+    const { user_id } = req.query;
     try {
         const badges = await BadgeModel.findAll({
             where: {

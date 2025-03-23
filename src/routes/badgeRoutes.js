@@ -6,7 +6,7 @@ const badgeController = require('../controllers/badgeController');
 router.get('/', badgeController.getAllBadges);
 
 // GET request for retrieving all badges by user ID
-router.get('/user/:user_id', badgeController.getBadgesByUserId);
+router.get('/user', badgeController.getBadgesByUserId);
 
 // POST request for creating a new user
 router.post('/', badgeController.createBadge);

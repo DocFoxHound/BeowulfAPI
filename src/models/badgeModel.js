@@ -25,7 +25,7 @@ Badge.init({
         allowNull: false,
         unique: false
     },
-    weight: {
+    badge_weight: {
         type: DataTypes.BIGINT,
         allowNull: false,
         unique: false,
