@@ -31,7 +31,7 @@ exports.getCityById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -59,7 +59,7 @@ exports.updateCity = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -87,7 +87,7 @@ exports.getCommodityById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -115,7 +115,7 @@ exports.updateCommodity = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -143,7 +143,7 @@ exports.getOutpostById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -171,7 +171,7 @@ exports.updateOutpost = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -199,7 +199,7 @@ exports.getPlanetById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -227,7 +227,7 @@ exports.updatePlanet = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -255,7 +255,7 @@ exports.getSpaceStationById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -283,7 +283,7 @@ exports.updateSpaceStation = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -311,7 +311,7 @@ exports.getStarSystemById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -339,7 +339,7 @@ exports.updateStarSystem = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -367,7 +367,7 @@ exports.getTerminalById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -395,7 +395,7 @@ exports.updateTerminal = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Entity not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -423,7 +423,7 @@ exports.getTerminalPricesById = async (req, res) => {
         if (id) {
             res.status(200).json(id);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Terminal Price not found');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -451,7 +451,7 @@ exports.updateTerminalPrices = async (req, res) => {
             const updatedEntity = await entity.update(req.body);
             res.status(200).json(updatedEntity);
         } else {
-            res.status(404).send('City not found');
+            res.status(404).send('Terminal Price not found');
         }
     } catch (error) {
         res.status(500).send(error.message);

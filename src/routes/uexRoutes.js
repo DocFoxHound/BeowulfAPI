@@ -87,16 +87,16 @@ router.put('/spacestations/:id', uexController.updateSpaceStation);
 //--------------------------------------------
 
 // GET request for retrieving a list of all entities
-router.get('/starsystem/', uexController.getAllStarSystems);
+router.get('/starsystems/', uexController.getAllStarSystems);
 
 // GET request for retrieving a single entity by ID
-router.get('/starsystem/:id', uexController.getStarSystemById);
+router.get('/starsystems/:id', uexController.getStarSystemById);
 
 // POST request for creating a new entity
-router.post('/starsystem/', uexController.createStarSystem);
+router.post('/starsystems/', uexController.createStarSystem);
 
 // PUT request for updating an existing entity by ID
-router.put('/starsystem/:id', uexController.updateStarSystem);
+router.put('/starsystems/:id', uexController.updateStarSystem);
 
 //--------------------------------------------
 //             TERMINAL ROUTES
@@ -119,16 +119,16 @@ router.put('/terminals/:id', uexController.updateTerminal);
 //--------------------------------------------
 
 // GET request for retrieving a list of all entities
-router.get('/terminals/', uexController.getAllTerminalPrices);
+router.get('/terminalprices/', uexController.getAllTerminalPrices);
 
 // GET request for retrieving a single entity by ID
-router.get('/terminals/:id', uexController.getTerminalPricesById);
+router.get('/terminalprices/:id', uexController.getTerminalPricesById);
 
 // POST request for creating a new entity
-router.post('/terminals/', uexController.createTerminalPrices);
+router.post('/terminalprices/', uexController.createTerminalPrices);
 
 // PUT request for updating an existing entity by ID
-router.put('/terminals/:id', uexController.updateTerminalPrices);
+router.put('/terminalprices/:id', uexController.updateTerminalPrices);
 
 
 

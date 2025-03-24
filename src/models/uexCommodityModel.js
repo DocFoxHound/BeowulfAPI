@@ -36,7 +36,7 @@ Commodity.init({
         unique: false,
     },
     price_buy: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: true,
         unique: false,
     },
@@ -46,7 +46,7 @@ Commodity.init({
         unique: false,
     },
     is_available: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: true,
         unique: false,
     },
