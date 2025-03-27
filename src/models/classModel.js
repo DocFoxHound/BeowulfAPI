@@ -35,6 +35,11 @@ Class.init({
         allowNull: false,
         unique: false
     },
+    prerequisites: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
