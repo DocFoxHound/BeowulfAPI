@@ -70,14 +70,19 @@ exports.updateUser = async (req, res) => {
 // Handle DELETE request to delete a user by ID
 exports.deleteUser = async (req, res) => {
     const userId = req.params.id;
+    if (!userId) {
+        return res.status(400).send('User ID is required');
+    }
     try {
-        const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *;', [userId]);
-        if (result.rows.length > 0) {
+        const user = await UserModel.findByPk(userId);
+        if (user) {
+            await user.destroy();
             res.status(200).send('User deleted');
         } else {
             res.status(404).send('User not found');
         }
     } catch (error) {
+        console.error(`Error deleting user: ${error.message}`);
         res.status(500).send(error.message);
     }
 };
