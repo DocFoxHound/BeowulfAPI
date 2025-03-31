@@ -15,6 +15,9 @@ const badgeRoutes = require("./src/routes/badgeRoutes")
 const uexRoutes = require("./src/routes/uexRoutes")
 const threadRoutes = require('./src/routes/threadRoutes');
 const messageRoutes = require('./src/routes/messageRoutes');
+const blackBoxRoutes = require('./src/routes/blackBoxRoutes');
+const hitTrackRoutes = require('./src/routes/hitTrackerRoutes');
+const shipLogRoutes = require('./src/routes/shipLogRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -37,6 +40,9 @@ app.use('/api/badges', badgeRoutes)
 app.use('/api/uex', uexRoutes)
 app.use('/api/threads', threadRoutes);
 app.use('/api/messages', messageRoutes)
+app.use('/api/blackbox', blackBoxRoutes)
+app.use('/api/hittracker', hitTrackRoutes)
+app.use('/api/shiplog', shipLogRoutes)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
