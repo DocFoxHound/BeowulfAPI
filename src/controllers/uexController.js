@@ -7,6 +7,8 @@ const SpaceStationModel = require('../models/uexSpaceStationModel');
 const StarSystemModel = require('../models/uexStarSystemModel');
 const TerminalModel = require('../models/uexTerminalModel');
 const TerminalPricesModel = require('../models/uexTerminalPricesModel');
+const ShipModel = require('../models/uexShipModel');
+
 
 
 //--------------------------------------------
@@ -334,6 +336,63 @@ exports.updateStarSystem = async (req, res) => {
     try {
         // Find the __badge first
         const entity = await StarSystemModel.findByPk(req.params.id);
+        if (entity) {
+            // Update the __badge with new data from req.body
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//               SHIP CONTROLLER              ShipModel
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllShips = async (req, res) => {
+    try {
+        const entity = await ShipModel.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getShipById = async (req, res) => {
+    try {
+        const id = await ShipModel.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create a entity
+exports.createShip = async (req, res) => {
+    try {
+        const newEntity = new ShipModel(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateShip = async (req, res) => {
+    try {
+        // Find the __badge first
+        const entity = await ShipModel.findByPk(req.params.id);
         if (entity) {
             // Update the __badge with new data from req.body
             const updatedEntity = await entity.update(req.body);

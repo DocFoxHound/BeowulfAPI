@@ -18,6 +18,8 @@ const messageRoutes = require('./src/routes/messageRoutes');
 const blackBoxRoutes = require('./src/routes/blackBoxRoutes');
 const hitTrackRoutes = require('./src/routes/hitTrackerRoutes');
 const shipLogRoutes = require('./src/routes/shipLogRoutes');
+const gameVersionRoutes = require('./src/routes/gameVersionRoutes');
+const lessonsLearnedController = require('./src/routes/lessonLearnedRoutes')
 
 // Load environment variables
 dotenv.config();
@@ -43,6 +45,8 @@ app.use('/api/messages', messageRoutes)
 app.use('/api/blackbox', blackBoxRoutes)
 app.use('/api/hittracker', hitTrackRoutes)
 app.use('/api/shiplog', shipLogRoutes)
+app.use('/api/gameversion', gameVersionRoutes)
+app.use('/api/lessonslearned', lessonsLearnedController)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

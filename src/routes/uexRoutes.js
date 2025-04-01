@@ -18,6 +18,7 @@ router.post('/cities/', uexController.createCity);
 // PUT request for updating an existing entity by ID
 router.put('/cities/:id', uexController.updateCity);
 
+
 //--------------------------------------------
 //             COMMODITY ROUTES
 //--------------------------------------------
@@ -33,6 +34,7 @@ router.post('/commodities/', uexController.createCommodity);
 
 // PUT request for updating an existing entity by ID
 router.put('/commodities/:id', uexController.updateCommodity);
+
 
 //--------------------------------------------
 //              OUTPOST ROUTES
@@ -50,6 +52,7 @@ router.post('/outposts/', uexController.createOutpost);
 // PUT request for updating an existing entity by ID
 router.put('/outposts/:id', uexController.updateOutpost);
 
+
 //--------------------------------------------
 //               PLANET ROUTES
 //--------------------------------------------
@@ -65,6 +68,7 @@ router.post('/planets/', uexController.createPlanet);
 
 // PUT request for updating an existing entity by ID
 router.put('/planets/:id', uexController.updatePlanet);
+
 
 //--------------------------------------------
 //            SPACE STATION ROUTES
@@ -82,6 +86,7 @@ router.post('/spacestations/', uexController.createSpaceStation);
 // PUT request for updating an existing entity by ID
 router.put('/spacestations/:id', uexController.updateSpaceStation);
 
+
 //--------------------------------------------
 //             STAR SYSTEM ROUTES
 //--------------------------------------------
@@ -98,6 +103,25 @@ router.post('/starsystems/', uexController.createStarSystem);
 // PUT request for updating an existing entity by ID
 router.put('/starsystems/:id', uexController.updateStarSystem);
 
+
+//--------------------------------------------
+//                 SHIP ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/ships/', uexController.getAllShips);
+
+// GET request for retrieving a single entity by ID
+router.get('/ships/:id', uexController.getShipById);
+
+// POST request for creating a new entity
+router.post('/ships/', uexController.createShip);
+
+// PUT request for updating an existing entity by ID
+router.put('/ships/:id', uexController.updateShip);
+
+
+
 //--------------------------------------------
 //             TERMINAL ROUTES
 //--------------------------------------------
@@ -113,6 +137,7 @@ router.post('/terminals/', uexController.createTerminal);
 
 // PUT request for updating an existing entity by ID
 router.put('/terminals/:id', uexController.updateTerminal);
+
 
 //--------------------------------------------
 //           TERMINAL PRICES ROUTES
