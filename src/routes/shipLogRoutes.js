@@ -9,10 +9,20 @@ router.get('/', shipLogController.getAll);
 router.get('/user', shipLogController.getByUserId);
 
 // GET request for retrieving all badges by user ID
+router.get('/entry', shipLogController.getByEntryId);
+
+// GET request for retrieving all badges by user ID
 router.get('/patch', shipLogController.getByPatch);
 
 // GET request for retrieving all badges by user ID
-router.get('/user2/:id/patch/:patch', shipLogController.getByUserIdAndPatch);
+router.get('/userandpatch', shipLogController.getByUserIdAndPatch);
+
+// GET request for retrieving all badges
+router.get('/assistantbox', shipLogController.getAssistantBoxes);
+
+//assistantboxuserpatch
+// GET request for retrieving all badges by user ID
+router.get('/assistantboxuserpatch', shipLogController.getAssistantBoxesUserPatch);
 
 // POST request for creating a new user
 router.post('/', shipLogController.create);

@@ -15,13 +15,23 @@ BlackBox.init({
         allowNull: false,
         unique: false,
     },
-    ship: {
+    ship_used: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: false
     },
+    ship_killed: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: false
+    },
+    value: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false,
+    },
     kill_count: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: false,
         unique: false,
     },
@@ -35,7 +45,11 @@ BlackBox.init({
         allowNull: true,
         unique: false
     },
-    
+    assists: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: false,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

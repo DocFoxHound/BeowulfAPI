@@ -9,10 +9,20 @@ router.get('/', blackBoxController.getAll);
 router.get('/user', blackBoxController.getByUserId);
 
 // GET request for retrieving all badges by user ID
+router.get('/entry', blackBoxController.getByEntryId);
+
+// GET request for retrieving all badges by user ID
 router.get('/patch', blackBoxController.getByPatch);
 
 // GET request for retrieving all badges by user ID
-router.get('/user2/:id/patch/:patch', blackBoxController.getByUserIdAndPatch);
+router.get('/userandpatch', blackBoxController.getByUserIdAndPatch);
+
+// GET request for retrieving all badges
+router.get('/assistantbox', blackBoxController.getAssistantEntries);
+
+//assistantboxuserpatch
+// GET request for retrieving all badges by user ID
+router.get('/assistantboxuserpatch', blackBoxController.getAssistantEntriesUserPatch);
 
 // POST request for creating a new user
 router.post('/', blackBoxController.create);

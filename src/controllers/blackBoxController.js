@@ -1,11 +1,33 @@
 const pool = require('../config/database');
+const sequelize = require('../config/database'); // Import the Sequelize instance
 const BlackBox = require('../models/blackBoxModel');
+
 
 
 exports.getAll = async (req, res) => {
     try {
         const entries = await BlackBox.findAll();
         res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+
+exports.getByEntryId = async (req, res) => {
+    const { id } = req.query;
+    try {
+        const entry = await BlackBox.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        if (entry) {
+            res.status(200).json(entry); // Return the object directly
+        } else {
+            res.status(404).send('No BlackBox found for the given ID');
+        }
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -32,17 +54,17 @@ exports.getByUserId = async (req, res) => {
 
 
 exports.getByPatch = async (req, res) => {
-    const { patch_desc } = req.query;
+    const { patch } = req.query;
     try {
         const entries = await BlackBox.findAll({
             where: {
-                patch: patch_desc
+                patch: patch
             }
         });
         if (entries.length > 0) {
             res.status(200).json(entries);
         } else {
-            res.status(404).send('No BlackBox found for the given user ID and patch');
+            res.status(404).send('No BlackBox found for the given user ID');
         }
     } catch (error) {
         res.status(500).send(error.message);
@@ -53,18 +75,60 @@ exports.getByPatch = async (req, res) => {
 exports.getByUserIdAndPatch = async (req, res) => {
     const { user_id, patch } = req.query;
     try {
-        const entries = await BlackBox.findAll({
-            where: {
-                user_id: user_id,
-                patch: patch
+      const entries = await BlackBox.findAll({
+        where: {
+          user_id,
+          patch
+        }
+      });
+  
+      if (entries.length > 0) {
+        res.status(200).json(entries);
+      } else {
+        res.status(404).send('No BlackBox found for the given user ID and patch');
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+};
+
+
+exports.getAssistantEntries = async (req, res) => {
+    const user_id = req.query.user_id;
+    try {
+      const entries = await sequelize.query(
+        'SELECT * FROM black_box WHERE :user_id = ANY(assists)',
+        {
+          replacements: { user_id },
+          type: sequelize.QueryTypes.SELECT
+        }
+      );      
+      res.status(200).json(entries);
+    } catch (error) {
+      console.error('Error querying assistant blackbox:', error.message);
+      res.status(500).send(error.message);
+    }
+};
+
+
+exports.getAssistantEntriesUserPatch = async (req, res) => {
+    const { user_id, patch } = req.query;
+    try {
+        const entries = await sequelize.query(
+            'SELECT * FROM black_box WHERE :user_id = ANY(assists) AND patch = :patch',
+            {
+                replacements: { user_id, patch },
+                type: sequelize.QueryTypes.SELECT
             }
-        });
+        );
+
         if (entries.length > 0) {
             res.status(200).json(entries);
         } else {
-            res.status(404).send('No BlackBox found for the given user ID');
+            res.status(404).send('No BlackBox found for the given user ID and patch');
         }
     } catch (error) {
+        console.error('Error querying assistant blackbox with patch:', error.message);
         res.status(500).send(error.message);
     }
 };
