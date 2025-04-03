@@ -20,6 +20,16 @@ Ship.init({
         allowNull: false,
         unique: false,
     },
+    crew: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: false,
+    },
+    pad_type: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: false
+    },
     
     // Add more fields as necessary
 }, {

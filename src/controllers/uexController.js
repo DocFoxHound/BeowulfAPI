@@ -379,6 +379,7 @@ exports.getShipById = async (req, res) => {
 // Handle POST request to create a entity
 exports.createShip = async (req, res) => {
     try {
+        console.log(`\nTEST\n`)
         const newEntity = new ShipModel(req.body);
         const savedEntity = await newEntity.save();
         res.status(201).json(savedEntity);

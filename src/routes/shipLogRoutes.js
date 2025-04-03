@@ -18,11 +18,11 @@ router.get('/patch', shipLogController.getByPatch);
 router.get('/userandpatch', shipLogController.getByUserIdAndPatch);
 
 // GET request for retrieving all badges
-router.get('/assistantbox', shipLogController.getAssistantBoxes);
+router.get('/assistantbox', shipLogController.getAssistantEntries);
 
 //assistantboxuserpatch
 // GET request for retrieving all badges by user ID
-router.get('/assistantboxuserpatch', shipLogController.getAssistantBoxesUserPatch);
+router.get('/assistantboxuserpatch', shipLogController.getAssistantEntriesUserPatch);
 
 // POST request for creating a new user
 router.post('/', shipLogController.create);
