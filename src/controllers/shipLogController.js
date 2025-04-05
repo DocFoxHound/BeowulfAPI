@@ -1,5 +1,8 @@
 const pool = require('../config/database');
+const sequelize = require('../config/database'); // Import the Sequelize instance
 const ShipLog = require('../models/shipLogModel');
+
+
 
 exports.getAll = async (req, res) => {
     try {
@@ -31,12 +34,30 @@ exports.getByEntryId = async (req, res) => {
 };
 
 
-exports.getByUserId = async (req, res) => {
-    const { user_id } = req.query;
+exports.getByOwnerId = async (req, res) => {
+    const { owner_id } = req.query;
     try {
         const entries = await ShipLog.findAll({
             where: {
-                user_id: user_id
+                owner_id: owner_id
+            }
+        });
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No ShipLog found for the given user ID');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getByCommanderId = async (req, res) => {
+    const { commander } = req.query;
+    try {
+        const entries = await ShipLog.findAll({
+            where: {
+                commander: commander
             }
         });
         if (entries.length > 0) {
@@ -69,13 +90,33 @@ exports.getByPatch = async (req, res) => {
 };
 
 
-exports.getByUserIdAndPatch = async (req, res) => {
-    const { user_id, patch } = req.query;
+exports.getByOwnerIdAndPatch = async (req, res) => {
+    const { owner_id, patch } = req.query;
     try {
       const entries = await ShipLog.findAll({
         where: {
-          user_id,
-          patch
+            owner_id,
+            patch
+        }
+      });
+  
+      if (entries.length > 0) {
+        res.status(200).json(entries);
+      } else {
+        res.status(404).send('No ShipLog found for the given user ID and patch');
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+};
+
+exports.getByCommanderIdAndPatch = async (req, res) => {
+    const { commander, patch } = req.query;
+    try {
+      const entries = await ShipLog.findAll({
+        where: {
+            commander,
+            patch
         }
       });
   
@@ -90,11 +131,11 @@ exports.getByUserIdAndPatch = async (req, res) => {
 };
 
 
-exports.getAssistantEntries = async (req, res) => {
+exports.getCrewEntries = async (req, res) => {
     const user_id = req.query.user_id;
     try {
       const entries = await sequelize.query(
-        'SELECT * FROM ship_log WHERE :user_id = ANY(assists)',
+        'SELECT * FROM ship_logs WHERE :user_id = ANY(crew)',
         {
           replacements: { user_id },
           type: sequelize.QueryTypes.SELECT
@@ -108,11 +149,11 @@ exports.getAssistantEntries = async (req, res) => {
 };
 
 
-exports.getAssistantEntriesUserPatch = async (req, res) => {
+exports.getCrewEntriesUserPatch = async (req, res) => {
     const { user_id, patch } = req.query;
     try {
         const entries = await sequelize.query(
-            'SELECT * FROM ship_log WHERE :user_id = ANY(assists) AND patch = :patch',
+            'SELECT * FROM ship_logs WHERE :user_id = ANY(crew) AND patch = :patch',
             {
                 replacements: { user_id, patch },
                 type: sequelize.QueryTypes.SELECT

@@ -21,6 +21,7 @@ const shipLogRoutes = require('./src/routes/shipLogRoutes');
 const gameVersionRoutes = require('./src/routes/gameVersionRoutes');
 const lessonsLearnedController = require('./src/routes/lessonLearnedRoutes')
 const playerShipController = require('./src/routes/playerShipRoutes')
+const shipLogController = require('./src/routes/shipLogRoutes')
 
 // Load environment variables
 dotenv.config();
@@ -49,6 +50,7 @@ app.use('/api/shiplog', shipLogRoutes)
 app.use('/api/gameversion', gameVersionRoutes)
 app.use('/api/lessonslearned', lessonsLearnedController)
 app.use('/api/playership', playerShipController)
+app.use('/api/shiplog', shipLogController)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

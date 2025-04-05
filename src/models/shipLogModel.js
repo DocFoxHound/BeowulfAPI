@@ -10,27 +10,62 @@ ShipLog.init({
         unique: true,
         primaryKey: true
     },
-    user_id: {
+    owner_id: {
         type: DataTypes.BIGINT,
         allowNull: false,
         unique: false,
     },
-    ship: {
-        type: DataTypes.STRING,
-        allowNull: true,
+    ship_used: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
         unique: false
     },
-    ship_name: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        unique: false
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: true,
+    commander: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
         unique: false,
     },
+    value: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false,
+    },
+    victim_orgs: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+        unique: false
+    },
     patch: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    crew: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: false,
+        unique: false
+    },
+    ships_killed: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: false,
+        unique: false
+    },
+    divided_value: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false
+    },
+    total_kills: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: false
+    },
+    divided_kills: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false
+    },
+    ship_used_name: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: false
@@ -39,7 +74,7 @@ ShipLog.init({
 }, {
     sequelize, // This is the Sequelize instance you must pass
     modelName: 'ShipLog', // We need to choose the model name
-    tableName: 'ship_log', // Specify the table name
+    tableName: 'ship_logs', // Specify the table name
     timestamps: false // Turn off Sequelize auto creating updatedAt and createdAt
 });
 

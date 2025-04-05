@@ -6,7 +6,10 @@ const shipLogController = require('../controllers/shipLogController');
 router.get('/', shipLogController.getAll);
 
 // GET request for retrieving all badges by user ID
-router.get('/user', shipLogController.getByUserId);
+router.get('/commander', shipLogController.getByCommanderId);
+
+// GET request for retrieving all badges by user ID
+router.get('/owner', shipLogController.getByOwnerId);
 
 // GET request for retrieving all badges by user ID
 router.get('/entry', shipLogController.getByEntryId);
@@ -15,14 +18,17 @@ router.get('/entry', shipLogController.getByEntryId);
 router.get('/patch', shipLogController.getByPatch);
 
 // GET request for retrieving all badges by user ID
-router.get('/userandpatch', shipLogController.getByUserIdAndPatch);
+router.get('/ownerandpatch', shipLogController.getByOwnerIdAndPatch);
+
+// GET request for retrieving all badges by user ID
+router.get('/commanderandpatch', shipLogController.getByCommanderIdAndPatch);
 
 // GET request for retrieving all badges
-router.get('/assistantbox', shipLogController.getAssistantEntries);
+router.get('/crew', shipLogController.getCrewEntries);
 
 //assistantboxuserpatch
 // GET request for retrieving all badges by user ID
-router.get('/assistantboxuserpatch', shipLogController.getAssistantEntriesUserPatch);
+router.get('/crewuserpatch', shipLogController.getCrewEntriesUserPatch);
 
 // POST request for creating a new user
 router.post('/', shipLogController.create);
