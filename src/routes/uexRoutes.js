@@ -43,8 +43,8 @@ router.put('/commodities/:id', uexController.updateCommodity);
 // GET request for retrieving a list of all entities
 router.get('/terminalcommodities/', uexController.getAllTerminalCommodities);
 
-// // GET request for retrieving a single entity by ID
-// router.get('/terminalcommodities/:id', uexController.getCommodityById);
+// GET request for retrieving a single entity by ID
+router.get('/terminalcommodities/:id', uexController.getTerminalCommodityById);
 
 // POST request for creating a new entity
 router.post('/terminalcommodities/', uexController.createTerminalCommodity);
@@ -77,8 +77,8 @@ router.put('/summarizedcommodities/:id', uexController.updateSummarizedCommodity
 // GET request for retrieving a list of all entities
 router.get('/terminalitems/', uexController.getAllTerminalItems);
 
-// // GET request for retrieving a single entity by ID
-// router.get('/terminalcommodities/:id', uexController.getCommodityById);
+// GET request for retrieving a single entity by ID
+router.get('/terminalcommodities/:id', uexController.getTerminalItemById);
 
 // POST request for creating a new entity
 router.post('/terminalitems/', uexController.createTerminalItem);

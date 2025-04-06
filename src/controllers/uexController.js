@@ -142,19 +142,19 @@ exports.getAllTerminalCommodities = async (req, res) => {
     }
 };
 
-// // Handle GET request for a single entity by ID
-// exports.getCommodityById = async (req, res) => {
-//     try {
-//         const id = await CommodityByTerminal.findByPk(req.params.id);
-//         if (id) {
-//             res.status(200).json(id);
-//         } else {
-//             res.status(404).send('Entity not found');
-//         }
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// };
+// Handle GET request for a single entity by ID
+exports.getTerminalCommodityById = async (req, res) => {
+    try {
+        const id = await CommodityByTerminal.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
 
 // Handle POST request to create a entity
 exports.createTerminalCommodity = async (req, res) => {
@@ -254,19 +254,19 @@ exports.getAllTerminalItems = async (req, res) => {
     }
 };
 
-// // Handle GET request for a single entity by ID
-// exports.getItemById = async (req, res) => {
-//     try {
-//         const id = await ItemByTerminal.findByPk(req.params.id);
-//         if (id) {
-//             res.status(200).json(id);
-//         } else {
-//             res.status(404).send('Entity not found');
-//         }
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// };
+// Handle GET request for a single entity by ID
+exports.getTerminalItemById = async (req, res) => {
+    try {
+        const id = await ItemByTerminal.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
 
 // Handle POST request to create a entity
 exports.createTerminalItem = async (req, res) => {
