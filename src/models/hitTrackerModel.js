@@ -15,11 +15,6 @@ HitTrack.init({
         allowNull: false,
         unique: false,
     },
-    action_type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: false
-    },
     cargo: {
         type: DataTypes.JSON,
         allowNull: false,
@@ -33,6 +28,26 @@ HitTrack.init({
     patch: {
         type: DataTypes.STRING,
         allowNull: true,
+        unique: false
+    },
+    total_value_stolen_sale: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false,
+    },
+    total_cut_value: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false,
+    },
+    total_value_stolen_sale_cut: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false,
+    },
+    assists: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: false,
         unique: false
     },
     // Add more fields as necessary

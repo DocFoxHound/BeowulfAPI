@@ -37,6 +37,74 @@ router.put('/commodities/:id', uexController.updateCommodity);
 
 
 //--------------------------------------------
+//        COMMODITY BY TERMINAL ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/terminalcommodities/', uexController.getAllTerminalCommodities);
+
+// // GET request for retrieving a single entity by ID
+// router.get('/terminalcommodities/:id', uexController.getCommodityById);
+
+// POST request for creating a new entity
+router.post('/terminalcommodities/', uexController.createTerminalCommodity);
+
+// PUT request for updating an existing entity by ID
+router.put('/terminalcommodities/:id', uexController.updateTerminalCommodity);
+
+
+//--------------------------------------------
+//        COMMODITY SUMMARIZED ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/summarizedcommodities/', uexController.getAllSummarizedCommodities);
+
+// GET request for retrieving a single entity by ID
+router.get('/summarizedcommodities/:id', uexController.getSummarizedCommodityById);
+
+// POST request for creating a new entity
+router.post('/summarizedcommodities/', uexController.createSummarizedCommodity);
+
+// PUT request for updating an existing entity by ID
+router.put('/summarizedcommodities/:id', uexController.updateSummarizedCommodity);
+
+
+//--------------------------------------------
+//           ITEM BY TERMINAL ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/terminalitems/', uexController.getAllTerminalItems);
+
+// // GET request for retrieving a single entity by ID
+// router.get('/terminalcommodities/:id', uexController.getCommodityById);
+
+// POST request for creating a new entity
+router.post('/terminalitems/', uexController.createTerminalItem);
+
+// PUT request for updating an existing entity by ID
+router.put('/terminalitems/:id', uexController.updateTerminalItem);
+
+
+//--------------------------------------------
+//           ITEMS SUMMARIZED ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/sumarizeditems/', uexController.getAllSummarizedItems);
+
+// GET request for retrieving a single entity by ID
+router.get('/sumarizeditems/:id', uexController.getSummarizedItemById);
+
+// POST request for creating a new entity
+router.post('/sumarizeditems/', uexController.createSummarizedItem);
+
+// PUT request for updating an existing entity by ID
+router.put('/sumarizeditems/:id', uexController.updateSummarizedItem);
+
+
+//--------------------------------------------
 //              OUTPOST ROUTES
 //--------------------------------------------
 

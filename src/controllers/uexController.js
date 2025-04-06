@@ -8,6 +8,10 @@ const StarSystemModel = require('../models/uexStarSystemModel');
 const TerminalModel = require('../models/uexTerminalModel');
 const TerminalPricesModel = require('../models/uexTerminalPricesModel');
 const ShipModel = require('../models/uexShipModel');
+const CommodityByTerminal = require('../models/uexCommodityByTerminalModel');
+const ItemByTerminal = require('../models/uexItemByTerminalModel');
+const CommoditySummary = require('../models/uexCommoditySummaryModel');
+const ItemSummary = require('../models/uexItemSummaryModel');
 
 
 
@@ -112,6 +116,230 @@ exports.updateCommodity = async (req, res) => {
     try {
         // Find the __badge first
         const entity = await CommodityModel.findByPk(req.params.id);
+        if (entity) {
+            // Update the __badge with new data from req.body
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//      COMMODITY BY TERMINAL CONTROLLER      CommodityByTerminal
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllTerminalCommodities = async (req, res) => {
+    try {
+        const entity = await CommodityByTerminal.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// // Handle GET request for a single entity by ID
+// exports.getCommodityById = async (req, res) => {
+//     try {
+//         const id = await CommodityByTerminal.findByPk(req.params.id);
+//         if (id) {
+//             res.status(200).json(id);
+//         } else {
+//             res.status(404).send('Entity not found');
+//         }
+//     } catch (error) {
+//         res.status(500).send(error.message);
+//     }
+// };
+
+// Handle POST request to create a entity
+exports.createTerminalCommodity = async (req, res) => {
+    try {
+        const newEntity = new CommodityByTerminal(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateTerminalCommodity = async (req, res) => {
+    try {
+        // Find the __badge first
+        const entity = await CommodityByTerminal.findByPk(req.params.id);
+        if (entity) {
+            // Update the __badge with new data from req.body
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//        COMMODITY SUMMARY CONTROLLER        CommoditySummary
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllSummarizedCommodities = async (req, res) => {
+    try {
+        const entity = await CommoditySummary.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getSummarizedCommodityById = async (req, res) => {
+    try {
+        const id = await CommoditySummary.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create a entity
+exports.createSummarizedCommodity = async (req, res) => {
+    try {
+        const newEntity = new CommoditySummary(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateSummarizedCommodity = async (req, res) => {
+    try {
+        // Find the __badge first
+        const entity = await CommoditySummary.findByPk(req.params.id);
+        if (entity) {
+            // Update the __badge with new data from req.body
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//         ITEM BY TERMINAL CONTROLLER        ItemByTerminal
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllTerminalItems = async (req, res) => {
+    try {
+        const entity = await ItemByTerminal.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// // Handle GET request for a single entity by ID
+// exports.getItemById = async (req, res) => {
+//     try {
+//         const id = await ItemByTerminal.findByPk(req.params.id);
+//         if (id) {
+//             res.status(200).json(id);
+//         } else {
+//             res.status(404).send('Entity not found');
+//         }
+//     } catch (error) {
+//         res.status(500).send(error.message);
+//     }
+// };
+
+// Handle POST request to create a entity
+exports.createTerminalItem = async (req, res) => {
+    try {
+        const newEntity = new ItemByTerminal(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateTerminalItem = async (req, res) => {
+    try {
+        // Find the __badge first
+        const entity = await ItemByTerminal.findByPk(req.params.id);
+        if (entity) {
+            // Update the __badge with new data from req.body
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//           ITEM SUMMARY CONTROLLER          ItemSummary
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllSummarizedItems = async (req, res) => {
+    try {
+        const entity = await ItemSummary.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getSummarizedItemById = async (req, res) => {
+    try {
+        const id = await ItemSummary.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Entity not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create a entity
+exports.createSummarizedItem = async (req, res) => {
+    try {
+        const newEntity = new ItemSummary(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateSummarizedItem = async (req, res) => {
+    try {
+        // Find the __badge first
+        const entity = await ItemSummary.findByPk(req.params.id);
         if (entity) {
             // Update the __badge with new data from req.body
             const updatedEntity = await entity.update(req.body);

@@ -12,7 +12,16 @@ router.get('/user', hitTrackerController.getByUserId);
 router.get('/patch', hitTrackerController.getByPatch);
 
 // GET request for retrieving all badges by user ID
-router.get('/user2/:id/patch/:patch', hitTrackerController.getByUserIdAndPatch);
+router.get('/entry', hitTrackerController.getByEntryId);
+
+// GET request for retrieving all badges by user ID
+router.get('/userandpatch', hitTrackerController.getByUserIdAndPatch);
+
+// GET request for retrieving all badges
+router.get('/assists', hitTrackerController.getAssistEntries);
+
+// GET request for retrieving all badges by user ID
+router.get('/assistsuserpatch', hitTrackerController.getAssistEntriesUserPatch);
 
 // POST request for creating a new user
 router.post('/', hitTrackerController.create);

@@ -31,6 +31,25 @@ exports.getByUserId = async (req, res) => {
 };
 
 
+exports.getByEntryId = async (req, res) => {
+    const { id } = req.query;
+    try {
+        const entries = await HitTrack.findOne({
+            where: {
+                id: id
+            }
+        });
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No HitTrack found for the given ID');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+
 exports.getByPatch = async (req, res) => {
     const { patch_desc } = req.query;
     try {
@@ -50,23 +69,64 @@ exports.getByPatch = async (req, res) => {
 };
 
 
+
 exports.getByUserIdAndPatch = async (req, res) => {
     const { user_id, patch } = req.query;
     try {
-      const entries = await HitTrack.findAll({
+      const entries = await ShipLog.findAll({
         where: {
-          user_id,
-          patch
+            user_id,
+            patch
         }
       });
   
       if (entries.length > 0) {
         res.status(200).json(entries);
       } else {
-        res.status(404).send('No BlackBox found for the given user ID and patch');
+        res.status(404).send('No ShipLog found for the given user ID and patch');
       }
     } catch (error) {
       res.status(500).send(error.message);
+    }
+};
+
+exports.getAssistEntries = async (req, res) => {
+    const user_id = req.query.user_id;
+    try {
+      const entries = await sequelize.query(
+        'SELECT * FROM ship_logs WHERE :user_id = ANY(assists)',
+        {
+          replacements: { user_id },
+          type: sequelize.QueryTypes.SELECT
+        }
+      );      
+      res.status(200).json(entries);
+    } catch (error) {
+      console.error('Error querying assistant shiplog:', error.message);
+      res.status(500).send(error.message);
+    }
+};
+
+
+exports.getAssistEntriesUserPatch = async (req, res) => {
+    const { user_id, patch } = req.query;
+    try {
+        const entries = await sequelize.query(
+            'SELECT * FROM ship_logs WHERE :user_id = ANY(assists) AND patch = :patch',
+            {
+                replacements: { user_id, patch },
+                type: sequelize.QueryTypes.SELECT
+            }
+        );
+
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No ShipLog found for the given user ID and patch');
+        }
+    } catch (error) {
+        console.error('Error querying assistant shiplog with patch:', error.message);
+        res.status(500).send(error.message);
     }
 };
 
