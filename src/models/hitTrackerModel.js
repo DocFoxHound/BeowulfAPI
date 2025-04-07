@@ -30,17 +30,7 @@ HitTrack.init({
         allowNull: true,
         unique: false
     },
-    total_value_stolen_sale: {
-        type: DataTypes.DOUBLE,
-        allowNull: false,
-        unique: false,
-    },
     total_cut_value: {
-        type: DataTypes.DOUBLE,
-        allowNull: false,
-        unique: false,
-    },
-    total_value_stolen_sale_cut: {
         type: DataTypes.DOUBLE,
         allowNull: false,
         unique: false,
@@ -49,6 +39,11 @@ HitTrack.init({
         type: DataTypes.ARRAY(DataTypes.BIGINT),
         allowNull: false,
         unique: false
+    },
+    total_scu: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false,
     },
     // Add more fields as necessary
 }, {

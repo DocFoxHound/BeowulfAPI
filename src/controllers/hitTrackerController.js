@@ -51,11 +51,12 @@ exports.getByEntryId = async (req, res) => {
 
 
 exports.getByPatch = async (req, res) => {
-    const { patch_desc } = req.query;
+    const { patch } = req.query;
+    console.log('\npatch', patch);
     try {
         const entries = await HitTrack.findAll({
             where: {
-                patch: patch_desc
+                patch: patch
             }
         });
         if (entries.length > 0) {

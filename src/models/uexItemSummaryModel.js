@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Assuming you have a config file for Sequelize
 
-class CommoditySummary extends Model {}
+class ItemSummary extends Model {}
 
-CommoditySummary.init({
+ItemSummary.init({
     id: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -27,10 +27,10 @@ CommoditySummary.init({
     },
 }, {
     sequelize, // This is the Sequelize instance you must pass
-    modelName: 'CommoditySummary', // We need to choose the model name
-    tableName: 'uex_commodities_summary', // Specify the table name
+    modelName: 'ItemSummary', // We need to choose the model name
+    tableName: 'uex_items_summary', // Specify the table name
     timestamps: false // Turn off Sequelize auto creating updatedAt and createdAt
 });
 
 // Export the model
-module.exports = CommoditySummary;
+module.exports = ItemSummary;
