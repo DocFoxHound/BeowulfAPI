@@ -21,7 +21,6 @@ const shipLogRoutes = require('./src/routes/shipLogRoutes');
 const gameVersionRoutes = require('./src/routes/gameVersionRoutes');
 const lessonsLearnedRoutes = require('./src/routes/lessonLearnedRoutes')
 const playerShipRoutes = require('./src/routes/playerShipRoutes')
-const shipLogRoutes = require('./src/routes/shipLogRoutes')
 const warehouseRoutes = require('./src/routes/warehouseRoutes')
 
 // Load environment variables

@@ -23,12 +23,6 @@ router.get('/userandpatch', warehouseController.getByUserIdAndPatch);
 // GET request for retrieving all badges by user ID
 router.get('/commodityandpatch', warehouseController.getByCommodityAndPatch);
 
-// GET request for retrieving all badges
-router.get('/assists', warehouseController.getAssistEntries);
-
-// GET request for retrieving all badges by user ID
-router.get('/assistsuserpatch', warehouseController.getAssistEntriesUserPatch);
-
 // POST request for creating a new user
 router.post('/', warehouseController.create);
 
