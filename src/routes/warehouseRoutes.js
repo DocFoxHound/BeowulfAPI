@@ -21,6 +21,9 @@ router.get('/commodity', warehouseController.getByCommodity);
 router.get('/userandpatch', warehouseController.getByUserIdAndPatch);
 
 // GET request for retrieving all badges by user ID
+router.get('/userandcommodity', warehouseController.getByUserIdAndPatch);
+
+// GET request for retrieving all badges by user ID
 router.get('/commodityandpatch', warehouseController.getByCommodityAndPatch);
 
 // POST request for creating a new user
