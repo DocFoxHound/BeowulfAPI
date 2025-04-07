@@ -21,7 +21,7 @@ router.get('/commodity', warehouseController.getByCommodity);
 router.get('/userandpatch', warehouseController.getByUserIdAndPatch);
 
 // GET request for retrieving all badges by user ID
-router.get('/userandcommodity', warehouseController.getByUserIdAndPatch);
+router.get('/userandcommodity', warehouseController.getByUserAndCommodity);
 
 // GET request for retrieving all badges by user ID
 router.get('/commodityandpatch', warehouseController.getByCommodityAndPatch);
