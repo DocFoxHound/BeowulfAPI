@@ -70,7 +70,6 @@ exports.getByPatch = async (req, res) => {
 
 exports.getByCommodity = async (req, res) => {
     const { commodity_name } = req.query;
-    console.log('\npatch', patch);
     try {
         const entries = await Warehouse.findAll({
             where: {
@@ -120,7 +119,7 @@ exports.getByUserAndCommodity = async (req, res) => {
       if (entries.length > 0) {
         res.status(200).json(entries);
       } else {
-        res.status(404).send('No Warehouse item found for the given user ID and patch');
+        res.status(404).send('No Warehouse item found for the given user ID and commodity');
       }
     } catch (error) {
       res.status(500).send(error.message);
