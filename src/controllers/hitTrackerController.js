@@ -33,14 +33,15 @@ exports.getByUserId = async (req, res) => {
 
 exports.getByEntryId = async (req, res) => {
     const { id } = req.query;
+    console.log("\nid", id);
     try {
-        const entries = await HitTrack.findOne({
+        const entry = await HitTrack.findOne({
             where: {
                 id: id
             }
         });
-        if (entries.length > 0) {
-            res.status(200).json(entries);
+        if (entry) {
+            res.status(200).json(entry);
         } else {
             res.status(404).send('No HitTrack found for the given ID');
         }

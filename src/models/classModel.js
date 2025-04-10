@@ -40,6 +40,16 @@ Class.init({
         allowNull: false,
         unique: false
     },
+    thumbnail_url: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    level: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: true
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

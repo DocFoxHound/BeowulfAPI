@@ -20,6 +20,11 @@ PrestigeModel.init({
         allowNull: false,
         unique: false
     },
+    rank_role: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

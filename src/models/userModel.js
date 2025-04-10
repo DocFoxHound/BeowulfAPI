@@ -22,17 +22,17 @@ User.init({
     },
     corsair_level: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         unique: false
     },
     raptor_level: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         unique: false
     },
     raider_level: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         unique: false
     },
     raptor_1_solo: {
