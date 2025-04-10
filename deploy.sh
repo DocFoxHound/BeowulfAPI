@@ -4,7 +4,7 @@
 cd /home/BeowulfAPI
 
 # Pull the latest code from GitHub
-git pull origin main
+git pull
 
 # Install any new dependencies
 npm install
