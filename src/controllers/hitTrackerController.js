@@ -1,6 +1,7 @@
 const pool = require('../config/database');
 const HitTrack = require('../models/hitTrackerModel');
-
+// const { Sequelize } = require('sequelize');
+const sequelize = require('../config/database'); // Import the Sequelize instance
 
 exports.getAll = async (req, res) => {
     try {
@@ -75,7 +76,7 @@ exports.getByPatch = async (req, res) => {
 exports.getByUserIdAndPatch = async (req, res) => {
     const { user_id, patch } = req.query;
     try {
-      const entries = await ShipLog.findAll({
+      const entries = await HitTrack.findAll({
         where: {
             user_id,
             patch
@@ -85,7 +86,7 @@ exports.getByUserIdAndPatch = async (req, res) => {
       if (entries.length > 0) {
         res.status(200).json(entries);
       } else {
-        res.status(404).send('No ShipLog found for the given user ID and patch');
+        res.status(404).send('No Hit Track found for the given user ID and patch');
       }
     } catch (error) {
       res.status(500).send(error.message);
@@ -96,7 +97,7 @@ exports.getAssistEntries = async (req, res) => {
     const user_id = req.query.user_id;
     try {
       const entries = await sequelize.query(
-        'SELECT * FROM ship_logs WHERE :user_id = ANY(assists)',
+        'SELECT * FROM hit_tracker WHERE :user_id = ANY(assists)',
         {
           replacements: { user_id },
           type: sequelize.QueryTypes.SELECT
@@ -114,7 +115,7 @@ exports.getAssistEntriesUserPatch = async (req, res) => {
     const { user_id, patch } = req.query;
     try {
         const entries = await sequelize.query(
-            'SELECT * FROM ship_logs WHERE :user_id = ANY(assists) AND patch = :patch',
+            'SELECT * FROM hit_tracker WHERE :user_id = ANY(assists) AND patch = :patch',
             {
                 replacements: { user_id, patch },
                 type: sequelize.QueryTypes.SELECT
@@ -124,10 +125,10 @@ exports.getAssistEntriesUserPatch = async (req, res) => {
         if (entries.length > 0) {
             res.status(200).json(entries);
         } else {
-            res.status(404).send('No ShipLog found for the given user ID and patch');
+            res.status(404).send('No Hit Track found for the given user ID and patch');
         }
     } catch (error) {
-        console.error('Error querying assistant shiplog with patch:', error.message);
+        console.error('Error querying assistant Hit Track with patch:', error.message);
         res.status(500).send(error.message);
     }
 };
