@@ -13,7 +13,6 @@ exports.getAllLessons = async (req, res) => {
 
 // Handle POST request to create a new Lesson
 exports.createLesson = async (req, res) => {
-    console.log("\nTEST\n")
     try {
         const newLesson = new LessonLearned(req.body);
         const savedLesson = await newLesson.save();

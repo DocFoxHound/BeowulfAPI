@@ -39,7 +39,7 @@ exports.getByEntryId = async (req, res) => {
                 id: id
             }
         });
-        if (entries.length > 0) {
+        if (entries) {
             res.status(200).json(entries);
         } else {
             res.status(404).send('No Warehouse item found for the given ID');

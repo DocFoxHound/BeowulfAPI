@@ -1,0 +1,42 @@
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/database'); // Assuming you have a config file for Sequelize
+
+class Key extends Model {}
+
+Key.init({
+    id: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        unique: false,
+        primaryKey: true
+    },
+    key: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    user_id: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        unique: false,
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    date_created: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        unique: false
+    },
+    // Add more fields as necessary
+}, {
+    sequelize, // This is the Sequelize instance you must pass
+    modelName: 'Key', // We need to choose the model name
+    tableName: 'keys', // Specify the table name
+    timestamps: false // Turn on Sequelize auto creating updatedAt and createdAt
+});
+
+// Export the model
+module.exports = Key;

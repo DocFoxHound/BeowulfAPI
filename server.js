@@ -22,6 +22,7 @@ const gameVersionRoutes = require('./src/routes/gameVersionRoutes');
 const lessonsLearnedRoutes = require('./src/routes/lessonLearnedRoutes')
 const playerShipRoutes = require('./src/routes/playerShipRoutes')
 const warehouseRoutes = require('./src/routes/warehouseRoutes')
+const keyRoutes = require('./src/routes/keyRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -51,6 +52,7 @@ app.use('/api/gameversion', gameVersionRoutes)
 app.use('/api/lessonslearned', lessonsLearnedRoutes)
 app.use('/api/playership', playerShipRoutes)
 app.use('/api/warehouse', warehouseRoutes)
+app.use('/api/keys', keyRoutes)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -70,9 +72,11 @@ app.use((err, req, res, next) => {
 });
 
 // Set the port and start the server
+// const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3000;
+// app.listen(host, port, () => {
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running on port http://${host}:${port}`);
 });
 
 // Export the app for testing purposes
