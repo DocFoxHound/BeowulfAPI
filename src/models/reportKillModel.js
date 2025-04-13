@@ -7,8 +7,8 @@ Kill.init({
     id: {
         type: DataTypes.BIGINT,
         allowNull: false,
-        unique: false,
-        primaryKill: true
+        unique: true,
+        primaryKey: true
     },
     key: {
         type: DataTypes.STRING,

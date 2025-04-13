@@ -23,6 +23,7 @@ const lessonsLearnedRoutes = require('./src/routes/lessonLearnedRoutes')
 const playerShipRoutes = require('./src/routes/playerShipRoutes')
 const warehouseRoutes = require('./src/routes/warehouseRoutes')
 const keyRoutes = require('./src/routes/keyRoutes');
+const reportKill = require('./src/routes/reportKillRoutes')
 
 // Load environment variables
 dotenv.config();
@@ -53,6 +54,7 @@ app.use('/api/lessonslearned', lessonsLearnedRoutes)
 app.use('/api/playership', playerShipRoutes)
 app.use('/api/warehouse', warehouseRoutes)
 app.use('/api/keys', keyRoutes)
+app.use('/api/reportkill', reportKill)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

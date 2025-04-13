@@ -11,13 +11,25 @@ exports.getAllKeys = async (req, res) => {
     }
 };
 
-// Handle POST request to create a new __key
 exports.createKey = async (req, res) => {
     try {
+        const { user_id } = req.body;
+
+        // Check for existing key for this user
+        const existingKey = await KeyModel.findOne({ where: { user_id } });
+
+        if (existingKey) {
+            await existingKey.destroy();
+            console.log(`Deleted existing key for user_id ${user_id}`);
+        }
+
+        // Create and save the new key
         const new__key = new KeyModel(req.body);
         const saved_key = await new__key.save();
+
         res.status(201).json(saved_key);
     } catch (error) {
+        console.error("Error creating key:", error.message);
         res.status(500).send(error.message);
     }
 };
