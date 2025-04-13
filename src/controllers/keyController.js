@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const Key = require('../models/keyModel');
+const KeyModel = require('../models/keyModel');
 
 // Handle GET request for all __key
 exports.getAllKeys = async (req, res) => {
@@ -62,7 +62,7 @@ exports.getKeyByKey = async (req, res) => {
 };
 
 // Handle GET request for Keys by user ID
-exports.getKeyByUserid = async (req, res) => {
+exports.getKeyByUserId = async (req, res) => {
     const { user_id } = req.query;
     try {
         const foundKey = await KeyModel.findOne({
@@ -86,7 +86,7 @@ exports.validateKey = async (req, res) => {
     try {
         const foundKey = await KeyModel.findOne({
             where: {
-                key: foundKey
+                key: key
             }
         });
         if(foundKey) {

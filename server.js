@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
 });
 
 // Set the port and start the server
-// const host = process.env.HOST || 'localhost';
+const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3000;
 // app.listen(host, port, () => {
 app.listen(port, () => {

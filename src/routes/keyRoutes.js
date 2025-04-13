@@ -18,6 +18,6 @@ router.get('/key', keyController.getKeyByKey);
 router.delete('/:id', keyController.deleteKey);
 
 // GET request for retrieving all badges by user ID
-router.get('/validate', keyController.validateKey);
+router.get('/validatekey', keyController.validateKey);
 
 module.exports = router;

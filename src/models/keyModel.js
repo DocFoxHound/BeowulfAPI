@@ -25,7 +25,7 @@ Key.init({
         allowNull: true,
         unique: false
     },
-    date_created: {
+    created_at: {
         type: DataTypes.DATE,
         allowNull: true,
         unique: false
