@@ -81,8 +81,7 @@ exports.getKeyByUserId = async (req, res) => {
 };
 
 exports.validateKey = async (req, res) => {
-    const key = req.query.api_key || req.headers.authorization;
-    const player_name = req.query.player_name;
+    const key = req.query.key || req.headers.authorization;
   
     if (!key) return res.status(400).send('Missing key');
   
