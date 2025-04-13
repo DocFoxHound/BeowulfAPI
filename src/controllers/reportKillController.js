@@ -1,6 +1,7 @@
 const pool = require('../config/database');
 const KillModel = require('../models/reportKillModel');
 const GameVersionModel = require('../models/gameVersionModel'); // Import the GameVersionModel
+const { killLogConvert } = require('../logic/killLogConverter');
 
 // Handle GET request for all __kill
 exports.getAllKills = async (req, res) => {
@@ -21,18 +22,41 @@ exports.createKill = async (req, res) => {
         const patches = await GameVersionModel.findAll();
         const latestPatchesSorted = patches.sort((a, b) => b.id - a.id);
         const latestPatch = latestPatchesSorted[0].version; // Get the latest patch
+        const key = req.headers.authorization
 
-        // Create a new KillModel object and explicitly set the id
-        const new__kill = new KillModel({
-            ...req.body, // Spread the incoming request body
+        // Sanitize and validate the time field
+        let sanitizedTime = req.body.time;
+        if (sanitizedTime && sanitizedTime.startsWith('<') && sanitizedTime.endsWith('>')) {
+            sanitizedTime = sanitizedTime.slice(1, -1); // Remove angle brackets
+        }
+
+        const parsedTime = new Date(sanitizedTime);
+        if (!sanitizedTime || isNaN(parsedTime.getTime())) {
+            return res.status(400).send('Invalid time format. Please provide a valid ISO 8601 date string.');
+        }
+
+        // Create a new KillModel object with only the required fields
+        const new__kill = await KillModel.create({
             id: parentId, // Set the id to the generated parentId
-            patch: latestPatch // Add the latest patch to the kill object
+            patch: latestPatch, // Add the latest patch to the kill object
+            time: parsedTime.toISOString(), // Use the sanitized and validated time
+            player: req.body.player,
+            victim: req.body.victim,
+            zone: req.body.zone,
+            weapon: req.body.weapon,
+            rsi_profile: req.body.rsi_profile,
+            game_mode: req.body.game_mode,
+            client_ver: req.body.client_ver,
+            killers_ship: req.body.killers_ship,
+            key: key
         });
-        console.log(new__kill)
 
-        const saved_kill = await new__kill.save(); // Save the new kill to the database
-        res.status(201).json(saved_kill); // Respond with the saved kill
+        console.log("New Kill ", new__kill);
+        killLogConvert(new__kill.dataValues); // Call the killLogConvert function with the new kill object
+
+        res.status(201).json(new__kill); // Respond with the saved kill
     } catch (error) {
+        console.error("Error creating kill:", error.message);
         res.status(500).send(error.message); // Handle errors
     }
 };
