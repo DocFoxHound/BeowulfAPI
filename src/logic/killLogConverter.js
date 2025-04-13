@@ -5,6 +5,7 @@ const BlackBox = require('../models/blackBoxModel');
 const stringSimilarity = require('string-similarity');
 
 async function killLogConvert(reportKill){
+    // console.log(reportKill);
     try{
         const id = reportKill.id;
         const patch = reportKill.patch;
@@ -16,8 +17,8 @@ async function killLogConvert(reportKill){
         const rsi_profile = reportKill.rsi_profile;
         const game_mode = reportKill.game_mode;
         const client_ver = reportKill.client_ver;
-        const playerShip = reportKill.killers_ship;
-        const killedShip = zone.slice(5, -14).replace(/_/g, ' ');
+        let playerShip = reportKill.killers_ship;
+        let killedShip = zone.slice(5, -14).replace(/_/g, ' ');
         const key = reportKill.key;
         const keyUserPair = await KeyModel.findOne({
             where: {
@@ -25,16 +26,18 @@ async function killLogConvert(reportKill){
             }
         });
         const userId = keyUserPair.user_id;
-        const userData = await UserModel.findByPk(req.params.id);
-        const allShips = await ShipModel.findAll();
+        const userData = await UserModel.findByPk(userId);
+        const allShips = (await ShipModel.findAll()).map(ship => ship.get());
+        const shipNames = allShips.map(s => s.ship);
+        const normalizedShipNames = shipNames.map(normalizeShipName);
 
         let matchedKilledShipObject = "unknown";
         try{
             const normalizedKilled = normalizeShipName(killedShip);
-            const shipNames = allShips.map(s => s.ship);
-            const matchKilled = stringSimilarity.findBestMatch(normalizedKilled, shipNames);
-            const bestKilledMatchName = shipNames[shipNames.indexOf(matchKilled.bestMatch.target)];
+            const matchKilled = stringSimilarity.findBestMatch(normalizedKilled, normalizedShipNames);
+            const bestKilledMatchName = shipNames[normalizedShipNames.indexOf(matchKilled.bestMatch.target)];
             matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
+            console.log("matchedKilledShipObject: ", matchedKilledShipObject);
         } catch (error) {
             console.error("Error matching killed ship: ", error.message);
         }
@@ -44,15 +47,14 @@ async function killLogConvert(reportKill){
             try{
                 playerShip = playerShip.slice(5, -14).replace(/_/g, ' ');
                 const normalizedPlayerShip = normalizeShipName(playerShip);
-                const matchPlayer = stringSimilarity.findBestMatch(normalizedPlayerShip, shipNames);
-                const bestPlayerMatchName = shipNames[shipNames.indexOf(matchPlayer.bestMatch.target)];
+                const matchPlayer = stringSimilarity.findBestMatch(normalizedPlayerShip, normalizedShipNames);
+                const bestPlayerMatchName = shipNames[normalizedShipNames.indexOf(matchPlayer.bestMatch.target)];
                 matchedPlayerShipObject = allShips.find(ship => ship.ship === bestPlayerMatchName);
+                // console.log("matchedPlayerShipObject: ", matchedPlayerShipObject);
             }catch (error) {
                 console.error("Error matching player ship: ", error.message);
             }
         }
-
-        console.log(`Matched killed ship: "${killedShip}" → "${bestMatchName}"`);
 
         const newBlackBox = new BlackBox({
             id: id,
@@ -61,11 +63,12 @@ async function killLogConvert(reportKill){
             ship_killed: matchedKilledShipObject !== "unknown" ? matchedKilledShipObject.ship : "unknown",
             value: matchedKilledShipObject !== "unknown" ? matchedKilledShipObject.avg_price : 0,
             kill_count: 1,
-            victims: victim,
+            victims: [victim],
             patch: patch,
             assists: [],
         });
         const savedBlackBox = await newBlackBox.save();
+        console.log("Saved")
 
     } catch (error) {
         console.error("Error in killLogConvert: ", error.message);

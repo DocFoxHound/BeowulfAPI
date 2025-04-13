@@ -36,25 +36,25 @@ app.use(bodyParser.json());           // Parses JSON data in requests
 app.use(bodyParser.urlencoded({ extended: true })); // Parses URL-encoded data
 
 // Routes
-app.use('/api/class', classRoutes);
-app.use('/api/ranks', rankRoutes);
-app.use('/api/prestiges', prestigeRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/completedentry', completedEntryRoutes);
-app.use('/api/queue', queueRoutes);
-app.use('/api/badges', badgeRoutes)
-app.use('/api/uex', uexRoutes)
-app.use('/api/threads', threadRoutes);
-app.use('/api/messages', messageRoutes)
-app.use('/api/blackbox', blackBoxRoutes)
-app.use('/api/hittracker', hitTrackRoutes)
-app.use('/api/shiplog', shipLogRoutes)
-app.use('/api/gameversion', gameVersionRoutes)
-app.use('/api/lessonslearned', lessonsLearnedRoutes)
-app.use('/api/playership', playerShipRoutes)
-app.use('/api/warehouse', warehouseRoutes)
-app.use('/api/keys', keyRoutes)
-app.use('/api/reportkill', reportKill)
+app.use(process.env.API_CLASS_ROUTES, classRoutes);
+app.use(process.env.API_RANK_ROUTES, rankRoutes);
+app.use(process.env.API_PRESTIGE_ROUTES, prestigeRoutes);
+app.use(process.env.API_USER_ROUTES, userRoutes);
+app.use(process.env.API_COMPLETED_ENTRY_ROUTES, completedEntryRoutes);
+app.use(process.env.API_QUEUE_ROUTES, queueRoutes);
+app.use(process.env.API_BADGES_ROUTES, badgeRoutes)
+app.use(process.env.API_UEX_ROUTES, uexRoutes)
+app.use(process.env.API_THREADS_ROUTES, threadRoutes);
+app.use(process.env.API_MESSAGES_ROUTES, messageRoutes)
+app.use(process.env.API_BLACKBOX_ROUTES, blackBoxRoutes)
+app.use(process.env.API_HITTRACKER_ROUTES, hitTrackRoutes)
+app.use(process.env.API_SHIPLOG_ROUTES, shipLogRoutes)
+app.use(process.env.API_GAMEVERSION_ROUTES, gameVersionRoutes)
+app.use(process.env.API_LESSONSLEARNED_ROUTES, lessonsLearnedRoutes)
+app.use(process.env.API_PLAYERSHIP_ROUTES, playerShipRoutes)
+app.use(process.env.API_WAREHOUSE_ROUTES, warehouseRoutes)
+app.use(process.env.API_KEY_ROUTES, keyRoutes)
+app.use(process.env.API_REPORT_KILL, reportKill)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {

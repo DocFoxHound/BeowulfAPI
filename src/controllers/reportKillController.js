@@ -51,7 +51,6 @@ exports.createKill = async (req, res) => {
             key: key
         });
 
-        console.log("New Kill ", new__kill);
         killLogConvert(new__kill.dataValues); // Call the killLogConvert function with the new kill object
 
         res.status(201).json(new__kill); // Respond with the saved kill

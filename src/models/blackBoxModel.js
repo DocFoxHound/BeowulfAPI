@@ -16,28 +16,28 @@ BlackBox.init({
         unique: false,
     },
     ship_used: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
+        type: DataTypes.STRING,
+        allowNull: true,
         unique: false
     },
     ship_killed: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: false
     },
     value: {
         type: DataTypes.DOUBLE,
-        allowNull: false,
+        allowNull: true,
         unique: false,
     },
     kill_count: {
         type: DataTypes.DOUBLE,
-        allowNull: false,
+        allowNull: true,
         unique: false,
     },
     victims: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false,
+        allowNull: true,
         unique: false
     },
     patch: {
@@ -47,7 +47,7 @@ BlackBox.init({
     },
     assists: {
         type: DataTypes.ARRAY(DataTypes.BIGINT),
-        allowNull: false,
+        allowNull: true,
         unique: false
     },
     // Add more fields as necessary
