@@ -101,7 +101,6 @@ exports.validateKey = async (req, res) => {
     try {
       const foundKey = await KeyModel.findOne({ where: { key } });
       if (foundKey) {
-        console.log(foundKey)
         return res.status(200).json(foundKey);
       } else {
         return res.status(404).send('Key not found');
