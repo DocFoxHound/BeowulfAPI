@@ -106,6 +106,7 @@ exports.validateKey = async (req, res) => {
         return res.status(404).send('Key not found');
       }
     } catch (error) {
-      res.status(500).send(error);
+        console.error(`Error validating key: ${error}`);
+        res.status(500).send(error);
     }
 };
