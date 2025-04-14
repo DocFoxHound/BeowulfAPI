@@ -93,6 +93,7 @@ exports.getKeyByUserId = async (req, res) => {
 };
 
 exports.validateKey = async (req, res) => {
+    console.log("Test")
     const key = req.query.api_key || req.headers.authorization;
     const player_name = req.query.player_name;
   

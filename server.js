@@ -54,7 +54,7 @@ app.use(process.env.API_LESSONSLEARNED_ROUTES, lessonsLearnedRoutes)
 app.use(process.env.API_PLAYERSHIP_ROUTES, playerShipRoutes)
 app.use(process.env.API_WAREHOUSE_ROUTES, warehouseRoutes)
 app.use(process.env.API_KEY_ROUTES, keyRoutes)
-app.use(process.env.API_REPORT_KILL, reportKill)
+app.use("/api/keys", reportKill)
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
