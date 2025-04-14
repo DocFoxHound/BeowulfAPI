@@ -5,20 +5,31 @@ const BlackBox = require('../models/blackBoxModel');
 const stringSimilarity = require('string-similarity');
 
 async function killLogConvert(reportKill){
-    // console.log(reportKill);
+    console.log(reportKill);
     try{
+        const global_ship_list = [
+            'DRAK', 'ORIG', 'AEGS', 'ANVL', 'CRUS', 'BANU', 'MISC',
+            'KRIG', 'XNAA', 'ARGO', 'VNCL', 'ESPR', 'RSI', 'CNOU',
+            'GRIN', 'TMBL', 'GAMA'
+        ]
+
+        const fps_weapons = [
+            '_rifle_', '_pistol_', '_shotgun_', '_smg_', '_sniper_', '_sniperrifle_', '_grenade_', '_launcher_', '_lmg_', '_melee_', '_special_', 'unknown'
+        ]
+
         const id = reportKill.id;
         const patch = reportKill.patch;
-        const time = reportKill.time;
-        const player = reportKill.player;
+        // const time = reportKill.time;
+        // const player = reportKill.player;
         const victim = reportKill.victim;
         const zone = reportKill.zone;
         const weapon = reportKill.weapon;
-        const rsi_profile = reportKill.rsi_profile;
-        const game_mode = reportKill.game_mode;
-        const client_ver = reportKill.client_ver;
+        const containsFpsWeapon = fps_weapons.some(gun => weapon.includes(gun));
+        const startsWithGlobalShip = global_ship_list.some(prefix => zone.startsWith(prefix));
+        // const rsi_profile = reportKill.rsi_profile;
+        // const game_mode = reportKill.game_mode;
+        // const client_ver = reportKill.client_ver;
         let playerShip = reportKill.killers_ship;
-        let killedShip = zone.slice(5, -14).replace(/_/g, ' ');
         const key = reportKill.key;
         const keyUserPair = await KeyModel.findOne({
             where: {
@@ -26,21 +37,30 @@ async function killLogConvert(reportKill){
             }
         });
         const userId = keyUserPair.user_id;
-        const userData = await UserModel.findByPk(userId);
+        const damageType = reportKill.damage_type;
+        // const userData = await UserModel.findByPk(userId);
         const allShips = (await ShipModel.findAll()).map(ship => ship.get());
         const shipNames = allShips.map(s => s.ship);
         const normalizedShipNames = shipNames.map(normalizeShipName);
 
-        let matchedKilledShipObject = "unknown";
-        try{
-            const normalizedKilled = normalizeShipName(killedShip);
-            const matchKilled = stringSimilarity.findBestMatch(normalizedKilled, normalizedShipNames);
-            const bestKilledMatchName = shipNames[normalizedShipNames.indexOf(matchKilled.bestMatch.target)];
-            matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
-            console.log("matchedKilledShipObject: ", matchedKilledShipObject);
-        } catch (error) {
-            console.error("Error matching killed ship: ", error.message);
+        let matchedKilledShipObject = "FPS";
+        if(damageType === "VehicleDestruction" || damageType === "Explosion" && startsWithGlobalShip && !containsFpsWeapon){
+            try{
+                let killedShip = zone.slice(5, -14).replace(/_/g, ' ');
+                const normalizedKilled = normalizeShipName(killedShip);
+                const matchKilled = stringSimilarity.findBestMatch(normalizedKilled, normalizedShipNames);
+                const bestKilledMatchName = shipNames[normalizedShipNames.indexOf(matchKilled.bestMatch.target)];
+                matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
+                // console.log("matchedKilledShipObject: ", matchedKilledShipObject);
+            } catch (error) {
+                console.error("Error matching killed ship: ", error.message);
+            }
+        }else if (containsFpsWeapon){
+            matchedKilledShipObject = "FPS";
+        }else{
+            matchedKilledShipObject = "unknown";
         }
+        
 
         let matchedPlayerShipObject = "unknown";
         if(playerShip !== "N/A"){
@@ -60,8 +80,8 @@ async function killLogConvert(reportKill){
             id: id,
             user_id: userId,
             ship_used: matchedPlayerShipObject !== "unknwon" ? matchedPlayerShipObject.ship : "unknown",
-            ship_killed: matchedKilledShipObject !== "unknown" ? matchedKilledShipObject.ship : "unknown",
-            value: matchedKilledShipObject !== "unknown" ? matchedKilledShipObject.avg_price : 0,
+            ship_killed: matchedKilledShipObject !== "FPS" ? matchedKilledShipObject.ship : "FPS",
+            value: matchedKilledShipObject !== "FPS" ? matchedKilledShipObject.avg_price : 0,
             kill_count: 1,
             victims: [victim],
             patch: patch,
@@ -75,30 +95,6 @@ async function killLogConvert(reportKill){
     }
 }
 
-// dataValues: {
-//     id: '1744564671305',
-//     patch: '4.1',
-//     time: 2025-04-13T17:17:51.279Z,
-//     player: 'DocHound',
-//     victim: 'Mercuriuss',
-//     zone: 'ANVL_Hornet_F7A_Mk2_2677329226210',
-//     weapon: 'GATS_BallisticGatling_S3_2677329225797',
-//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
-//     game_mode: 'EA_SquadronBattle',
-//     client_ver: '7.0',
-//     killers_ship: 'N/A',
-//     key: '1744564671305',
-//   },
-
-// id: 
-// user_id: 
-// ship_used: 
-// ship_killed: 
-// value: 
-// kill_count: 
-// victims: 
-// patch: 
-// assists: 
 
 function normalizeShipName(name) {
     return name
@@ -116,3 +112,183 @@ function normalizeShipName(name) {
 module.exports = {
     killLogConvert
 };
+
+// {
+//     id: '1744564671305',
+//     patch: '4.1',
+//     time: 2025-04-13T17:17:51.279Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'ANVL_Hornet_F7A_Mk2_2677329226210',
+//     weapon: 'GATS_BallisticGatling_S3_2677329225797',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_SquadronBattle',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '1744564671305',
+//   },
+
+// {
+//     id: '1744649023808',
+//     patch: '4.1',
+//     time: 2025-04-14T16:43:43.226Z,
+//     player: 'DocHound',
+//     victim: 'CaptainComedy',
+//     zone: 'OOC_Stanton_2a_Cellin',
+//     weapon: 'unknown',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/CaptainComedy',
+//     game_mode: 'EA_FPSGunGame',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// { this is a turret
+//     id: '1744650651701',
+//     patch: '4.1',
+//     time: 2025-04-14T17:10:51.498Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'ANVL_Hornet_F7A_Mk2_2699085238610',
+//     weapon: 'RSI_Bespoke_BallisticCannon_A_2699085238957',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FreeFlight',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// {
+//     id: '1744650979279',
+//     patch: '4.1',
+//     time: 2025-04-14T17:16:18.806Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'ANVL_Hornet_F7A_Mk2_2699085240659',
+//     weapon: 'MRCK_S10_RSI_Polaris_Torpedo_lb_2699085238828',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FreeFlight',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// {
+//     id: '1744653304646',
+//     patch: '4.1',
+//     time: 2025-04-14T17:55:02.880Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'planet',
+//     weapon: 'klwe_lmg_energy_01_2699725233488',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FPSGunGame',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// {
+//     id: '1744653411989',
+//     patch: '4.1',
+//     time: 2025-04-14T17:56:51.076Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'planet',
+//     weapon: 'utfl_melee_01_gungame_2699725233463',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FPSGunGame',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// {
+//     id: '1744653572428',
+//     patch: '4.1',
+//     time: 2025-04-14T17:59:31.952Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'planet',
+//     weapon: 'gmni_rifle_ballistic_01_firerats01_2699725233533',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FPSGunGame',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// {
+//     id: '1744653805773',
+//     patch: '4.1',
+//     time: 2025-04-14T18:03:24.713Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'planet',
+//     weapon: 'none_shotgun_ballistic_01_2699725233627',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FPSGunGame',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// {
+//     id: '1744653880625',
+//     patch: '4.1',
+//     time: 2025-04-14T18:04:40.256Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'planet',
+//     weapon: 'ksar_sniper_ballistic_01_2699725233662',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FPSGunGame',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// {
+//     id: '1744654036375',
+//     patch: '4.1',
+//     time: 2025-04-14T18:07:15.556Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'planet',
+//     weapon: 'ksar_pistol_ballistic_01_2699725233735',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_FPSGunGame',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// { GRENADE KILL
+//     id: '1744654477359',
+//     patch: '4.1',
+//     time: 2025-04-14T18:14:36.924Z,
+//     player: 'DocHound',
+//     victim: 'Mercuriuss',
+//     zone: 'stanton4',
+//     weapon: 'unknown',
+//     rsi_profile: 'https://robertsspaceindustries.com/citizens/Mercuriuss',
+//     game_mode: 'EA_Elimination',
+//     client_ver: '7.0',
+//     killers_ship: 'N/A',
+//     key: '82d2d7a4f738c905db556f6cd904e8c3'
+//   }
+
+// id: 
+// user_id: 
+// ship_used: 
+// ship_killed: 
+// value: 
+// kill_count: 
+// victims: 
+// patch: 
+// assists: 
+
+// <2025-04-14T16:42:53.465Z> [Notice] <Actor Death> CActor::Kill: 'idkausername_27' [202063593546] in zone 'OOC_Stanton_2a_Cellin' killed by 'DocHound' [202061381370] using 'lbco_pistol_energy_01_2698343630880' [Class lbco_pistol_energy_01] with damage type 'Bullet' from direction x: -0.995284, y: -0.073818, z: -0.062935 [Team_ActorTech][Actor] ::: FPS kill on Kraeah station.
+// <2025-04-14T17:10:51.498Z> [Notice] <Actor Death> CActor::Kill: 'Mercuriuss' [200146297631] in zone 'ANVL_Hornet_F7A_Mk2_2699085238610' killed by 'DocHound' [202061381370] using 'RSI_Bespoke_BallisticCannon_A_2699085238957' [Class unknown] with damage type 'VehicleDestruction' from direction x: 0.000000, y: 0.000000, z: 0.000000 [Team_ActorTech][Actor] ::: Ship kill from Turret
+// <2025-04-14T17:16:18.806Z> [Notice] <Actor Death> CActor::Kill: 'Mercuriuss' [200146297631] in zone 'ANVL_Hornet_F7A_Mk2_2699085240659' killed by 'DocHound' [202061381370] using 'MRCK_S10_RSI_Polaris_Torpedo_lb_2699085238828' [Class MRCK_S10_RSI_Polaris_Torpedo_lb] with damage type 'Explosion' from direction x: 0.383955, y: 1.041579, z: -0.330675 [Team_ActorTech][Actor] ::: Ship kill from Torpedo
+// <2025-04-14T17:22:04.228Z> [Notice] <Actor Death> CActor::Kill: 'Mercuriuss' [200146297631] in zone 'RSI_Polaris_2699085238718' killed by 'DocHound' [202061381370] using 'behr_rifle_ballistic_01_2699085238600' [Class behr_rifle_ballistic_01] with damage type 'Bullet' from direction x: 0.040409, y: -0.998474, z: 0.037640 [Team_ActorTech][Actor] ::: FPS kill on RSI Polaris

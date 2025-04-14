@@ -48,7 +48,8 @@ exports.createKill = async (req, res) => {
             game_mode: req.body.game_mode,
             client_ver: req.body.client_ver,
             killers_ship: req.body.killers_ship,
-            key: key
+            key: key,
+            damage_type: req.body.damage_type,
         });
 
         killLogConvert(new__kill.dataValues); // Call the killLogConvert function with the new kill object
