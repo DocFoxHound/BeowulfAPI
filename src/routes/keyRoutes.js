@@ -3,10 +3,10 @@ const router = express.Router();
 const keyController = require('../controllers/keyController');
 
 // GET request for retrieving a list of all users
-router.get(process.env.API_KEY_GET, keyController.getAllKeys); //process.env.API_KEY_ROUTES
+router.get('/', keyController.getAllKeys);
 
 // POST request for creating a new user
-router.post(process.env.API_KEY_POST, keyController.createKey);
+router.post('/', keyController.createKey);
 
 // PUT request for updating an existing user by ID
 router.get('/user', keyController.getKeyByUserId);
