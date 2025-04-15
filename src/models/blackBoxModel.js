@@ -45,11 +45,6 @@ BlackBox.init({
         allowNull: true,
         unique: false
     },
-    assists: {
-        type: DataTypes.ARRAY(DataTypes.BIGINT),
-        allowNull: true,
-        unique: false
-    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
