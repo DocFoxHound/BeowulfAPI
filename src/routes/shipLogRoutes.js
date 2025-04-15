@@ -18,9 +18,6 @@ router.get('/entry', shipLogController.getByEntryId);
 router.get('/patch', shipLogController.getByPatch);
 
 // GET request for retrieving all badges by user ID
-router.get('/ownerandpatch', shipLogController.getByOwnerIdAndPatch);
-
-// GET request for retrieving all badges by user ID
 router.get('/commanderandpatch', shipLogController.getByCommanderIdAndPatch);
 
 // GET request for retrieving all badges
