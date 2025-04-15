@@ -89,27 +89,6 @@ exports.getByPatch = async (req, res) => {
     }
 };
 
-
-exports.getByOwnerIdAndPatch = async (req, res) => {
-    const { owner_id, patch } = req.query;
-    try {
-      const entries = await ShipLog.findAll({
-        where: {
-            owner_id,
-            patch
-        }
-      });
-  
-      if (entries.length > 0) {
-        res.status(200).json(entries);
-      } else {
-        res.status(404).send('No ShipLog found for the given user ID and patch');
-      }
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
-};
-
 exports.getByCommanderIdAndPatch = async (req, res) => {
     const { commander, patch } = req.query;
     try {
