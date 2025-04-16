@@ -3,7 +3,7 @@ const router = express.Router();
 const keyController = require('../controllers/keyController');
 
 // GET request for retrieving a list of all users
-router.get('/', keyController.getAllKeys);
+router.get('/', keyController.getAllKeys); //process.env.API_KEY_ROUTES
 
 // POST request for creating a new user
 router.post('/', keyController.createKey);

@@ -16,12 +16,12 @@ ShipLog.init({
         unique: false,
     },
     subcommanders: {
-        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: false,
         unique: false,
     },
     crew: {
-        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: false,
         unique: false
     },
