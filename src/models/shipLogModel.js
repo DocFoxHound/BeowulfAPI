@@ -15,7 +15,12 @@ ShipLog.init({
         allowNull: false,
         unique: false,
     },
-    subcommanders: {
+    air_subcommanders: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
+        unique: false,
+    },
+    fps_subcommanders: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: false,
         unique: false,
@@ -36,6 +41,16 @@ ShipLog.init({
         unique: false
     },
     patch: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    title: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: false

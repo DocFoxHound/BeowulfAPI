@@ -45,6 +45,11 @@ HitTrack.init({
         allowNull: false,
         unique: false,
     },
+    air_or_ground: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: false,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
