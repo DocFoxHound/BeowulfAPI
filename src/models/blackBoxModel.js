@@ -45,6 +45,11 @@ BlackBox.init({
         allowNull: true,
         unique: false
     },
+    game_mode: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

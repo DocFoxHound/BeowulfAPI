@@ -21,6 +21,7 @@ async function killLogConvert(reportKill){
         const patch = reportKill.patch;
         // const time = reportKill.time;
         // const player = reportKill.player;
+        const gameModeRaw = reportKill.game_mode;
         const victim = reportKill.victim;
         const zone = reportKill.zone;
         const weapon = reportKill.weapon;
@@ -42,6 +43,13 @@ async function killLogConvert(reportKill){
         const allShips = (await ShipModel.findAll()).map(ship => ship.get());
         const shipNames = allShips.map(s => s.ship);
         const normalizedShipNames = shipNames.map(normalizeShipName);
+
+        let gameMode
+        if(gameModeRaw.includes("EA")){
+            gameMode = "AC";
+        }else{
+            gameMode = "PU";
+        }
 
         let matchedKilledShipObject = "FPS";
         if(damageType === "VehicleDestruction" || damageType === "Explosion" && startsWithGlobalShip && !containsFpsWeapon){
@@ -85,7 +93,7 @@ async function killLogConvert(reportKill){
             kill_count: 1,
             victims: [victim],
             patch: patch,
-            assists: [],
+            game_mode: gameMode
         });
         const savedBlackBox = await newBlackBox.save();
         console.log("Saved")
