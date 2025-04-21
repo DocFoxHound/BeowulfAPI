@@ -8,6 +8,9 @@ router.get('/', badgeController.getAllBadges);
 // GET request for retrieving all badges by user ID
 router.get('/user', badgeController.getBadgesByUserId);
 
+// GET request for retrieving all badges by user ID
+router.get('/patch', badgeController.getBadgesByPatch);
+
 // POST request for creating a new user
 router.post('/', badgeController.createBadge);
 

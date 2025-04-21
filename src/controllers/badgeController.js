@@ -11,20 +11,6 @@ exports.getAllBadges = async (req, res) => {
     }
 };
 
-// // Handle GET request for a single __player by ID
-// exports.getBadgeByPlayerId = async (req, res) => {
-//     try {
-//         const __player = await BadgeModel.findByPk(req.params.id);
-//         if (__player) {
-//             res.status(200).json(__player);
-//         } else {
-//             res.status(404).send('Player not found');
-//         }
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// };
-
 // Handle POST request to create a new __badge
 exports.createBadge = async (req, res) => {
     try {
@@ -52,22 +38,6 @@ exports.updateBadge = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
-
-// // Handle DELETE request to delete a __badge by ID
-// exports.deleteBadge = async (req, res) => {
-//     const __badgeId = req.params.id;
-//     console.log(__badgeId);
-//     try {
-//         const result = await pool.query('DELETE FROM badges WHERE id = $1 RETURNING *;', [__badgeId]);
-//         if (result.rows.length > 0) {
-//             res.status(200).send('Badge deleted');
-//         } else {
-//             res.status(404).send('Badge not found');
-//         }
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// };
 
 // Handle DELETE request to delete a badge by ID
 exports.deleteBadge = async (req, res) => {
@@ -102,6 +72,25 @@ exports.getBadgesByUserId = async (req, res) => {
             res.status(200).json(badges);
         } else {
             res.status(404).send('No badges found for the given user ID');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for badges by user ID
+exports.getBadgesByPatch = async (req, res) => {
+    const { patch } = req.query;
+    try {
+        const badges = await BadgeModel.findAll({
+            where: {
+                patch: patch
+            }
+        });
+        if (badges.length > 0) {
+            res.status(200).json(badges);
+        } else {
+            res.status(404).send('No badges found for the specified patch.');
         }
     } catch (error) {
         res.status(500).send(error.message);
