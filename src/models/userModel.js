@@ -35,37 +35,123 @@ User.init({
         allowNull: true,
         unique: false
     },
-    raptor_1_solo: {
+    rank: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        unique: true,
+        primaryKey: true
+    },
+    raptor_1_initiation: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raptor_1_team: {
+    raptor_1_hooligan: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raptor_2_solo: {
+    raptor_2_brawler: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raptor_2_team: {
+    raptor_2_teamfighter: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raptor_3_solo: {
+    raptor_3_competitor: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raptor_3_team: {
+    raptor_3_family: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    corsair_1_turret: {
+    raptor_3_mercenary: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raptor_4_dogfighter: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raptor_4_hivemind: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raptor_4_assassin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raptor_5_ace: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_1_bouncer: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_1_thief: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_2_butcher: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_2_highwayman: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_2_squadie: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_3_mission: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_3_requisition: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_3_proficiency: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_4_point: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_4_operator: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_4_challenge: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false
+    },
+    raider_5_selection: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
@@ -75,56 +161,40 @@ User.init({
         allowNull: false,
         unique: false
     },
-    corsair_2_ship_commander: {
+    corsair_1_turret: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    corsair_2_wing_commander: {
+    corsair_2_sailor: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    corsair_3_fleet_commander: {
+    corsair_3_broadening: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raider_1_swabbie: {
+    corsair_3_staff: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raider_1_linemaster: {
+    corsair_4_operations: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raider_1_boarder: {
+    corsair_5_commander: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
     },
-    raider_2_powdermonkey: {
+    corsair_5_admiral: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         unique: false
-    },
-    raider_2_mate: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        unique: false
-    },
-    raider_3_sailmaster: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        unique: false
-    },
-    rank: {
-        type: DataTypes.BIGINT,
-        allowNull: true,
-        unique: true,
-        primaryKey: true
     },
     // Add more fields as necessary
 }, {
