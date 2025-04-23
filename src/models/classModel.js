@@ -16,7 +16,7 @@ Class.init({
         unique: true
     },
     prestige_category: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: false
     },
