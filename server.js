@@ -3,6 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const session = require("express-session");
+const cors = require("cors");
+const passport = require("./src/auth/discord");
 
 // Import route files
 const classRoutes = require("./src/routes/classRoutes")
@@ -73,6 +76,45 @@ app.use((err, req, res, next) => {
     });
 });
 
+// CORS so frontend can use cookies/session
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
+  
+  // Sessions
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Auth Routes
+app.get("/auth/discord", passport.authenticate("discord"));
+app.get("/auth/discord/callback",
+  passport.authenticate("discord", { failureRedirect: "/" }),
+  (req, res) => {
+    // Redirect to frontend after successful login
+    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+  }
+);
+
+// Fetch user data
+app.get("/auth/user", (req, res) => {
+  if (!req.user) return res.status(401).json({ error: "Not logged in" });
+  res.json(req.user);
+});
+
+// Logout
+app.get("/auth/logout", (req, res) => {
+  req.logout(() => {
+    res.redirect(process.env.FRONTEND_URL);
+  });
+});
+
 // Set the port and start the server
 const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3000;
@@ -80,6 +122,8 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server running on port http://${host}:${port}`);
 });
+
+// app.listen(3000, () => console.log("API listening on http://localhost:3000"));
 
 // Export the app for testing purposes
 module.exports = app;
