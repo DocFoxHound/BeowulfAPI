@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const session = require("express-session");
 const cors = require("cors");
 const passport = require("./src/auth/discord");
+const authRoutes = require('./src/routes/authRoutes');
 
 // Import route files
 const classRoutes = require("./src/routes/classRoutes")
@@ -38,6 +39,22 @@ app.use(morgan('dev'));               // Logging middleware
 app.use(bodyParser.json());           // Parses JSON data in requests
 app.use(bodyParser.urlencoded({ extended: true })); // Parses URL-encoded data
 
+// CORS so frontend can use cookies/session
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
+  
+// Sessions
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Routes
 app.use(process.env.API_CLASS_ROUTES, classRoutes);
 app.use(process.env.API_RANK_ROUTES, rankRoutes);
@@ -58,6 +75,7 @@ app.use(process.env.API_PLAYERSHIP_ROUTES, playerShipRoutes)
 app.use(process.env.API_WAREHOUSE_ROUTES, warehouseRoutes)
 app.use(process.env.API_KEY_ROUTES, keyRoutes)
 app.use(process.env.API_REPORT_KILL, reportKill)
+app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -76,49 +94,11 @@ app.use((err, req, res, next) => {
     });
 });
 
-// CORS so frontend can use cookies/session
-app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true
-}));
-  
-  // Sessions
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Auth Routes
-app.get("/auth/discord", passport.authenticate("discord"));
-app.get("/auth/discord/callback",
-  passport.authenticate("discord", { failureRedirect: "/" }),
-  (req, res) => {
-    // Redirect to frontend after successful login
-    res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
-  }
-);
-
-// Fetch user data
-app.get("/auth/user", (req, res) => {
-  if (!req.user) return res.status(401).json({ error: "Not logged in" });
-  res.json(req.user);
-});
-
-// Logout
-app.get("/auth/logout", (req, res) => {
-  req.logout(() => {
-    res.redirect(process.env.FRONTEND_URL);
-  });
-});
 
 // Set the port and start the server
 const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3000;
-// app.listen(host, port, () => {
+// Start the server
 app.listen(port, () => {
     console.log(`Server running on port http://${host}:${port}`);
 });

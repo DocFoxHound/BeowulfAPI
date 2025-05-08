@@ -38,8 +38,7 @@ User.init({
     rank: {
         type: DataTypes.BIGINT,
         allowNull: true,
-        unique: true,
-        primaryKey: true
+        unique: true
     },
     raptor_1_initiation: {
         type: DataTypes.BOOLEAN,
@@ -196,6 +195,20 @@ User.init({
         allowNull: false,
         unique: false
     },
+    // Discord authentication fields
+    // discordId: { 
+    //     type: DataTypes.STRING, 
+    //     allowNull: false, 
+    //     unique: true 
+    // },
+    // accessToken: { 
+    //     type: DataTypes.STRING, 
+    //     allowNull: false 
+    // },
+    // refreshToken: { 
+    //     type: DataTypes.STRING, 
+    //     allowNull: false 
+    // }
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
