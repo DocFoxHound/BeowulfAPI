@@ -11,7 +11,7 @@ passport.use(
     {
       clientID: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      callbackURL: process.env.DISCORD_CALLBACK_URL,
+      callbackURL: process.env.IS_LIVE === "false" ? process.env.TEST_DISCORD_CALLBACK_URL : process.env.LIVE_DISCORD_CALLBACK_URL,
       scope: ["identify"],
     },
     async (accessToken, refreshToken, profile, done) => {

@@ -2,7 +2,7 @@ const UserService = require('../services/userService');
 
 exports.handleDiscordCallback = async (req, res) => {
   const user = await UserService.upsertUser(req.user);
-  res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
+  res.redirect(`${process.env.IS_LIVE === "false" ? process.env.TEST_FRONTEND_URL : process.env.LIVE_FRONTEND_URL}/dashboard`);
 };
 
 exports.getUserProfile = (req, res) => {
@@ -11,5 +11,5 @@ exports.getUserProfile = (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  req.logout(() => res.redirect(process.env.FRONTEND_URL));
+  req.logout(() => res.redirect(process.env.IS_LIVE === "false" ? process.env.TEST_FRONTEND_URL : process.env.LIVE_FRONTEND_URL));
 };
