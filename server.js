@@ -42,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // Parses URL-encoded data
 
 // CORS so frontend can use cookies/session
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [process.env.IS_LIVE === "true" ? process.env.LIVE_FRONTEND_URL : process.env.TEST_FRONTEND_URL, process.env.LIVE_FRONTEND_URL_SHORT],
     credentials: true
 }));
   
