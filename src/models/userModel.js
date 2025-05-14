@@ -195,6 +195,11 @@ User.init({
         allowNull: false,
         unique: false
     },
+    roles: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: true,
+        unique: false,
+    },
     // Discord authentication fields
     // discordId: { 
     //     type: DataTypes.STRING, 

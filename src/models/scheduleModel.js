@@ -46,6 +46,16 @@ Schedule.init({
         allowNull: true,
         unique: false
     },
+    allowed_ranks: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: true,
+        unique: false,
+    },
+    allowed_ranks_names: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        unique: false,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
