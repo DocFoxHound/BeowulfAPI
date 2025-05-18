@@ -23,6 +23,9 @@ router.get('/assists', hitTrackerController.getAssistEntries);
 // GET request for retrieving all badges by user ID
 router.get('/assistsuserpatch', hitTrackerController.getAssistEntriesUserPatch);
 
+// GET request for retrieving the latest entry
+router.get('/latest', hitTrackerController.getLatest);
+
 // POST request for creating a new user
 router.post('/', hitTrackerController.create);
 

@@ -35,6 +35,16 @@ Warehouse.init({
         allowNull: true,
         unique: false
     },
+    location: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    for_org: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        unique: false
+    },
     
     // Add more fields as necessary
 }, {

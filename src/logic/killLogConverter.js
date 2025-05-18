@@ -43,6 +43,7 @@ async function killLogConvert(reportKill){
         const allShips = (await ShipModel.findAll()).map(ship => ship.get());
         const shipNames = allShips.map(s => s.ship);
         const normalizedShipNames = shipNames.map(normalizeShipName);
+        const SIMILARITY_THRESHOLD = 0.8
 
         let gameMode
         if(gameModeRaw.includes("EA")){
@@ -56,10 +57,58 @@ async function killLogConvert(reportKill){
             try{
                 let killedShip = zone.slice(5, -14).replace(/_/g, ' ');
                 const normalizedKilled = normalizeShipName(killedShip);
-                const matchKilled = stringSimilarity.findBestMatch(normalizedKilled, normalizedShipNames);
-                const bestKilledMatchName = shipNames[normalizedShipNames.indexOf(matchKilled.bestMatch.target)];
-                matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
-                // console.log("matchedKilledShipObject: ", matchedKilledShipObject);
+
+                // 1. Exact match first
+                const exactIdx = normalizedShipNames.indexOf(normalizedKilled);
+                if (exactIdx !== -1) {
+                    const bestKilledMatchName = shipNames[exactIdx];
+                    matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
+                } else {
+                    // 2. Fuzzy match, but prefer shortest and/or prefix matches on tie
+                    const matchKilled = stringSimilarity.findBestMatch(normalizedKilled, normalizedShipNames);
+                    const bestScore = matchKilled.bestMatch.rating;
+
+                    // Find all matches with the best score
+                    const bestMatches = matchKilled.ratings
+                        .map((r, i) => ({ ...r, index: i }))
+                        .filter(r => r.rating === bestScore && bestScore >= SIMILARITY_THRESHOLD);
+
+                    let chosenIdx;
+                    if (bestMatches.length > 1) {
+                        // Prefer exact prefix match, then shortest name, then first
+                        const prefixIdx = bestMatches.find(m => normalizedShipNames[m.index].startsWith(normalizedKilled));
+                        if (prefixIdx) {
+                            chosenIdx = prefixIdx.index;
+                        } else {
+                            // Prefer shortest name
+                            chosenIdx = bestMatches.reduce((minIdx, curr) =>
+                                shipNames[curr.index].length < shipNames[minIdx].length ? curr.index : minIdx,
+                                bestMatches[0].index
+                            );
+                        }
+                    } else if (bestMatches.length === 1) {
+                        chosenIdx = bestMatches[0].index;
+                    }
+
+                    if (chosenIdx !== undefined) {
+                        const bestKilledMatchName = shipNames[chosenIdx];
+                        matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
+                    } else {
+                        matchedKilledShipObject = "unknown";
+                    }
+                }
+
+                //ORIGINAL
+                // const matchKilled = stringSimilarity.findBestMatch(normalizedKilled, normalizedShipNames);
+                // const bestKilledMatchName = shipNames[normalizedShipNames.indexOf(matchKilled.bestMatch.target)];
+                // matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
+                
+                // if (matchKilled.bestMatch.rating >= SIMILARITY_THRESHOLD) {
+                //     const bestKilledMatchName = shipNames[normalizedShipNames.indexOf(matchKilled.bestMatch.target)];
+                //     matchedKilledShipObject = allShips.find(ship => ship.ship === bestKilledMatchName);
+                // } else {
+                //     matchedKilledShipObject = "unknown";
+                // }
             } catch (error) {
                 console.error("Error matching killed ship: ", error.message);
             }

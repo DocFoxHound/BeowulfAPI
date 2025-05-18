@@ -181,3 +181,15 @@ exports.delete = async (req, res) => {
     }
 };
 
+exports.getLatest = async (req, res) => {
+    try {
+        const entries = await HitTrack.findAll({
+            order: [['id', 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
