@@ -162,6 +162,11 @@ function normalizeShipName(name) {
         .replace(/\bmk3\b/gi, 'mk iii')      // optional extras
         .replace(/\bmk4\b/gi, 'mk iv')      // optional extras
         .replace(/\bmk5\b/gi, 'mk v')      // optional extras
+        .replace(/\bmk 1\b/gi, 'mk i')       // replace mk2 → mk ii
+        .replace(/\bmk 2\b/gi, 'mk ii')       // replace mk2 → mk ii
+        .replace(/\bmk 3\b/gi, 'mk iii')      // optional extras
+        .replace(/\bmk 4\b/gi, 'mk iv')      // optional extras
+        .replace(/\bmk 5\b/gi, 'mk v')
         .replace(/[^a-z0-9 ]/gi, '')          // remove special chars
         .trim();
 }
