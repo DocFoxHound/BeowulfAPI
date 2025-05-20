@@ -29,6 +29,9 @@ const warehouseRoutes = require('./src/routes/warehouseRoutes')
 const keyRoutes = require('./src/routes/keyRoutes');
 const reportKill = require('./src/routes/reportKillRoutes')
 const scheduleRoutes = require('./src/routes/scheduleRoutes')
+const fleetRoutes = require('./src/routes/userFleetRoutes')
+const playerExperienceRoutes = require('./src/routes/playerExperienceRoutes')
+const recentGatheringRoutes = require('./src/routes/recentGatheringsRoutes')
 
 // Load environment variables
 dotenv.config();
@@ -77,6 +80,9 @@ app.use(process.env.API_WAREHOUSE_ROUTES, warehouseRoutes)
 app.use(process.env.API_KEY_ROUTES, keyRoutes)
 app.use(process.env.API_REPORT_KILL, reportKill)
 app.use(process.env.API_SCHEDULES, scheduleRoutes)
+app.use(process.env.API_FLEET_ROUTES, fleetRoutes)
+app.use(process.env.API_PLAYER_EXPERIENCE_ROUTES, playerExperienceRoutes)
+app.use(process.env.API_RECENT_GATHERINGS_ROUTES, recentGatheringRoutes)
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler

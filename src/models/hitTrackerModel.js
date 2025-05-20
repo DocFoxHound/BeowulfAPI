@@ -75,6 +75,36 @@ HitTrack.init({
         allowNull: true,
         unique: false,
     },
+    video_link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false,
+    },
+    additional_media_links: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        unique: false,
+    },
+    type_of_piracy: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: false,
+    },
+    fleet_activity: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        unique: false,
+    },
+    fleet_names: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        unique: false,
+    },
+    fleet_ids: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: true,
+        unique: false,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
