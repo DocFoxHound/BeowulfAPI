@@ -33,4 +33,13 @@ router.put('/:id', blackBoxController.update);
 // DELETE request for deleting a user by ID
 router.delete('/:id', blackBoxController.delete);
 
+// GET request for retrieving all badges by user ID
+router.get('/userkillsbefore', blackBoxController.getUserKillsBeforeTimestamp);
+
+// GET request for retrieving all badges by user ID and patch game mode
+router.get('/userpatchgamemode', blackBoxController.getByUserIdPatchGameMode);
+
+// GET request for retrieving entries between two timestamps
+router.get('/between', blackBoxController.getEntriesBetweenTimestamps);
+
 module.exports = router;

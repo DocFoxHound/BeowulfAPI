@@ -17,6 +17,9 @@ router.get('/user', scheduleController.getSchedulesByUserId);
 // POST request for creating a new user
 router.post('/', scheduleController.createSchedule);
 
+// POST request for creating repeated schedules
+router.post('/repeat', scheduleController.createScheduleRepeatUntil);
+
 // PUT request for updating an existing user by ID
 router.put('/:id', scheduleController.updateSchedule);
 

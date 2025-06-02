@@ -60,17 +60,32 @@ PlayerExperience.init({
         allowNull: true,
         unique: false
     },
-    leadership: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-        unique: false
-    },
     salvage: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
         unique: false
     },
     patch: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    air_leadership: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        unique: false
+    },
+    ground_leadership: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        unique: false
+    },
+    commander: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        unique: false
+    },
+    type_of_experience: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: false

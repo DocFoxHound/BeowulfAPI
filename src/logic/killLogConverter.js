@@ -3,9 +3,9 @@ const UserModel = require('../models/userModel');
 const ShipModel = require('../models/uexShipModel');
 const BlackBox = require('../models/blackBoxModel');
 const stringSimilarity = require('string-similarity');
+const crypto = require('crypto'); // Add this at the top if not already imported
 
 async function killLogConvert(reportKill){
-    console.log(reportKill);
     try{
         const global_ship_list = [
             'DRAK', 'ORIG', 'AEGS', 'ANVL', 'CRUS', 'BANU', 'MISC',
@@ -17,10 +17,16 @@ async function killLogConvert(reportKill){
             '_rifle_', '_pistol_', '_shotgun_', '_smg_', '_sniper_', '_sniperrifle_', '_grenade_', '_launcher_', '_lmg_', '_melee_', '_special_', 'unknown'
         ]
 
-        const id = reportKill.id;
+        // Replace this line:
+        // const id = reportKill.id;
+
+        // With this:
+        const id = BigInt(Date.now()) * 1000n + BigInt(crypto.randomInt(0, 1000));
+
         const patch = reportKill.patch;
         // const time = reportKill.time;
         // const player = reportKill.player;
+        const timestamp = new Date(reportKill.time).toISOString();
         const gameModeRaw = reportKill.game_mode;
         const victim = reportKill.victim;
         const zone = reportKill.zone;
@@ -53,7 +59,7 @@ async function killLogConvert(reportKill){
         }
 
         let matchedKilledShipObject = "FPS";
-        if(damageType === "VehicleDestruction" || damageType === "Explosion" && startsWithGlobalShip && !containsFpsWeapon){
+        if(damageType === "VehicleDestruction" || damageType === "Explosion" || damageType === "Crash" && startsWithGlobalShip && !containsFpsWeapon){
             try{
                 let killedShip = zone.slice(5, -14).replace(/_/g, ' ');
                 const normalizedKilled = normalizeShipName(killedShip);
@@ -142,7 +148,8 @@ async function killLogConvert(reportKill){
             kill_count: 1,
             victims: [victim],
             patch: patch,
-            game_mode: gameMode
+            game_mode: gameMode,
+            timestamp: timestamp
         });
         const savedBlackBox = await newBlackBox.save();
         console.log("Saved")

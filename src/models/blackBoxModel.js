@@ -50,6 +50,11 @@ BlackBox.init({
         allowNull: true,
         unique: false
     },
+    timestamp: {
+        type: DataTypes.TIME,
+        allowNull: true,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

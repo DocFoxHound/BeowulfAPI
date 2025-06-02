@@ -23,6 +23,7 @@ router.get('/patch', playerExperienceController.getPlayerExperiencesByPatch);
 // GET request for retrieving all badges by user ID
 router.get('/userandpatch', playerExperienceController.getByUserIdAndPatch);
 
-
+// GET request for retrieving all badges by operation ID
+router.get('/operation', playerExperienceController.getPlayerExperiencesByOperationId);
 
 module.exports = router;

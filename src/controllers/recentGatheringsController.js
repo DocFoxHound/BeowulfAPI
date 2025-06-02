@@ -11,7 +11,6 @@ exports.getAllRecentGatherings = async (req, res) => {
     }
 };
 
-// Handle POST request to create a new __recentGathering
 exports.createRecentGathering = async (req, res) => {
     try {
         const new__recentGathering = new RecentGatheringModel(req.body);
@@ -22,7 +21,6 @@ exports.createRecentGathering = async (req, res) => {
     }
 };
 
-// Handle PUT request to update a recentGathering by ID
 exports.updateRecentGathering = async (req, res) => {
     try {
         // Find the __recentGathering first
@@ -39,7 +37,6 @@ exports.updateRecentGathering = async (req, res) => {
     }
 };
 
-// Handle DELETE request to delete a recentGathering by ID
 exports.deleteRecentGathering = async (req, res) => {
     const recentGatheringId = req.params.id;
     if (!recentGatheringId) {
@@ -58,61 +55,3 @@ exports.deleteRecentGathering = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
-
-// // Handle GET request for recentGatherings by user ID
-// exports.getRecentGatheringsByUserId = async (req, res) => {
-//     const { user_id } = req.query;
-//     try {
-//         const recentGatherings = await RecentGatheringModel.findAll({
-//             where: {
-//                 user_id: user_id
-//             }
-//         });
-//         if (recentGatherings.length > 0) {
-//             res.status(200).json(recentGatherings);
-//         } else {
-//             res.status(404).send('No recentGatherings found for the given user ID');
-//         }
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// };
-
-// // Handle GET request for recentGatherings by user ID
-// exports.getRecentGatheringsByPatch = async (req, res) => {
-//     const { patch } = req.query;
-//     try {
-//         const recentGatherings = await RecentGatheringModel.findAll({
-//             where: {
-//                 patch: patch
-//             }
-//         });
-//         if (recentGatherings.length > 0) {
-//             res.status(200).json(recentGatherings);
-//         } else {
-//             res.status(404).send('No recentGatherings found for the specified patch.');
-//         }
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// };
-
-// exports.getByUserIdAndPatch = async (req, res) => {
-//     const { user_id, patch } = req.query;
-//     try {
-//       const entries = await RecentGatheringModel.findAll({
-//         where: {
-//             user_id,
-//             patch
-//         }
-//       });
-  
-//       if (entries.length > 0) {
-//         res.status(200).json(entries);
-//       } else {
-//         res.status(404).send('No recentGathering found for the given user ID and patch');
-//       }
-//     } catch (error) {
-//       res.status(500).send(error.message);
-//     }
-// };

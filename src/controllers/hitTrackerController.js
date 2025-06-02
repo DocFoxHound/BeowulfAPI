@@ -2,6 +2,7 @@ const pool = require('../config/database');
 const HitTrack = require('../models/hitTrackerModel');
 // const { Sequelize } = require('sequelize');
 const sequelize = require('../config/database'); // Import the Sequelize instance
+const axios = require('axios'); // Add at the top if not already imported
 
 exports.getAll = async (req, res) => {
     try {
@@ -138,6 +139,15 @@ exports.create = async (req, res) => {
     try {
         const new_entry = new HitTrack(req.body);
         const saved_entry = await new_entry.save();
+
+        // Notify Discord bot
+        try {
+            await axios.post('http://localhost:3001/hittrack', saved_entry); // Change URL as needed
+        } catch (notifyErr) {
+            console.error('Failed to notify Discord bot:', notifyErr.message);
+            // Optionally: continue even if bot notification fails
+        }
+
         res.status(201).json(saved_entry);
     } catch (error) {
         res.status(500).send(error.message);
@@ -186,6 +196,18 @@ exports.getLatest = async (req, res) => {
         const entries = await HitTrack.findAll({
             order: [['id', 'DESC']],
             limit: 10
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getLatest100 = async (req, res) => {
+    try {
+        const entries = await HitTrack.findAll({
+            order: [['id', 'DESC']],
+            limit: 100
         });
         res.status(200).json(entries);
     } catch (error) {

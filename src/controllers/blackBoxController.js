@@ -181,3 +181,81 @@ exports.delete = async (req, res) => {
     }
 };
 
+
+exports.getUserKillsBeforeTimestamp = async (req, res) => {
+    const { user_id, timestamp } = req.query;
+    if (!user_id || !timestamp) {
+        return res.status(400).send('user_id and timestamp are required');
+    }
+    try {
+        // Calculate one hour before the given timestamp
+        const endTime = new Date(timestamp);
+        const startTime = new Date(endTime.getTime() - 60 * 60 * 1000);
+
+        const entries = await BlackBox.findAll({
+            where: {
+                user_id: user_id,
+                timestamp: {
+                    [require('sequelize').Op.between]: [startTime, endTime]
+                }
+            }
+        });
+
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No kills found for the given user and time window');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+
+exports.getByUserIdPatchGameMode = async (req, res) => {
+    const { user_id, patch, game_mode } = req.query;
+    if (!user_id || !patch || !game_mode) {
+        return res.status(400).send('user_id, patch, and game_mode are required');
+    }
+    try {
+        const entries = await BlackBox.findAll({
+            where: {
+                user_id,
+                patch,
+                game_mode
+            }
+        });
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No BlackBox found for the given user_id, patch, and game_mode');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+
+exports.getEntriesBetweenTimestamps = async (req, res) => {
+    const { start, end } = req.query;
+    if (!start || !end) {
+        return res.status(400).send('start and end timestamps are required');
+    }
+    try {
+        const entries = await BlackBox.findAll({
+            where: {
+                timestamp: {
+                    [require('sequelize').Op.between]: [new Date(start), new Date(end)]
+                }
+            }
+        });
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No BlackBox entries found in the given time range');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+

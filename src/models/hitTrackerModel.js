@@ -95,13 +95,13 @@ HitTrack.init({
         allowNull: false,
         unique: false,
     },
-    fleet_names: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+    fleet_ids: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
         allowNull: true,
         unique: false,
     },
-    fleet_ids: {
-        type: DataTypes.ARRAY(DataTypes.BIGINT),
+    victims: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         unique: false,
     },

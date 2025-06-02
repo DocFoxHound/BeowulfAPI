@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Assuming you have a config file for Sequelize
+const sequelize = require('../config/database');
 
 class Schedule extends Model {}
 
@@ -7,62 +7,114 @@ Schedule.init({
     id: {
         type: DataTypes.BIGINT,
         allowNull: false,
-        unique: true,
         primaryKey: true,
-        // autoIncrement: true
+        unique: true
     },
     author_id: {
         type: DataTypes.BIGINT,
-        allowNull: true,
-        unique: false,
+        allowNull: true
     },
     type: {
         type: DataTypes.STRING,
-        allowNull: true,
-        unique: false
+        allowNull: true
     },
     attendees: {
         type: DataTypes.ARRAY(DataTypes.BIGINT),
-        allowNull: true,
-        unique: false,
+        allowNull: true
     },
     author_username: {
         type: DataTypes.STRING,
-        allowNull: true,
-        unique: false,
+        allowNull: true
     },
     attendees_usernames: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-        unique: false,
+        allowNull: true
     },
     timestamp: {
-        type: DataTypes.TIME,
-        allowNull: true,
-        unique: false,
+        type: DataTypes.DATE, // timestamp with time zone
+        allowNull: true
     },
     action: {
         type: DataTypes.STRING,
-        allowNull: true,
-        unique: false
+        allowNull: true
     },
     allowed_ranks: {
         type: DataTypes.ARRAY(DataTypes.BIGINT),
-        allowNull: true,
-        unique: false,
+        allowNull: true
     },
     allowed_ranks_names: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-        unique: false,
+        allowNull: true
     },
-    // Add more fields as necessary
+    title: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    start_time: {
+        type: DataTypes.DATE, // timestamp with time zone
+        allowNull: true
+    },
+    end_time: {
+        type: DataTypes.DATE, // timestamp with time zone
+        allowNull: true
+    },
+    channel: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
+    appearance: {
+        type: DataTypes.JSON,
+        allowNull: true
+    },
+    repeat: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+    },
+    rsvp_options: {
+        type: DataTypes.JSON,
+        allowNull: true
+    },
+    fleet: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: true
+    },
+    patch: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+    },
+    repeat_end_date: {
+        type: DataTypes.DATE, // timestamp with time zone
+        allowNull: true
+    },
+    repeat_frequency: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    repeat_series: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
+    event_members: {
+        type: DataTypes.ARRAY(DataTypes.JSON),
+        allowNull: true
+    },
+    discord_post: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    }
 }, {
-    sequelize, // This is the Sequelize instance you must pass
-    modelName: 'Schedule', // We need to choose the model name
-    tableName: 'schedules', // Specify the table name
-    timestamps: false // Turn off Sequelize auto creating updatedAt and createdAt
+    sequelize,
+    modelName: 'Schedule',
+    tableName: 'schedules',
+    timestamps: false
 });
 
-// Export the model
 module.exports = Schedule;

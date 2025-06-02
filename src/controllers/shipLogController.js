@@ -1,6 +1,7 @@
 const pool = require('../config/database');
 const sequelize = require('../config/database'); // Import the Sequelize instance
 const ShipLog = require('../models/shipLogModel');
+const axios = require('axios'); // Add this at the top if not already present
 
 
 
@@ -153,8 +154,16 @@ exports.getCrewEntriesUserPatch = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const new_entry = new ShipLog(req.body);
-        const saved_entry = await new_entry.save();
+        const saved_entry = await ShipLog.create(req.body);
+
+        // Notify Discord bot or external service
+        try {
+            await axios.post('http://localhost:3001/fleetlog', saved_entry); // Change URL as needed
+        } catch (notifyErr) {
+            console.error('Failed to notify Discord bot:', notifyErr.message);
+            // Optionally: continue even if bot notification fails
+        }
+
         res.status(201).json(saved_entry);
     } catch (error) {
         res.status(500).send(error.message);
@@ -194,6 +203,72 @@ exports.delete = async (req, res) => {
         }
     } catch (error) {
         console.error(`Error deleting ShipLog: ${error.message}`);
+        res.status(500).send(error.message);
+    }
+};
+
+// Get logs by fleet active status
+exports.getByFleetActiveStatus = async (req, res) => {
+    const { active } = req.query;
+    try {
+        const entries = await ShipLog.findAll({
+            include: [{
+                association: 'Fleet',
+                where: { active: active === 'true' }
+            }]
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Get logs with top kills
+exports.getTopKills = async (req, res) => {
+    try {
+        const entries = await ShipLog.findAll({
+            order: [['total_kills', 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Get logs with top damages_value
+exports.getTopDamages = async (req, res) => {
+    try {
+        const entries = await ShipLog.findAll({
+            order: [['damages_value', 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Get recent logs by fleet ID
+exports.getRecentByFleetId = async (req, res) => {
+    const { fleet_id } = req.query;
+    if (!fleet_id) {
+        return res.status(400).send('fleet_id is required');
+    }
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+    try {
+        const entries = await ShipLog.findAll({
+            where: {
+                fleet_id: fleet_id,
+                created_at: {
+                    [sequelize.Sequelize.Op.gte]: threeMonthsAgo
+                }
+            }
+        });
+        res.status(200).json(entries);
+    } catch (error) {
         res.status(500).send(error.message);
     }
 };

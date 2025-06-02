@@ -116,3 +116,24 @@ exports.getByUserIdAndPatch = async (req, res) => {
       res.status(500).send(error.message);
     }
 };
+
+exports.getPlayerExperiencesByOperationId = async (req, res) => {
+    const { operation_id } = req.query;
+    if (!operation_id) {
+        return res.status(400).send('operation_id is required');
+    }
+    try {
+        const playerExperiences = await PlayerExperienceModel.findAll({
+            where: {
+                operation_id: operation_id
+            }
+        });
+        if (playerExperiences.length > 0) {
+            res.status(200).json(playerExperiences);
+        } else {
+            res.status(404).send('No playerExperiences found for the given operation_id');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};

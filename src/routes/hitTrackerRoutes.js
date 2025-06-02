@@ -26,6 +26,9 @@ router.get('/assistsuserpatch', hitTrackerController.getAssistEntriesUserPatch);
 // GET request for retrieving the latest entry
 router.get('/latest', hitTrackerController.getLatest);
 
+// GET request for retrieving the latest 100 entries
+router.get('/latest100', hitTrackerController.getLatest100);
+
 // POST request for creating a new user
 router.post('/', hitTrackerController.create);
 

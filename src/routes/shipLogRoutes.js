@@ -23,7 +23,6 @@ router.get('/commanderandpatch', shipLogController.getByCommanderIdAndPatch);
 // GET request for retrieving all badges
 router.get('/crew', shipLogController.getCrewEntries);
 
-//assistantboxuserpatch
 // GET request for retrieving all badges by user ID
 router.get('/crewuserpatch', shipLogController.getCrewEntriesUserPatch);
 
@@ -35,5 +34,17 @@ router.put('/:id', shipLogController.update);
 
 // DELETE request for deleting a user by ID
 router.delete('/:id', shipLogController.delete);
+
+// GET logs by fleet active status
+router.get('/by-fleet-active', shipLogController.getByFleetActiveStatus);
+
+// GET logs with top kills
+router.get('/top-kills', shipLogController.getTopKills);
+
+// GET logs with top damages_value
+router.get('/top-damages', shipLogController.getTopDamages);
+
+// GET request for retrieving recent logs by fleet ID
+router.get('/recent-by-fleet', shipLogController.getRecentByFleetId);
 
 module.exports = router;

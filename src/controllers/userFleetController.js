@@ -1,5 +1,6 @@
 const pool = require('../config/database');
 const FleetModel = require('../models/userFleetModel');
+const axios = require('axios'); // Add this line
 
 // Handle GET request for all __fleet
 exports.getAllFleets = async (req, res) => {
@@ -16,6 +17,15 @@ exports.createFleet = async (req, res) => {
     try {
         const new__fleet = new FleetModel(req.body);
         const saved_fleet = await new__fleet.save();
+
+        // Notify Discord bot or external service
+        try {
+            await axios.post('http://localhost:3001/fleetcreated', saved_fleet); // Change URL as needed
+        } catch (notifyErr) {
+            console.error('Failed to notify Discord bot:', notifyErr.message);
+            // Optionally: continue even if bot notification fails
+        }
+
         res.status(201).json(saved_fleet);
     } catch (error) {
         res.status(500).send(error.message);

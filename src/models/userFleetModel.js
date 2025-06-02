@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Assuming you have a config file for Sequelize
+const sequelize = require('../config/database');
 
 class Fleet extends Model {}
 
@@ -7,116 +7,95 @@ Fleet.init({
     id: {
         type: DataTypes.BIGINT,
         allowNull: false,
-        unique: true,
-        primaryKey: true
+        primaryKey: true,
+        unique: true
     },
     name: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: false
+        allowNull: true
     },
     commander_id: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
-    },
-    commander_username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: false
+        allowNull: true
     },
     members_ids: {
         type: DataTypes.ARRAY(DataTypes.BIGINT),
-        allowNull: true,
-        unique: false,
-    },
-    members_usernames: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-        unique: false,
+        allowNull: true
     },
     primary_mission: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: false
+        type: DataTypes.TEXT,
+        allowNull: true
     },
     secondary_mission: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: false
+        type: DataTypes.TEXT,
+        allowNull: true
     },
     total_kills: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     patch_kills: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_damages: {
         type: DataTypes.DOUBLE,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_damages_patch: {
         type: DataTypes.DOUBLE,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_events: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_events_patch: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     last_active: {
-        type: DataTypes.TIME,
-        allowNull: true,
-        unique: false,
+        type: DataTypes.DATE,
+        allowNull: true
     },
     commander_corsair_rank: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
-    },
-    allowed_total_members: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_cargo_stolen: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_cargo_stolen_patch: {
         type: DataTypes.BIGINT,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_value_stolen: {
         type: DataTypes.DOUBLE,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
     total_value_stolen_patch: {
         type: DataTypes.DOUBLE,
-        allowNull: false,
-        unique: false,
+        allowNull: true
     },
-    // Add more fields as necessary
+    active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
+    },
+    original_commander_id: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
+    avatar: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 }, {
-    sequelize, // This is the Sequelize instance you must pass
-    modelName: 'Fleet', // We need to choose the model name
-    tableName: 'user_fleets', // Specify the table name
-    timestamps: false // Turn off Sequelize auto creating updatedAt and createdAt
+    sequelize,
+    modelName: 'Fleet',
+    tableName: 'user_fleets',
+    timestamps: false
 });
 
-// Export the model
 module.exports = Fleet;
