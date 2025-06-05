@@ -83,6 +83,7 @@ app.use(process.env.API_SCHEDULES, scheduleRoutes)
 app.use(process.env.API_FLEET_ROUTES, fleetRoutes)
 app.use(process.env.API_PLAYER_EXPERIENCE_ROUTES, playerExperienceRoutes)
 app.use(process.env.API_RECENT_GATHERINGS_ROUTES, recentGatheringRoutes)
+app.use(process.env.API_EVENTS_ROUTES, scheduleRoutes)
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler

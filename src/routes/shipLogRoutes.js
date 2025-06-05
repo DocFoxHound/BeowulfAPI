@@ -47,4 +47,7 @@ router.get('/top-damages', shipLogController.getTopDamages);
 // GET request for retrieving recent logs by fleet ID
 router.get('/recent-by-fleet', shipLogController.getRecentByFleetId);
 
+// GET request for retrieving top fleets by patch
+router.get('/top-fleets', shipLogController.getTopFleetsByPatch);
+
 module.exports = router;

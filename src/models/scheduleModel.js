@@ -62,10 +62,6 @@ Schedule.init({
         type: DataTypes.DATE, // timestamp with time zone
         allowNull: true
     },
-    channel: {
-        type: DataTypes.BIGINT,
-        allowNull: true
-    },
     appearance: {
         type: DataTypes.JSON,
         allowNull: true
@@ -109,7 +105,27 @@ Schedule.init({
     discord_post: {
         type: DataTypes.BIGINT,
         allowNull: true
-    }
+    },
+    discord_channel: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
+    discord_buttons: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true
+    },
+    discord_thread: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
+    first_notice: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+    },
+    second_notice: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+    },
 }, {
     sequelize,
     modelName: 'Schedule',

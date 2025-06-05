@@ -38,4 +38,13 @@ router.put('/:id', hitTrackerController.update);
 // DELETE request for deleting a user by ID
 router.delete('/:id', hitTrackerController.delete);
 
+// GET request for retrieving the count of hit entries
+router.get('/count', hitTrackerController.getHitEntryCount);
+
+// GET request for retrieving the total value sum
+router.get('/totalsum', hitTrackerController.getTotalValueSum);
+
+// GET request for retrieving top 10 total cut value by patch
+router.get('/top10totalcutvalue', hitTrackerController.getTop10TotalCutValueByPatch);
+
 module.exports = router;

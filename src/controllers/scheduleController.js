@@ -24,7 +24,7 @@ exports.getWeekSchedules = async (req, res) => {
     try {
         const schedules = await ScheduleModel.findAll({
             where: {
-                date: {
+                start_time: {
                     [Op.between]: [startDate, endDate] // Find dates between startDate and endDate
                 }
             }
@@ -84,12 +84,11 @@ exports.createSchedule = async (req, res) => {
             notifySchedule = savedSchedule;
             res.status(201).json(savedSchedule);
         }
-
         // Notify Discord bot (non-blocking, errors are logged)
         if (notifySchedule) {
-            axios.post('http://localhost:3001/schedule', notifySchedule)
+            axios.post('http://localhost:3001/createschedule', notifySchedule)
                 .catch(err => console.error('Failed to notify Discord bot:', err.message));
-        }
+        } 
     } catch (error) {
         console.error("Error creating schedule:", error);
         res.status(500).send(error.message);
@@ -99,15 +98,20 @@ exports.createSchedule = async (req, res) => {
 // Handle PUT request to update a schedule by ID
 exports.updateSchedule = async (req, res) => {
     try {
-        // Find the __schedule first
+        // Destructure notify from the body, default to true if not provided
+        const { notify = false, ...updateData } = req.body;
+
+        // Find the schedule first
         const __schedule = await ScheduleModel.findByPk(req.params.id);
         if (__schedule) {
-            // Update the __schedule with new data from req.body
-            const updated__schedule = await __schedule.update(req.body);
+            // Update the schedule with new data from updateData
+            const updated__schedule = await __schedule.update(updateData);
 
-            // Notify Discord bot (non-blocking, errors are logged)
-            axios.post('http://localhost:3001/updateschedule', updated__schedule)
-                .catch(err => console.error('Failed to notify Discord bot:', err.message));
+            // Notify Discord bot only if notify is true
+            if (notify) {
+                axios.post('http://localhost:3001/updateschedule', updated__schedule)
+                    .catch(err => console.error('Failed to notify Discord bot:', err.message));
+            }
 
             res.status(200).json(updated__schedule);
         } else {
@@ -118,22 +122,22 @@ exports.updateSchedule = async (req, res) => {
     }
 };
 
-// Handle PUT request to update a schedule by ID
-exports.updateScheduleNoNotify = async (req, res) => {
-    try {
-        // Find the __schedule first
-        const __schedule = await ScheduleModel.findByPk(req.params.id);
-        if (__schedule) {
-            // Update the __schedule with new data from req.body
-            const updated__schedule = await __schedule.update(req.body);
-            res.status(200).json(updated__schedule);
-        } else {
-            res.status(404).send('Schedule not found');
-        }
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-};
+// // Handle PUT request to update a schedule by ID
+// exports.updateScheduleNoNotify = async (req, res) => {
+//     try {
+//         // Find the __schedule first
+//         const __schedule = await ScheduleModel.findByPk(req.params.id);
+//         if (__schedule) {
+//             // Update the __schedule with new data from req.body
+//             const updated__schedule = await __schedule.update(req.body);
+//             res.status(200).json(updated__schedule);
+//         } else {
+//             res.status(404).send('Schedule not found');
+//         }
+//     } catch (error) {
+//         res.status(500).send(error.message);
+//     }
+// };
 
 // Handle DELETE request to delete a schedule by ID
 exports.deleteSchedule = async (req, res) => {
@@ -216,6 +220,56 @@ exports.createScheduleRepeatUntil = async (req, res) => {
         res.status(201).json(created);
     } catch (error) {
         console.error("Error creating repeated schedules:", error);
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for the next schedule in a repeat series after a given schedule's start_time
+exports.getNextScheduleByRepeatSeries = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).send('Schedule ID is required.');
+    }
+
+    try {
+        // Find the current schedule by ID
+        const currentSchedule = await ScheduleModel.findByPk(id);
+        if (!currentSchedule) {
+            return res.status(404).send('Schedule not found.');
+        }
+        if (!currentSchedule.repeat_series) {
+            return res.status(400).send('Schedule does not belong to a repeat series.');
+        }
+
+        // Find the next schedule in the same repeat_series after the current schedule's start_time
+        const nextSchedule = await ScheduleModel.findOne({
+            where: {
+                repeat_series: currentSchedule.repeat_series,
+                start_time: { [Op.gt]: currentSchedule.start_time }
+            },
+            order: [['start_time', 'ASC']]
+        });
+
+        if (nextSchedule) {
+            res.status(200).json(nextSchedule);
+        } else {
+            res.status(404).send('No next schedule found in the repeat series.');
+        }
+    } catch (error) {
+        console.error(`Error fetching next schedule by repeat_series: ${error.message}`);
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for all active schedules
+exports.getActiveSchedules = async (req, res) => {
+    try {
+        const activeSchedules = await ScheduleModel.findAll({
+            where: { active: true }
+        });
+        res.status(200).json(activeSchedules);
+    } catch (error) {
+        console.error('Error fetching active schedules:', error.message);
         res.status(500).send(error.message);
     }
 };

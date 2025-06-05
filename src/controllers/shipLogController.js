@@ -273,3 +273,27 @@ exports.getRecentByFleetId = async (req, res) => {
     }
 };
 
+// Get top fleets by patch
+exports.getTopFleetsByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) {
+        return res.status(400).send('patch is required');
+    }
+    try {
+        const { fn, col } = require('sequelize');
+        const results = await ShipLog.findAll({
+            attributes: [
+                'fleet_id',
+                [fn('COUNT', col('fleet_id')), 'entry_count']
+            ],
+            where: { patch },
+            group: ['fleet_id'],
+            order: [[fn('COUNT', col('fleet_id')), 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(results);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+

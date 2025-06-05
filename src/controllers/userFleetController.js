@@ -1,6 +1,7 @@
 const pool = require('../config/database');
 const FleetModel = require('../models/userFleetModel');
 const axios = require('axios'); // Add this line
+const sequelize = require('../config/database');
 
 // Handle GET request for all __fleet
 exports.getAllFleets = async (req, res) => {
@@ -20,10 +21,19 @@ exports.createFleet = async (req, res) => {
 
         // Notify Discord bot or external service
         try {
-            await axios.post('http://localhost:3001/fleetcreated', saved_fleet); // Change URL as needed
+            await axios.post('http://localhost:3001/fleetcreated', saved_fleet);
         } catch (notifyErr) {
             console.error('Failed to notify Discord bot:', notifyErr.message);
-            // Optionally: continue even if bot notification fails
+        }
+
+        // Notify commander add
+        try {
+            await axios.post('http://localhost:3001/fleetcommanderchange', {
+                ...saved_fleet.toJSON(),
+                action: "add"
+            });
+        } catch (err) {
+            console.error('Failed to notify commander add:', err.message);
         }
 
         res.status(201).json(saved_fleet);
@@ -35,11 +45,36 @@ exports.createFleet = async (req, res) => {
 // Handle PUT request to update a fleet by ID
 exports.updateFleet = async (req, res) => {
     try {
-        // Find the __fleet first
         const __fleet = await FleetModel.findByPk(req.params.id);
         if (__fleet) {
-            // Update the __fleet with new data from req.body
+            const oldCommander = __fleet.commander_id;
             const updated__fleet = await __fleet.update(req.body);
+            const newCommander = updated__fleet.commander_id;
+
+            // If commander changed, notify remove and add
+            if (oldCommander !== newCommander) {
+                // Remove old commander
+                try {
+                    await axios.post('http://localhost:3001/fleetcommanderchange', {
+                        ...updated__fleet.toJSON(),
+                        commander_id: oldCommander,
+                        action: "remove"
+                    });
+                } catch (err) {
+                    console.error('Failed to notify commander remove:', err.message);
+                }
+                // Add new commander
+                try {
+                    await axios.post('http://localhost:3001/fleetcommanderchange', {
+                        ...updated__fleet.toJSON(),
+                        commander_id: newCommander,
+                        action: "add"
+                    });
+                } catch (err) {
+                    console.error('Failed to notify commander add:', err.message);
+                }
+            }
+
             res.status(200).json(updated__fleet);
         } else {
             res.status(404).send('Fleet not found');
@@ -91,14 +126,18 @@ exports.getFleetById = async (req, res) => {
 exports.getFleetByMember = async (req, res) => {
     const user_id = req.query.user_id;
     try {
-      const entries = await sequelize.query(
-        'SELECT * FROM user_fleets WHERE :user_id = ANY(member_ids)',
+      const [entry] = await sequelize.query(
+        'SELECT * FROM user_fleets WHERE :user_id = ANY(members_ids) LIMIT 1',
         {
           replacements: { user_id },
           type: sequelize.QueryTypes.SELECT
         }
-      );      
-      res.status(200).json(entries);
+      );
+      if (entry) {
+        res.status(200).json(entry);
+      } else {
+        res.status(404).send('No fleet found for the given member');
+      }
     } catch (error) {
       console.error('Error querying assistant shiplog:', error.message);
       res.status(500).send(error.message);

@@ -42,4 +42,31 @@ router.get('/userpatchgamemode', blackBoxController.getByUserIdPatchGameMode);
 // GET request for retrieving entries between two timestamps
 router.get('/between', blackBoxController.getEntriesBetweenTimestamps);
 
+// GET request for retrieving the count of AC game modes
+router.get('/acgamemodecount', blackBoxController.getACGameModeCount);
+
+// GET request for retrieving the count of AC game modes
+router.get('/pugamemodecount', blackBoxController.getPUGameModeCount);
+
+// GET request for retrieving the count of AC game modes
+router.get('/shipkillcount', blackBoxController.getShipKillCount);
+
+// GET request for retrieving the count of AC game modes
+router.get('/fpskillcount', blackBoxController.getFPSKillCount);
+
+// GET request for retrieving the sum of all values
+router.get('/totalsum', blackBoxController.getTotalValueSum);
+
+// GET request for retrieving the top 10 AC ship killers by patch
+router.get('/top10acshipkillers', blackBoxController.getTop10ACShipKillersByPatch);
+
+// GET request for retrieving the top 10 AC FPS killers by patch
+router.get('/top10acfpskillers', blackBoxController.getTop10ACFPSKillersByPatch);
+
+// GET request for retrieving the top 10 PU Ship killers by patch
+router.get('/top10pushipkillers', blackBoxController.getTop10PUShipKillersByPatch);
+
+// GET request for retrieving the top 10 PU FPS killers by patch
+router.get('/top10pufpskillers', blackBoxController.getTop10PUFPSKillersByPatch);
+
 module.exports = router;

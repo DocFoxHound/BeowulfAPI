@@ -259,3 +259,179 @@ exports.getEntriesBetweenTimestamps = async (req, res) => {
     }
 };
 
+exports.getACGameModeCount = async (req, res) => {
+    try {
+        const count = await BlackBox.count({
+            where: {
+                game_mode: "AC"
+            }
+        });
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getPUGameModeCount = async (req, res) => {
+    try {
+        const count = await BlackBox.count({
+            where: {
+                game_mode: "PU"
+            }
+        });
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getShipKillCount = async (req, res) => {
+    try {
+        const { Op } = require('sequelize');
+        const count = await BlackBox.count({
+            where: {
+                ship_killed: {
+                    [Op.ne]: "FPS"
+                }
+            }
+        });
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getFPSKillCount = async (req, res) => {
+    try {
+        const count = await BlackBox.count({
+            where: {
+                ship_killed: "FPS"
+            }
+        });
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getTotalValueSum = async (req, res) => {
+    try {
+        const { fn } = require('sequelize');
+        const result = await BlackBox.findOne({
+            attributes: [[fn('SUM', sequelize.col('value')), 'total_sum']]
+        });
+        const total_sum = result.dataValues.total_sum || 0;
+        res.status(200).json({ total_sum: parseFloat(total_sum) });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getTop10ACShipKillersByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) {
+        return res.status(400).send('patch is required');
+    }
+    try {
+        const { Op, fn, col } = require('sequelize');
+        const results = await BlackBox.findAll({
+            attributes: [
+                'user_id',
+                [fn('COUNT', col('user_id')), 'kill_count']
+            ],
+            where: {
+                patch: patch,
+                game_mode: 'AC',
+                ship_killed: { [Op.ne]: 'FPS' }
+            },
+            group: ['user_id'],
+            order: [[fn('COUNT', col('user_id')), 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(results);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getTop10ACFPSKillersByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) {
+        return res.status(400).send('patch is required');
+    }
+    try {
+        const { fn, col } = require('sequelize');
+        const results = await BlackBox.findAll({
+            attributes: [
+                'user_id',
+                [fn('COUNT', col('user_id')), 'kill_count']
+            ],
+            where: {
+                patch: patch,
+                game_mode: 'AC',
+                ship_killed: 'FPS'
+            },
+            group: ['user_id'],
+            order: [[fn('COUNT', col('user_id')), 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(results);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getTop10PUShipKillersByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) {
+        return res.status(400).send('patch is required');
+    }
+    try {
+        const { Op, fn, col } = require('sequelize');
+        const results = await BlackBox.findAll({
+            attributes: [
+                'user_id',
+                [fn('COUNT', col('user_id')), 'kill_count']
+            ],
+            where: {
+                patch: patch,
+                game_mode: 'PU',
+                ship_killed: { [Op.ne]: 'FPS' }
+            },
+            group: ['user_id'],
+            order: [[fn('COUNT', col('user_id')), 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(results);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getTop10PUFPSKillersByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) {
+        return res.status(400).send('patch is required');
+    }
+    try {
+        const { fn, col } = require('sequelize');
+        const results = await BlackBox.findAll({
+            attributes: [
+                'user_id',
+                [fn('COUNT', col('user_id')), 'kill_count']
+            ],
+            where: {
+                patch: patch,
+                game_mode: 'PU',
+                ship_killed: 'FPS'
+            },
+            group: ['user_id'],
+            order: [[fn('COUNT', col('user_id')), 'DESC']],
+            limit: 10
+        });
+        res.status(200).json(results);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+

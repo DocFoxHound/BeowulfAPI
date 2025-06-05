@@ -215,3 +215,62 @@ exports.getLatest100 = async (req, res) => {
     }
 };
 
+exports.getHitEntryCount = async (req, res) => {
+    try {
+        const count = await HitTrack.count();
+        res.status(200).json({ count });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getTotalValueSum = async (req, res) => {
+    try {
+        const { fn } = require('sequelize');
+        const result = await HitTrack.findOne({
+            attributes: [[fn('SUM', sequelize.col('total_value')), 'total_sum']]
+        });
+        const total_sum = result.dataValues.total_sum || 0;
+        res.status(200).json({ total_sum: parseFloat(total_sum) });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getTop10TotalCutValueByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) {
+        return res.status(400).send('patch is required');
+    }
+    try {
+        const { QueryTypes } = require('sequelize');
+        // This query sums total_cut_value for each user_id found in either user_id or assists array
+        const results = await sequelize.query(
+            `
+            SELECT
+                user_id,
+                SUM(total_cut_value) AS total_cut_sum
+            FROM (
+                SELECT user_id, total_cut_value
+                FROM hit_tracker
+                WHERE patch = :patch
+                UNION ALL
+                SELECT unnest(assists) AS user_id, total_cut_value
+                FROM hit_tracker
+                WHERE patch = :patch
+            ) AS combined
+            GROUP BY user_id
+            ORDER BY total_cut_sum DESC
+            LIMIT 10
+            `,
+            {
+                replacements: { patch },
+                type: QueryTypes.SELECT
+            }
+        );
+        res.status(200).json(results);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
