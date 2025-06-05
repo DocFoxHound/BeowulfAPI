@@ -95,6 +95,10 @@ Fleet.init({
         type: DataTypes.BIGINT,
         allowNull: true
     },
+    updated_at: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
 }, {
     sequelize,
     modelName: 'Fleet',

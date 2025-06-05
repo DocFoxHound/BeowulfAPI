@@ -51,14 +51,30 @@ exports.createFleet = async (req, res) => {
 // for logging fleet activity, detect log_fleet_activity
 exports.updateFleet = async (req, res) => {
     try {
-        const __fleet = await FleetModel.findByPk(req.params.id);
+        const fleetId = req.params.id;
+        const { action, changed_user_id, updated_at: clientUpdatedAt, ...updateFields } = req.body;
+
+        if (!clientUpdatedAt) {
+            return res.status(400).send('Missing created_at for version control');
+        }
+
+        // Fetch the fleet
+        const __fleet = await FleetModel.findByPk(fleetId);
         if (!__fleet) {
             return res.status(404).send('Fleet not found');
         }
 
-        const { action, changed_user_id } = req.body;
+        // Check version
+        if (String(__fleet.created_at) !== String(clientUpdatedAt)) {
+            return res.status(409).send('Fleet has been modified by another user. Please refresh and try again.');
+        }
+
+        // Update created_at for new version
+        const newCreatedAt = Date.now();
+        updateFields.created_at = newCreatedAt;
+
         const oldCommander = __fleet.commander_id;
-        const updated__fleet = await __fleet.update(req.body);
+        const updated__fleet = await __fleet.update(updateFields);
         const newCommander = updated__fleet.commander_id;
 
         // Handle specific actions
