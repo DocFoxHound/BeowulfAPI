@@ -43,42 +43,72 @@ exports.createFleet = async (req, res) => {
 };
 
 // Handle PUT request to update a fleet by ID
+// for adding a member,detect add_member in the request body
+// for removing a member, detect remove_member
+// for closing a fleet detect close_fleet
+// for taking command, detect take_command
+// for editing a fleet, detect edit_fleet
+// for logging fleet activity, detect log_fleet_activity
 exports.updateFleet = async (req, res) => {
     try {
         const __fleet = await FleetModel.findByPk(req.params.id);
-        if (__fleet) {
-            const oldCommander = __fleet.commander_id;
-            const updated__fleet = await __fleet.update(req.body);
-            const newCommander = updated__fleet.commander_id;
-
-            // If commander changed, notify remove and add
-            if (oldCommander !== newCommander) {
-                // Remove old commander
-                try {
-                    await axios.post('http://localhost:3001/fleetcommanderchange', {
-                        ...updated__fleet.toJSON(),
-                        commander_id: oldCommander,
-                        action: "remove"
-                    });
-                } catch (err) {
-                    console.error('Failed to notify commander remove:', err.message);
-                }
-                // Add new commander
-                try {
-                    await axios.post('http://localhost:3001/fleetcommanderchange', {
-                        ...updated__fleet.toJSON(),
-                        commander_id: newCommander,
-                        action: "add"
-                    });
-                } catch (err) {
-                    console.error('Failed to notify commander add:', err.message);
-                }
-            }
-
-            res.status(200).json(updated__fleet);
-        } else {
-            res.status(404).send('Fleet not found');
+        if (!__fleet) {
+            return res.status(404).send('Fleet not found');
         }
+
+        const { action, changed_user_id } = req.body;
+        const oldCommander = __fleet.commander_id;
+        const updated__fleet = await __fleet.update(req.body);
+        const newCommander = updated__fleet.commander_id;
+
+        // Handle specific actions
+        if (action === "add_member" || action === "remove_member") {
+            // Notify member change
+            try {
+                await axios.post('http://localhost:3001/fleetmemberchange', {
+                    ...updated__fleet.toJSON(),
+                    action,
+                    changed_user_id
+                });
+            } catch (err) {
+                console.error(`Failed to notify fleet member ${action}:`, err.message);
+            }
+        } else if (action === "close_fleet") {
+            // Notify closing fleet
+            try {
+                await axios.post('http://localhost:3001/fleetcommanderchange', {
+                    ...__fleet.toJSON(),
+                    commander_id: changed_user_id,
+                    action: "close"
+                });
+            } catch (err) {
+                console.error(`Failed to notify fleet commander ${action}:`, err.message);
+            }
+        } else if (oldCommander !== newCommander) { //promoting someone else to commander
+            // Remove old commander
+            try {
+                await axios.post('http://localhost:3001/fleetcommanderchange', {
+                    ...updated__fleet.toJSON(),
+                    commander_id: oldCommander,
+                    action: "remove"
+                });
+            } catch (err) {
+                console.error('Failed to notify commander remove:', err.message);
+            }
+            // Add new commander
+            try {
+                await axios.post('http://localhost:3001/fleetcommanderchange', {
+                    ...updated__fleet.toJSON(),
+                    commander_id: newCommander,
+                    action: "add"
+                });
+            } catch (err) {
+                console.error('Failed to notify commander add:', err.message);
+            }
+        }
+        // For edit_fleet or log_fleet_activity, just update, no extra POST
+
+        res.status(200).json(updated__fleet);
     } catch (error) {
         res.status(500).send(error.message);
     }

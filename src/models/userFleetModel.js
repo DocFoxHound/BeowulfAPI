@@ -91,6 +91,10 @@ Fleet.init({
         type: DataTypes.STRING,
         allowNull: true
     },
+    discord_role: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
 }, {
     sequelize,
     modelName: 'Fleet',
