@@ -55,7 +55,7 @@ exports.updateFleet = async (req, res) => {
         const { action, changed_user_id, updated_at: clientUpdatedAt, ...updateFields } = req.body;
 
         if (!clientUpdatedAt) {
-            return res.status(400).send('Missing created_at for version control');
+            return res.status(400).send('Missing updated_at for version control');
         }
 
         // Fetch the fleet
@@ -65,13 +65,13 @@ exports.updateFleet = async (req, res) => {
         }
 
         // Check version
-        if (String(__fleet.created_at) !== String(clientUpdatedAt)) {
+        if (String(__fleet.updated_at) !== String(clientUpdatedAt)) {
             return res.status(409).send('Fleet has been modified by another user. Please refresh and try again.');
         }
 
-        // Update created_at for new version
-        const newCreatedAt = Date.now();
-        updateFields.created_at = newCreatedAt;
+        // Update updated_at for new version
+        const newUpdatedAt = Date.now();
+        updateFields.updated_at = newUpdatedAt;
 
         const oldCommander = __fleet.commander_id;
         const updated__fleet = await __fleet.update(updateFields);
