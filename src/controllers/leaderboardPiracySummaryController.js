@@ -5,7 +5,7 @@ exports.getLeaderboardByPatch = async (req, res) => {
   const { patch } = req.params;
   try {
     const result = await sequelize.query(
-      `SELECT * FROM hit_tracker_summary_per_patch WHERE patch = :patch ORDER BY total_value DESC`,
+      `SELECT * FROM leaderboard_hit_tracker_per_patch WHERE patch = :patch ORDER BY total_value DESC`,
       { replacements: { patch }, type: sequelize.QueryTypes.SELECT }
     );
     res.json(result); // <-- return the whole array
@@ -19,7 +19,7 @@ exports.getPlayerStats = async (req, res) => {
   const { player_id } = req.params;
   try {
     const result = await pool.query(
-      `SELECT * FROM hit_tracker_summary_per_patch WHERE player_id = $1`,
+      `SELECT * FROM leaderboard_hit_tracker_per_patch WHERE player_id = $1`,
       [player_id]
     );
     res.json(result.rows);

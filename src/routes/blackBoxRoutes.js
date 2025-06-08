@@ -69,4 +69,16 @@ router.get('/top10pushipkillers', blackBoxController.getTop10PUShipKillersByPatc
 // GET request for retrieving the top 10 PU FPS killers by patch
 router.get('/top10pufpskillers', blackBoxController.getTop10PUFPSKillersByPatch);
 
+// Get all FPS kills by patch
+router.get('/allfpskillsbypatch', blackBoxController.getAllFPSKillsByPatch);
+
+// Get all ship kills by patch (excluding FPS)
+router.get('/allshipkillsbypatch', blackBoxController.getAllShipKillsByPatch);
+
+// Get newest 100 FPS kills by patch
+router.get('/newest100fpskillsbypatch', blackBoxController.getNewest100FPSKillsByPatch);
+
+// Get newest 100 ship kills by patch (excluding FPS)
+router.get('/newest100shipkillsbypatch', blackBoxController.getNewest100ShipKillsByPatch);
+
 module.exports = router;

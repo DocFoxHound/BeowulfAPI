@@ -435,3 +435,77 @@ exports.getTop10PUFPSKillersByPatch = async (req, res) => {
     }
 };
 
+// Get all FPS kills by patch
+exports.getAllFPSKillsByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) return res.status(400).send('patch is required');
+    try {
+        const entries = await BlackBox.findAll({
+            where: {
+                patch,
+                ship_killed: 'FPS'
+            }
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Get all ship kills by patch (excluding FPS)
+exports.getAllShipKillsByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) return res.status(400).send('patch is required');
+    try {
+        const { Op } = require('sequelize');
+        const entries = await BlackBox.findAll({
+            where: {
+                patch,
+                ship_killed: { [Op.ne]: 'FPS' }
+            }
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Get newest 100 FPS kills by patch
+exports.getNewest100FPSKillsByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) return res.status(400).send('patch is required');
+    try {
+        const entries = await BlackBox.findAll({
+            where: {
+                patch,
+                ship_killed: 'FPS'
+            },
+            order: [['timestamp', 'DESC']],
+            limit: 100
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Get newest 100 ship kills by patch (excluding FPS)
+exports.getNewest100ShipKillsByPatch = async (req, res) => {
+    const { patch } = req.query;
+    if (!patch) return res.status(400).send('patch is required');
+    try {
+        const { Op } = require('sequelize');
+        const entries = await BlackBox.findAll({
+            where: {
+                patch,
+                ship_killed: { [Op.ne]: 'FPS' }
+            },
+            order: [['timestamp', 'DESC']],
+            limit: 100
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+

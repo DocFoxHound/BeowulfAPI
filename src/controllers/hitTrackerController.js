@@ -274,3 +274,16 @@ exports.getTop10TotalCutValueByPatch = async (req, res) => {
     }
 };
 
+// Get overview for a specific patch or 'ALL'
+exports.getOverviewByPatch = async (req, res) => {
+  try {
+    const result = await sequelize.query(
+      `SELECT * FROM public.overview_hit_tracker_per_patch`,
+      { type: sequelize.QueryTypes.SELECT }
+    );
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+

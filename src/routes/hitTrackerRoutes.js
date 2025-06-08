@@ -8,13 +8,13 @@ router.get('/', hitTrackerController.getAll);
 // GET request for retrieving all badges by user ID
 router.get('/user', hitTrackerController.getByUserId);
 
-// GET request for retrieving all badges by user ID
+// GET request for all hits by patch
 router.get('/patch', hitTrackerController.getByPatch);
 
 // GET request for retrieving all badges by user ID
 router.get('/entry', hitTrackerController.getByEntryId);
 
-// GET request for retrieving all badges by user ID
+// GET request for retrieving all hits by user ID and patch
 router.get('/userandpatch', hitTrackerController.getByUserIdAndPatch);
 
 // GET request for retrieving all badges
@@ -46,5 +46,8 @@ router.get('/totalsum', hitTrackerController.getTotalValueSum);
 
 // GET request for retrieving top 10 total cut value by patch
 router.get('/top10totalcutvalue', hitTrackerController.getTop10TotalCutValueByPatch);
+
+// GET request for retrieving org overview summary by patch
+router.get('/hitoverviewbypatch', hitTrackerController.getOverviewByPatch);
 
 module.exports = router;
