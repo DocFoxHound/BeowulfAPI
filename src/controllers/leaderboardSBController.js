@@ -65,6 +65,16 @@ exports.deleteLeaderboardEntry = async (req, res) => {
     }
 };
 
+// DELETE all leaderboard entries
+exports.deleteAllLeaderboardEntries = async (req, res) => {
+    try {
+        await LeaderboardSB.destroy({ where: {}, truncate: true });
+        res.status(200).send('All leaderboard entries deleted');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 // POST bulk create leaderboard entries
 exports.createLeaderboardEntriesBulk = async (req, res) => {
     try {

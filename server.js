@@ -34,6 +34,7 @@ const playerExperienceRoutes = require('./src/routes/playerExperienceRoutes')
 const recentGatheringRoutes = require('./src/routes/recentGatheringsRoutes')
 const leaderboardSBRoutes = require('./src/routes/leaderboardSBRoutes');
 const leaderboardSBSummaryRoutes = require('./src/routes/leaderboardSBSummaryRoutes');
+const leaderboardPiracySummaryRoutes = require('./src/routes/leaderboardPiracySummaryRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -88,6 +89,7 @@ app.use(process.env.API_RECENT_GATHERINGS_ROUTES, recentGatheringRoutes)
 app.use(process.env.API_EVENTS_ROUTES, scheduleRoutes)
 app.use(process.env.API_LEADERBOARD_SB_ROUTES, leaderboardSBRoutes)
 app.use(process.env.API_LEADERBOARD_SB_SUMMARY_ROUTES, leaderboardSBSummaryRoutes)
+app.use(process.env.API_LEADERBOARD_PIRACY_SUMMARY_ROUTES, leaderboardPiracySummaryRoutes)
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler
