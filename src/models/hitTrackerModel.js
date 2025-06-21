@@ -105,6 +105,11 @@ HitTrack.init({
         allowNull: true,
         unique: false,
     },
+    thread_id: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        unique: false,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

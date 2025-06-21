@@ -177,6 +177,13 @@ exports.delete = async (req, res) => {
     if (!entryId) {
         return res.status(400).send('HitTrack ID is required');
     }
+    // Notify Discord bot
+        try {
+            await axios.post('http://localhost:3001/hittrackdelete', saved_entry); // Change URL as needed
+        } catch (notifyErr) {
+            console.error('Failed to notify Discord bot:', notifyErr.message);
+            // Optionally: continue even if bot notification fails
+        }
     try {
         const entry = await HitTrack.findByPk(entryId);
         if (entry) {
