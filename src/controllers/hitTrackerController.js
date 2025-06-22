@@ -142,7 +142,7 @@ exports.create = async (req, res) => {
 
         // Notify Discord bot
         try {
-            await axios.post('http://localhost:3001/hittrack', saved_entry); // Change URL as needed
+            await axios.post('http://localhost:3001/hittrackcreate', saved_entry); // Change URL as needed
         } catch (notifyErr) {
             console.error('Failed to notify Discord bot:', notifyErr.message);
             // Optionally: continue even if bot notification fails
@@ -179,7 +179,7 @@ exports.delete = async (req, res) => {
     }
     // Notify Discord bot
         try {
-            await axios.post('http://localhost:3001/hittrackdelete', saved_entry); // Change URL as needed
+            await axios.post('http://localhost:3001/hittrackdelete', { entryId }); // Change URL as needed
         } catch (notifyErr) {
             console.error('Failed to notify Discord bot:', notifyErr.message);
             // Optionally: continue even if bot notification fails
