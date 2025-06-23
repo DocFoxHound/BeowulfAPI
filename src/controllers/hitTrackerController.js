@@ -173,17 +173,18 @@ exports.update = async (req, res) => {
 
 
 exports.delete = async (req, res) => {
-    const entryId = req.params.id;
+    const hit = req.body; // Now expecting the whole hit object in the body
+    const entryId = hit.id;
     if (!entryId) {
         return res.status(400).send('HitTrack ID is required');
     }
     // Notify Discord bot
-        try {
-            axios.post('http://localhost:3001/hittrackdelete', { entryId }); // Change URL as needed
-        } catch (notifyErr) {
-            console.error('Failed to notify Discord bot:', notifyErr.message);
-            // Optionally: continue even if bot notification fails
-        }
+    try {
+        await axios.post('http://localhost:3001/hittrackdelete', { hit }); // Change URL as needed
+    } catch (notifyErr) {
+        console.error('Failed to notify Discord bot:', notifyErr.message);
+        // Optionally: continue even if bot notification fails
+    }
     try {
         const entry = await HitTrack.findByPk(entryId);
         if (entry) {
@@ -197,6 +198,33 @@ exports.delete = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+// // notifies the discord bot to delete, does not actually delete the entry
+// exports.deleteNotify = async (req, res) => {
+//     const entryId = req.params.id;
+//     if (!entryId) {
+//         return res.status(400).send('HitTrack ID is required');
+//     }
+//     // Notify Discord bot
+//         try {
+//             axios.post('http://localhost:3001/hittrackdelete', { entryId }); // Change URL as needed
+//         } catch (notifyErr) {
+//             console.error('Failed to notify Discord bot:', notifyErr.message);
+//             // Optionally: continue even if bot notification fails
+//         }
+//     try {
+//         const entry = await HitTrack.findByPk(entryId);
+//         if (entry) {
+//             await entry.destroy();
+//             res.status(200).send('HitTrack deleted');
+//         } else {
+//             res.status(404).send('HitTrack not found');
+//         }
+//     } catch (error) {
+//         console.error(`Error deleting HitTrack: ${error.message}`);
+//         res.status(500).send(error.message);
+//     }
+// };
 
 exports.getLatest = async (req, res) => {
     try {
