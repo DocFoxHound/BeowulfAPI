@@ -110,6 +110,11 @@ HitTrack.init({
         allowNull: true,
         unique: false,
     },
+    guests: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        unique: false,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
