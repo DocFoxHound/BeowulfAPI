@@ -1,5 +1,6 @@
 const pool = require('../config/database');
 const Warehouse = require('../models/warehouseModel');
+const { Op } = require('sequelize');
 
 
 exports.getAll = async (req, res) => {
@@ -11,6 +12,39 @@ exports.getAll = async (req, res) => {
     }
 };
 
+exports.getOrgPublic = async (req, res) => {
+    try {
+        const entries = await Warehouse.findAll({
+            where: {
+                intent: { [Op.in]: ['LTB', 'LTS'] }
+            }
+        });
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No Warehouse item found for Public Org');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+exports.getOrgPrivate = async (req, res) => {
+    try {
+        const entries = await Warehouse.findAll({
+            where: {
+                for_org: true,
+            }
+        });
+        if (entries.length > 0) {
+            res.status(200).json(entries);
+        } else {
+            res.status(404).send('No Warehouse item found for Private Org');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
 
 exports.getByUserId = async (req, res) => {
     const { user_id } = req.query;

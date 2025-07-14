@@ -5,6 +5,12 @@ const warehouseController = require('../controllers/warehouseController');
 // GET request for retrieving a list of all users
 router.get('/', warehouseController.getAll);
 
+// GET for all public org items
+router.get('/orgpublic', warehouseController.getOrgPublic);
+
+// GET for all private org items
+router.get('/orgprivate', warehouseController.getOrgPrivate);
+
 // GET request for retrieving all badges by user ID
 router.get('/user', warehouseController.getByUserId);
 

@@ -45,6 +45,11 @@ Warehouse.init({
         allowNull: true,
         unique: false
     },
+    intent: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    }
     
     // Add more fields as necessary
 }, {
