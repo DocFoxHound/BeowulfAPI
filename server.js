@@ -37,6 +37,7 @@ const leaderboardSBSummaryRoutes = require('./src/routes/leaderboardSBSummaryRou
 const leaderboardPiracySummaryRoutes = require('./src/routes/leaderboardPiracySummaryRoutes');
 const leaderboardBlackboxSummaryRoutes = require('./src/routes/leaderboardBlackboxSummaryRoutes');
 const leaderboardFleetlogSummaryRoutes = require('./src/routes/leaderboardFleetlogSummaryRoutes');
+const voiceChannelSessionsRoutes = require('./src/routes/voiceChannelSessionsRoutes'); // Import the new voice channel sessions routes
 
 // Load environment variables
 dotenv.config();
@@ -94,6 +95,7 @@ app.use(process.env.API_LEADERBOARD_SB_SUMMARY_ROUTES, leaderboardSBSummaryRoute
 app.use(process.env.API_LEADERBOARD_PIRACY_SUMMARY_ROUTES, leaderboardPiracySummaryRoutes)
 app.use(process.env.API_LEADERBOARD_BLACKBOX_SUMMARY_ROUTES, leaderboardBlackboxSummaryRoutes)
 app.use(process.env.API_LEADERBOARD_FLEETLOG_SUMMARY_ROUTES, leaderboardFleetlogSummaryRoutes)
+app.use(process.env.API_VOICE_CHANNEL_SESSIONS_ROUTES, voiceChannelSessionsRoutes); 
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler
