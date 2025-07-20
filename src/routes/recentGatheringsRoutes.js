@@ -3,7 +3,12 @@ const router = express.Router();
 const RecentGathering = require('../controllers/recentGatheringsController');
 
 // GET request for retrieving a list of all users
+
+// GET request for retrieving all recent gatherings
 router.get('/', RecentGathering.getAllRecentGatherings);
+
+// GET request for retrieving recent gatherings within a timeframe
+router.get('/timeframe', RecentGathering.getRecentGatheringsWithinTimeframe);
 
 router.post('/', RecentGathering.createRecentGathering);
 

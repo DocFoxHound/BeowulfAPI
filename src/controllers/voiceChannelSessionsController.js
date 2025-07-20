@@ -11,6 +11,48 @@ exports.getAllVoiceSessions = async (req, res) => {
     }
 };
 
+exports.getAllVoiceSessionsLastHour = async (req, res) => {
+    try {
+        const __voiceSession = await VoiceChannelSessionsModel.findAll({
+            where: {
+                joined_at: {
+                    [Op.gte]: new Date(Date.now() - 60 * 60 * 1000) // Last hour
+                }
+            }
+        });
+        res.status(200).json(__voiceSession);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for all voice sessions within a provided timeframe
+exports.getVoiceSessionsWithinTimeframe = async (req, res) => {
+    const { start, end } = req.query;
+    if (!start || !end) {
+        return res.status(400).send('Start and end query parameters are required');
+    }
+    try {
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        if (isNaN(startDate) || isNaN(endDate)) {
+            return res.status(400).send('Invalid date format for start or end');
+        }
+        const { Op } = require('sequelize');
+        const sessions = await VoiceChannelSessionsModel.findAll({
+            where: {
+                joined_at: {
+                    [Op.gte]: startDate,
+                    [Op.lte]: endDate
+                }
+            }
+        });
+        res.status(200).json(sessions);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 // Handle GET request for all active voice sessions
 exports.getAllActiveVoiceSessions = async (req, res) => {
     try {

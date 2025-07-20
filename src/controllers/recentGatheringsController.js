@@ -11,6 +11,33 @@ exports.getAllRecentGatherings = async (req, res) => {
     }
 };
 
+// Handle GET request for all recent gatherings within a provided timeframe
+exports.getRecentGatheringsWithinTimeframe = async (req, res) => {
+    const { start, end } = req.query;
+    if (!start || !end) {
+        return res.status(400).send('Start and end query parameters are required');
+    }
+    try {
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        if (isNaN(startDate) || isNaN(endDate)) {
+            return res.status(400).send('Invalid date format for start or end');
+        }
+        const { Op } = require('sequelize');
+        const gatherings = await RecentGatheringModel.findAll({
+            where: {
+                created_at: {
+                    [Op.gte]: startDate,
+                    [Op.lte]: endDate
+                }
+            }
+        });
+        res.status(200).json(gatherings);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 exports.createRecentGathering = async (req, res) => {
     try {
         const new__recentGathering = new RecentGatheringModel(req.body);
