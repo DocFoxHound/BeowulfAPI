@@ -53,6 +53,34 @@ exports.getVoiceSessionsWithinTimeframe = async (req, res) => {
     }
 };
 
+// Handle GET request for all voice sessions within a provided timeframe by user_id
+exports.getVoiceSessionsWithinTimeframeByUserId = async (req, res) => {
+    const { start, end, user_id } = req.query;
+    if (!start || !end || !user_id) {
+        return res.status(400).send('Start, end, and user_id query parameters are required');
+    }
+    try {
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+        if (isNaN(startDate) || isNaN(endDate)) {
+            return res.status(400).send('Invalid date format for start or end');
+        }
+        const { Op } = require('sequelize');
+        const sessions = await VoiceChannelSessionsModel.findAll({
+            where: {
+                user_id: user_id,
+                joined_at: {
+                    [Op.gte]: startDate,
+                    [Op.lte]: endDate
+                }
+            }
+        });
+        res.status(200).json(sessions);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 // Handle GET request for all active voice sessions
 exports.getAllActiveVoiceSessions = async (req, res) => {
     try {

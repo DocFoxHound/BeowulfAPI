@@ -39,6 +39,9 @@ router.get('/userkillsbefore', blackBoxController.getUserKillsBeforeTimestamp);
 // GET request for retrieving all badges by user ID and patch game mode
 router.get('/userpatchgamemode', blackBoxController.getByUserIdPatchGameMode);
 
+// GET request for retrieving all blackBoxes within a provided timeframe
+router.get('/within-timeframe', blackBoxController.getAllWithinTimeframe);
+
 // GET request for retrieving entries between two timestamps
 router.get('/between', blackBoxController.getEntriesBetweenTimestamps);
 

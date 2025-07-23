@@ -235,6 +235,25 @@ exports.getByUserIdPatchGameMode = async (req, res) => {
     }
 };
 
+// Retrieve all BlackBox entries within a provided timeframe
+exports.getAllWithinTimeframe = async (req, res) => {
+    const { start, end } = req.query;
+    if (!start || !end) {
+        return res.status(400).send('start and end timestamps are required');
+    }
+    try {
+        const entries = await BlackBox.findAll({
+            where: {
+                timestamp: {
+                    [require('sequelize').Op.between]: [new Date(start), new Date(end)]
+                }
+            }
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
 
 exports.getEntriesBetweenTimestamps = async (req, res) => {
     const { start, end } = req.query;

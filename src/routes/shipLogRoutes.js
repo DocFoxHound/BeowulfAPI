@@ -50,4 +50,7 @@ router.get('/recent-by-fleet', shipLogController.getRecentByFleetId);
 // GET request for retrieving top fleets by patch
 router.get('/top-fleets', shipLogController.getTopFleetsByPatch);
 
+// GET request for retrieving all shipLogs within a timeframe
+router.get('/timeframe', shipLogController.getEntriesByTimeframe);
+
 module.exports = router;

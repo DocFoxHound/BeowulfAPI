@@ -297,3 +297,22 @@ exports.getTopFleetsByPatch = async (req, res) => {
     }
 };
 
+exports.getEntriesByTimeframe = async (req, res) => {
+    const { start, end } = req.query;
+    if (!start || !end) {
+        return res.status(400).send('Start and end timestamps are required');
+    }
+    try {
+        const entries = await ShipLog.findAll({
+            where: {
+                created_at: {
+                    [require('sequelize').Op.between]: [new Date(start), new Date(end)]
+                }
+            }
+        });
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+

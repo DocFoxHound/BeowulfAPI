@@ -38,6 +38,8 @@ const leaderboardPiracySummaryRoutes = require('./src/routes/leaderboardPiracySu
 const leaderboardBlackboxSummaryRoutes = require('./src/routes/leaderboardBlackboxSummaryRoutes');
 const leaderboardFleetlogSummaryRoutes = require('./src/routes/leaderboardFleetlogSummaryRoutes');
 const voiceChannelSessionsRoutes = require('./src/routes/voiceChannelSessionsRoutes'); // Import the new voice channel sessions routes
+const leaderboardSBLogRoutes = require('./src/routes/leaderboardSBLogRoutes'); // Import the leaderboard SB log routes
+const badgeReusableRoutes = require('./src/routes/badgeReusableRoutes'); // Import the badge reusable routes
 
 // Load environment variables
 dotenv.config();
@@ -96,6 +98,8 @@ app.use(process.env.API_LEADERBOARD_PIRACY_SUMMARY_ROUTES, leaderboardPiracySumm
 app.use(process.env.API_LEADERBOARD_BLACKBOX_SUMMARY_ROUTES, leaderboardBlackboxSummaryRoutes)
 app.use(process.env.API_LEADERBOARD_FLEETLOG_SUMMARY_ROUTES, leaderboardFleetlogSummaryRoutes)
 app.use(process.env.API_VOICE_CHANNEL_SESSIONS_ROUTES, voiceChannelSessionsRoutes); 
+app.use(process.env.API_LEADERBOARD_SB_LOG_ROUTES, leaderboardSBLogRoutes); // Use the leaderboard SB log routes
+app.use(process.env.API_BADGE_REUSABLES_ROUTES, badgeReusableRoutes); // Use the badge reusable routes
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler

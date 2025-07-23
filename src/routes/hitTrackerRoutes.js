@@ -50,4 +50,6 @@ router.get('/top10totalcutvalue', hitTrackerController.getTop10TotalCutValueByPa
 // GET request for retrieving org overview summary by patch
 router.get('/hitoverviewbypatch', hitTrackerController.getOverviewByPatch);
 
+// GET request for retrieving all hitTracker entries between a timeframe
+router.get('/timeframe', hitTrackerController.getEntriesByTimeframe);
 module.exports = router;
