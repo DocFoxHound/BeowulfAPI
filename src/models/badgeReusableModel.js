@@ -60,6 +60,16 @@ BadgeReusable.init({
         allowNull: true,
         unique: false
     },
+    trigger: {
+        type: DataTypes.ARRAY(DataTypes.JSON),
+        allowNull: true,
+        unique: false
+    },
+    image_url: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

@@ -5,6 +5,9 @@ const badgeReusableController = require('../controllers/badgeReusableController'
 // GET request for retrieving a list of all users
 router.get('/', badgeReusableController.getAllBadgeReusables);
 
+// GET request for retrieving all active badges
+router.get('/active', badgeReusableController.getActiveBadgeReusables);
+
 // GET request for retrieving all badges by ID
 router.get('/id', badgeReusableController.getBadgeReusableById);
 

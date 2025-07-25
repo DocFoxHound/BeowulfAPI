@@ -40,6 +40,7 @@ const leaderboardFleetlogSummaryRoutes = require('./src/routes/leaderboardFleetl
 const voiceChannelSessionsRoutes = require('./src/routes/voiceChannelSessionsRoutes'); // Import the new voice channel sessions routes
 const leaderboardSBLogRoutes = require('./src/routes/leaderboardSBLogRoutes'); // Import the leaderboard SB log routes
 const badgeReusableRoutes = require('./src/routes/badgeReusableRoutes'); // Import the badge reusable routes
+const emojiRoutes = require('./src/routes/emojiRoutes'); // Import the emoji routes
 
 // Load environment variables
 dotenv.config();
@@ -100,6 +101,7 @@ app.use(process.env.API_LEADERBOARD_FLEETLOG_SUMMARY_ROUTES, leaderboardFleetlog
 app.use(process.env.API_VOICE_CHANNEL_SESSIONS_ROUTES, voiceChannelSessionsRoutes); 
 app.use(process.env.API_LEADERBOARD_SB_LOG_ROUTES, leaderboardSBLogRoutes); // Use the leaderboard SB log routes
 app.use(process.env.API_BADGE_REUSABLES_ROUTES, badgeReusableRoutes); // Use the badge reusable routes
+app.use(process.env.API_EMOJI_ROUTES, emojiRoutes); // Use the emoji routes
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler

@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const pool = require('../config/database');
 const BadgeReusableModel = require('../models/badgeReusableModel');
 
@@ -6,6 +7,20 @@ exports.getAllBadgeReusables = async (req, res) => {
     try {
         const __badge = await BadgeReusableModel.findAll();
         res.status(200).json(__badge);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for all active badges (deleted !== true)
+exports.getActiveBadgeReusables = async (req, res) => {
+    try {
+        const activeBadges = await BadgeReusableModel.findAll({
+            where: {
+                deleted: { [Op.ne]: true }
+            }
+        });
+        res.status(200).json(activeBadges);
     } catch (error) {
         res.status(500).send(error.message);
     }
