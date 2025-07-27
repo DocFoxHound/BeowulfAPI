@@ -35,6 +35,16 @@ Badge.init({
         allowNull: true,
         unique: false
     },
+    badge_icon: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
+    badge_url: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

@@ -70,6 +70,11 @@ BadgeReusable.init({
         allowNull: true,
         unique: false
     },
+    emoji_name: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

@@ -41,6 +41,8 @@ const voiceChannelSessionsRoutes = require('./src/routes/voiceChannelSessionsRou
 const leaderboardSBLogRoutes = require('./src/routes/leaderboardSBLogRoutes'); // Import the leaderboard SB log routes
 const badgeReusableRoutes = require('./src/routes/badgeReusableRoutes'); // Import the badge reusable routes
 const emojiRoutes = require('./src/routes/emojiRoutes'); // Import the emoji routes
+const playerStatsRoutes = require('./src/routes/playerStatsRoutes'); // Import the player stats routes
+const promoteRoutes = require('./src/routes/promoteRoutes'); // Import the promote player routes
 
 // Load environment variables
 dotenv.config();
@@ -102,6 +104,8 @@ app.use(process.env.API_VOICE_CHANNEL_SESSIONS_ROUTES, voiceChannelSessionsRoute
 app.use(process.env.API_LEADERBOARD_SB_LOG_ROUTES, leaderboardSBLogRoutes); // Use the leaderboard SB log routes
 app.use(process.env.API_BADGE_REUSABLES_ROUTES, badgeReusableRoutes); // Use the badge reusable routes
 app.use(process.env.API_EMOJI_ROUTES, emojiRoutes); // Use the emoji routes
+app.use(process.env.API_PLAYER_STATS_ROUTES, playerStatsRoutes); // Use the player stats routes
+app.use(process.env.API_PROMOTE_PLAYER_ROUTES, promoteRoutes); // Use the promote player routes
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler
