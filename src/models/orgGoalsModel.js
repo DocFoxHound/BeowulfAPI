@@ -1,81 +1,81 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database'); // Assuming you have a config file for Sequelize
 
-class User extends Model {}
+class OrgGoal extends Model {}
 
-User.init({
+OrgGoal.init({
     id: {
         type: DataTypes.BIGINT,
         allowNull: false,
         unique: true,
         primaryKey: true
     },
-    username: {
+    goal_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: false
+    },
+    goal_description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: false
+    },
+    goal_trigger: {
+        type: DataTypes.ARRAY(DataTypes.JSON),
+        allowNull: true,
+        unique: false
+    },
+    patch: {
         type: DataTypes.STRING,
         allowNull: true,
         unique: false
     },
-    nickname: {
-        type: DataTypes.STRING,
+    created_at: {
+        type: DataTypes.TIME,
         allowNull: true,
         unique: false
     },
-    corsair_level: {
+    deleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        unique: false
+    },
+    completed_on: {
+        type: DataTypes.TIME,
+        allowNull: true,
+        unique: false
+    },
+    start_date: {
+        type: DataTypes.TIME,
+        allowNull: true,
+        unique: false
+    },
+    end_date: {
+        type: DataTypes.TIME,
+        allowNull: true,
+        unique: false
+    },
+    priority: {
         type: DataTypes.INTEGER,
         allowNull: true,
         unique: false
     },
-    raptor_level: {
+    manual_percentage: {
         type: DataTypes.INTEGER,
         allowNull: true,
         unique: false
     },
-    raider_level: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        unique: false
-    },
-    rank: {
-        type: DataTypes.BIGINT,
-        allowNull: true,
-        unique: true
-    },
-    roles: {
-        type: DataTypes.ARRAY(DataTypes.BIGINT),
-        allowNull: true,
-        unique: false,
-    },
-    rsi_handle: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        unique: false
-    },
-    rsi_display_name: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        unique: false
-    },
-    verification_code: {
-        type: DataTypes.BIGINT,
-        allowNull: true,
-        unique: false
-    },
-    joined_date: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        unique: false
-    },
-    player_org: {
-        type: DataTypes.STRING,
+    manual_progress: {
+        type: DataTypes.BOOLEAN,
         allowNull: true,
         unique: false
     },
 }, {
     sequelize, // This is the Sequelize instance you must pass
-    modelName: 'User', // We need to choose the model name
-    tableName: 'users', // Specify the table name
+    modelName: 'OrgGoal', // We need to choose the model name
+    tableName: 'org_goals', // Specify the table name
     timestamps: false // Turn off Sequelize auto creating updatedAt and createdAt
 });
 
 // Export the model
-module.exports = User;
+module.exports = OrgGoal;

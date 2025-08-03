@@ -1,5 +1,6 @@
 const pool = require('../config/database');
 const LeaderboardLogSBLog = require('../models/leaderboardSBLogModel');
+const { Op } = require('sequelize');
 
 // GET all LeaderboardLog entries
 exports.getAllLeaderboardLogEntries = async (req, res) => {
@@ -42,15 +43,20 @@ exports.getLeaderboardLogEntryByUserId = async (req, res) => {
 // GET all LeaderboardLog entries within a provided timespan
 exports.getLeaderboardLogEntriesByTimespan = async (req, res) => {
     const { start, end } = req.query;
-    if (!start || !end) {
+    const startMs= Number(start);
+    const endMs = Number(end);
+    if (!startMs || !endMs) {
         return res.status(400).send('Missing required query parameters: start, end');
+    }
+    if (isNaN(startMs) || isNaN(endMs)) {
+        return res.status(400).send('Invalid start or end: must be ms since epoch');
     }
     try {
         const entries = await LeaderboardLogSBLog.findAll({
             where: {
-                createdAt: {
-                    $gte: new Date(start),
-                    $lte: new Date(end)
+                created_at: {
+                    [Op.gte]: startMs,
+                    [Op.lte]: endMs
                 }
             }
         });

@@ -102,3 +102,50 @@ exports.getUsersByCorsairLevel = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Handle GET request to retrieve users whose roles contain any RONIN_IDS
+exports.getUsersByRoninRole = async (req, res) => {
+    // Get RONIN_IDS from environment variable and split into array
+    const roninIds = (process.env.RONIN_IDS || '').split(',').map(id => id.trim());
+    try {
+        // Find all users where roles contains any of the RONIN_IDS
+        const users = await UserModel.findAll({
+            where: {
+                roles: {
+                    // Sequelize 'overlap' operator for arrays
+                    [require('sequelize').Op.overlap]: roninIds
+                }
+            }
+        });
+        if (users && users.length > 0) {
+            res.status(200).json(users);
+        } else {
+            res.status(404).json({ message: 'No users found with Ronin roles' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Handle GET request to retrieve users whose roles contain any FLEET_COMMANDER_IDS
+exports.getUsersByFleetCommanderRole = async (req, res) => {
+    // Get FLEET_COMMANDER_IDS from environment variable and split into array
+    const fleetCommanderIds = (process.env.FLEET_COMMANDER_IDS || '').split(',').map(id => id.trim());
+    try {
+        // Find all users where roles contains any of the FLEET_COMMANDER_IDS
+        const users = await UserModel.findAll({
+            where: {
+                roles: {
+                    [require('sequelize').Op.overlap]: fleetCommanderIds
+                }
+            }
+        });
+        if (users && users.length > 0) {
+            res.status(200).json(users);
+        } else {
+            res.status(404).json({ message: 'No users found with Fleet Commander roles' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

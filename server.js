@@ -43,6 +43,13 @@ const badgeReusableRoutes = require('./src/routes/badgeReusableRoutes'); // Impo
 const emojiRoutes = require('./src/routes/emojiRoutes'); // Import the emoji routes
 const playerStatsRoutes = require('./src/routes/playerStatsRoutes'); // Import the player stats routes
 const promoteRoutes = require('./src/routes/promoteRoutes'); // Import the promote player routes
+const notifyAwardRoutes = require('./src/routes/notifyAwardRoutes'); // Import the notify award routes
+const grantPrestigeRoutes = require('./src/routes/grantPrestigeRoutes'); // Import the grant prestige routes
+const orgGoalsRoutes = require('./src/routes/orgGoalsRoutes'); // Import the organization goals routes
+const leaderboardSBOrgRoutes = require('./src/routes/leaderboardSBOrgRoutes'); // Import the leaderboard SB organization routes
+const leaderboardSBOrgSummaryRoutes = require('./src/routes/leaderboardSBOrgSummaryRoutes'); // Import the leaderboard SB organization summary routes
+const starcitizenApiRoutes = require('./src/routes/starcitizen-apiRoutes'); // Import the Star Citizen API routes
+const verifyUserRoutes = require('./src/routes/verifyUserRoutes'); // Import the verify user routes
 
 // Load environment variables
 dotenv.config();
@@ -106,6 +113,13 @@ app.use(process.env.API_BADGE_REUSABLES_ROUTES, badgeReusableRoutes); // Use the
 app.use(process.env.API_EMOJI_ROUTES, emojiRoutes); // Use the emoji routes
 app.use(process.env.API_PLAYER_STATS_ROUTES, playerStatsRoutes); // Use the player stats routes
 app.use(process.env.API_PROMOTE_PLAYER_ROUTES, promoteRoutes); // Use the promote player routes
+app.use(process.env.API_NOTIFY_AWARD_ROUTES, notifyAwardRoutes); // Use the notify award routes
+app.use(process.env.API_GRANT_PRESTIGE_ROUTES, grantPrestigeRoutes); // Use the grant prestige routes
+app.use(process.env.API_ORG_GOALS_ROUTES, orgGoalsRoutes); // Use the organization goals routes
+app.use(process.env.API_LEADERBOARD_SB_ORG_ROUTES, leaderboardSBOrgRoutes); // Use the leaderboard SB organization routes
+app.use(process.env.API_LEADERBOARD_SB_ORG_SUMMARY_ROUTES, leaderboardSBOrgSummaryRoutes); // Use the leaderboard SB organization summary routes
+app.use(process.env.API_SCI_API_ROUTES, starcitizenApiRoutes); // Use the Star Citizen API routes
+app.use(process.env.API_VERIFY_USER_ROUTES, verifyUserRoutes); // Use the verify user routes
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler

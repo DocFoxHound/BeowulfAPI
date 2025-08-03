@@ -8,6 +8,12 @@ router.get('/', userController.getAllUsers);
 // GET request for retrieving a list of all users
 router.get('/by-corsair-level', userController.getUsersByCorsairLevel);
 
+// GET request for retrieving users whose roles contain any RONIN_IDS
+router.get('/by-ronin-role', userController.getUsersByRoninRole);
+
+// GET request for retrieving users whose roles contain any FLEET_COMMANDER_IDS
+router.get('/by-fleet-commander-role', userController.getUsersByFleetCommanderRole);
+
 // GET request for retrieving a single user by ID
 router.get('/:id', userController.getUserById);
 

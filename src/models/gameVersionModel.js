@@ -15,6 +15,11 @@ GameVersion.init({
         allowNull: false,
         unique: false,
     },
+    season: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        unique: false,
+    },
     
     // Add more fields as necessary
 }, {

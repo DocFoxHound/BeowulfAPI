@@ -6,13 +6,15 @@ const LeaderboardLogSBController = require('../controllers/leaderboardSBLogContr
 router.get('/', LeaderboardLogSBController.getAllLeaderboardLogEntries);
 
 // GET LeaderboardLog entry by ID
-router.get('/:id', LeaderboardLogSBController.getLeaderboardLogEntryById);
+
+// GET all LeaderboardLog entries within a provided timespan
+router.get('/timespan', LeaderboardLogSBController.getLeaderboardLogEntriesByTimespan);
 
 // GET LeaderboardLog entry by User ID
 router.get('/user/:id', LeaderboardLogSBController.getLeaderboardLogEntryByUserId);
 
-// GET all LeaderboardLog entries within a provided timespan
-router.get('/timespan', LeaderboardLogSBController.getLeaderboardLogEntriesByTimespan);
+// GET LeaderboardLog entry by ID
+router.get('/:id', LeaderboardLogSBController.getLeaderboardLogEntryById);
 
 // POST create a new LeaderboardLog entry
 router.post('/', LeaderboardLogSBController.createLeaderboardLogEntry);
