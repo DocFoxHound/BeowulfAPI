@@ -70,6 +70,11 @@ User.init({
         allowNull: true,
         unique: false
     },
+    fleet: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: false
+    },
 }, {
     sequelize, // This is the Sequelize instance you must pass
     modelName: 'User', // We need to choose the model name

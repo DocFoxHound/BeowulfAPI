@@ -50,6 +50,8 @@ const leaderboardSBOrgRoutes = require('./src/routes/leaderboardSBOrgRoutes'); /
 const leaderboardSBOrgSummaryRoutes = require('./src/routes/leaderboardSBOrgSummaryRoutes'); // Import the leaderboard SB organization summary routes
 const starcitizenApiRoutes = require('./src/routes/starcitizen-apiRoutes'); // Import the Star Citizen API routes
 const verifyUserRoutes = require('./src/routes/verifyUserRoutes'); // Import the verify user routes
+const badgeAccoladesRoutes = require('./src/routes/badgeAccoladesRoutes'); // Import the badge accolades routes
+const calendarAvailabilityRoutes = require('./src/routes/calendarAvailabilityRoutes'); // Import the calendar availability routes
 
 // Load environment variables
 dotenv.config();
@@ -120,6 +122,8 @@ app.use(process.env.API_LEADERBOARD_SB_ORG_ROUTES, leaderboardSBOrgRoutes); // U
 app.use(process.env.API_LEADERBOARD_SB_ORG_SUMMARY_ROUTES, leaderboardSBOrgSummaryRoutes); // Use the leaderboard SB organization summary routes
 app.use(process.env.API_SCI_API_ROUTES, starcitizenApiRoutes); // Use the Star Citizen API routes
 app.use(process.env.API_VERIFY_USER_ROUTES, verifyUserRoutes); // Use the verify user routes
+app.use(process.env.API_BADGE_ACCOLADES_ROUTES, badgeAccoladesRoutes); // Use the badge accolades routes
+app.use(process.env.API_CALENDAR_AVAILABILITY_ROUTES, calendarAvailabilityRoutes); // Use the calendar availability routes
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler

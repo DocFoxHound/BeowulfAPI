@@ -99,6 +99,10 @@ Fleet.init({
         type: DataTypes.BIGINT,
         allowNull: true
     },
+    accolades: {
+        type: DataTypes.ARRAY(DataTypes.BIGINT),
+        allowNull: true
+    },
 }, {
     sequelize,
     modelName: 'Fleet',
