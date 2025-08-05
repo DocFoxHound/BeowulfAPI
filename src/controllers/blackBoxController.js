@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const pool = require('../config/database');
 const sequelize = require('../config/database'); // Import the Sequelize instance
 const BlackBox = require('../models/blackBoxModel');

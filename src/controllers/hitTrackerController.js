@@ -3,6 +3,7 @@ const HitTrack = require('../models/hitTrackerModel');
 // const { Sequelize } = require('sequelize');
 const sequelize = require('../config/database'); // Import the Sequelize instance
 const axios = require('axios'); // Add at the top if not already imported
+const { Op } = require('sequelize');
 
 exports.getAll = async (req, res) => {
     try {

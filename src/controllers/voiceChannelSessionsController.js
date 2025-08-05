@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const pool = require('../config/database');
 const VoiceChannelSessionsModel = require('../models/voiceChannelSessionsModel'); // Assuming you have a model for voiceSession
 

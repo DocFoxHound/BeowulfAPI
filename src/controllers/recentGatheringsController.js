@@ -1,5 +1,6 @@
 const pool = require('../config/database');
 const RecentGatheringModel = require('../models/recentGatheringsModel');
+const { Op } = require('sequelize');
 
 // Handle GET request for all __recentGathering
 exports.getAllRecentGatherings = async (req, res) => {

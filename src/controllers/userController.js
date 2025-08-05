@@ -1,4 +1,5 @@
 const UserModel = require('../models/userModel');
+const { Op } = require('sequelize');
 
 // Handle GET request for all users
 exports.getAllUsers = async (req, res) => {

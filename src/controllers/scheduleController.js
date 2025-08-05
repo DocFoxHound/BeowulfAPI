@@ -261,6 +261,28 @@ exports.getNextScheduleByRepeatSeries = async (req, res) => {
     }
 };
 
+// Handle DELETE request to delete all schedules in a repeat series by schedule ID
+exports.deleteScheduleSeries = async (req, res) => {
+    const { repeat_series } = req.params;
+    if (!repeat_series) {
+        return res.status(400).send('repeat_series is required.');
+    }
+    try {
+        // Delete all schedules in the given repeat_series
+        const deletedCount = await ScheduleModel.destroy({
+            where: { repeat_series }
+        });
+        if (deletedCount > 0) {
+            res.status(200).send(`${deletedCount} schedules deleted in the repeat series.`);
+        } else {
+            res.status(404).send('No schedules found for the given repeat_series.');
+        }
+    } catch (error) {
+        console.error(`Error deleting schedule series: ${error.message}`);
+        res.status(500).send(error.message);
+    }
+};
+
 // Handle GET request for all active schedules
 exports.getActiveSchedules = async (req, res) => {
     try {

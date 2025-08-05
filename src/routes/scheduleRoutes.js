@@ -32,4 +32,7 @@ router.get('/repeatseries/:id/next', scheduleController.getNextScheduleByRepeatS
 // GET schedule by ID
 router.get('/:id', scheduleController.getScheduleById);
 
+// DELETE all schedules in a repeat series by repeat_series number
+router.delete('/repeatseries/:repeat_series', scheduleController.deleteScheduleSeries);
+
 module.exports = router;

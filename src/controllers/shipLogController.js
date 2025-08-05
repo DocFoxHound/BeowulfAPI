@@ -2,6 +2,7 @@ const pool = require('../config/database');
 const sequelize = require('../config/database'); // Import the Sequelize instance
 const ShipLog = require('../models/shipLogModel');
 const axios = require('axios'); // Add this at the top if not already present
+const { Op } = require('sequelize');
 
 
 
