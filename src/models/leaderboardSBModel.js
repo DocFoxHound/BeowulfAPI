@@ -38,7 +38,7 @@ LeaderboardSB.init({
         allowNull: true
     },
     score: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     damage_dealt: {
