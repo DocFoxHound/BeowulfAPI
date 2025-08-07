@@ -30,15 +30,15 @@ LeaderboardSBOrg.init({
         allowNull: true
     },
     score: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     damage_dealt: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     damage_taken: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     matches: {
@@ -63,14 +63,6 @@ LeaderboardSBOrg.init({
     },
     core_carrier_kills: {
         type: DataTypes.INTEGER,
-        allowNull: true
-    },
-    best_lap: {
-        type: DataTypes.DOUBLE,
-        allowNull: true
-    },
-    best_race: {
-        type: DataTypes.STRING,
         allowNull: true
     },
     max_waves: {
@@ -98,11 +90,11 @@ LeaderboardSBOrg.init({
         allowNull: true
     },
     shots_fired: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: true
     },
     hits: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: true
     },
     org_media: {
@@ -110,7 +102,7 @@ LeaderboardSBOrg.init({
         allowNull: true
     },
     rating: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     avg_flight_time: {
@@ -142,7 +134,7 @@ LeaderboardSBOrg.init({
         allowNull: true
     },
     rank: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     created_at: {
