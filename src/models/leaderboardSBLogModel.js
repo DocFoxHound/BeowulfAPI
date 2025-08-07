@@ -42,7 +42,7 @@ LeaderboardSBLog.init({
         allowNull: true
     },
     rank: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: true
     },
     created_at: {
