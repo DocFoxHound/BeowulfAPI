@@ -35,6 +35,11 @@ RecentGathering.init({
         allowNull: false,
         unique: false
     },
+    created_at: {
+        type: DataTypes.TIME,
+        allowNull: false,
+        unique: false
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
