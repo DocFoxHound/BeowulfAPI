@@ -27,7 +27,7 @@ exports.getRecentGatheringsWithinTimeframe = async (req, res) => {
         const { Op } = require('sequelize');
         const gatherings = await RecentGatheringModel.findAll({
             where: {
-                timestamp: {
+                created_at: {
                     [Op.gte]: startDate,
                     [Op.lte]: endDate
                 }
