@@ -79,6 +79,26 @@ exports.getBadgesByUserId = async (req, res) => {
 };
 
 // Handle GET request for badges by user ID
+exports.getBadgesByUserIdAndAccolade = async (req, res) => {
+    const { user_id } = req.query;
+    try {
+        const badges = await BadgeModel.findAll({
+            where: {
+                user_id: user_id,
+                accolade: true
+            }
+        });
+        if (badges.length > 0) {
+            res.status(200).json(badges);
+        } else {
+            res.status(404).send('No badges found for the given user ID');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for badges by user ID
 exports.getBadgesByPatch = async (req, res) => {
     const { patch } = req.query;
     try {

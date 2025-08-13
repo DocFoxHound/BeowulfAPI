@@ -36,6 +36,9 @@ router.delete('/:id', blackBoxController.delete);
 // GET request for retrieving all badges by user ID
 router.get('/userkillsbefore', blackBoxController.getUserKillsBeforeTimestamp);
 
+// GET request for retrieving all badges by user ID
+router.get('/userkillsbetween', blackBoxController.getUserKillsBetweenTimestamps);
+
 // GET request for retrieving all badges by user ID and patch game mode
 router.get('/userpatchgamemode', blackBoxController.getByUserIdPatchGameMode);
 

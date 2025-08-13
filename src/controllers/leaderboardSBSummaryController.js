@@ -3,8 +3,8 @@ const sequelize = require('../config/database'); // Use sequelize, not pool
 // GET all player summaries
 exports.getAllPlayerSummaries = async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM leaderboard_sb_player_summary');
-        res.status(200).json(result.rows);
+        const result = await sequelize.query('SELECT * FROM leaderboard_sb_player_summary', { type: sequelize.QueryTypes.SELECT });
+        res.status(200).json(result);
     } catch (error) {
         res.status(500).send(error.message);
     }

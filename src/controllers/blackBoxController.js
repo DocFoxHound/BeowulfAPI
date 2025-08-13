@@ -212,6 +212,32 @@ exports.getUserKillsBeforeTimestamp = async (req, res) => {
     }
 };
 
+exports.getUserKillsBetweenTimestamps = async (req, res) => {
+    const { user_id, start_timestamp, end_timestamp } = req.query;
+    if (!user_id || !start_timestamp || !end_timestamp) {
+        return res.status(400).send('user_id, start_timestamp, and end_timestamp are required');
+    }
+    try {
+        // Decode URI components to handle + and %2B correctly
+        const startTime = new Date(decodeURIComponent(start_timestamp));
+        const endTime = new Date(decodeURIComponent(end_timestamp));
+
+        const entries = await BlackBox.findAll({
+            where: {
+                user_id: user_id,
+                timestamp: {
+                    [require('sequelize').Op.between]: [startTime, endTime]
+                }
+            }
+        });
+
+        // Always return 200 with array (empty or not)
+        res.status(200).json(entries);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 
 exports.getByUserIdPatchGameMode = async (req, res) => {
     const { user_id, patch, game_mode } = req.query;
