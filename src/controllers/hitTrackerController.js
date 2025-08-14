@@ -341,3 +341,53 @@ exports.getOverviewByPatch = async (req, res) => {
   }
 };
 
+
+// GET recent pirate summary from view with patch, limit, offset
+exports.getRecentPirateSummary = async (req, res) => {
+    try {
+        const patch = req.query.patch ?? null;
+        const limit = Math.min(parseInt(req.query.limit ?? "100", 10), 500);
+        const offset = Math.max(parseInt(req.query.offset ?? "0", 10), 0);
+
+        const patchEscaped = patch ? `'${patch.replace(/'/g, "''")}'` : 'NULL';
+
+        const query = `
+            SELECT *
+            FROM recent_piracy_user_summary(${patchEscaped}::text)
+            ORDER BY total_hits DESC
+            OFFSET ${offset}
+            LIMIT ${limit}
+        `;
+
+        const rows = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+        res.status(200).json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+};
+
+// GET total pirate summary from view with patch, limit, offset
+exports.getTotalPirateSummary = async (req, res) => {
+    try {
+        const patch = req.query.patch ?? null;
+        const limit = Math.min(parseInt(req.query.limit ?? "100", 10), 500);
+        const offset = Math.max(parseInt(req.query.offset ?? "0", 10), 0);
+
+        const patchEscaped = patch ? `'${patch.replace(/'/g, "''")}'` : 'NULL';
+
+        const query = `
+            SELECT *
+            FROM total_piracy_player_summary()
+            ORDER BY total_hits DESC
+            OFFSET ${offset}
+            LIMIT ${limit}
+        `;
+
+        const rows = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+        res.status(200).json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+};

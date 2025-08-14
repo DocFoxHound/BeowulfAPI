@@ -130,3 +130,20 @@ exports.getRecentFleetsSummary = async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 };
+
+// Handle GET request for a single RecentFleet by id
+exports.getRecentFleetById = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).send('RecentFleets ID is required');
+    }
+    try {
+        const fleet = await RecentFleetsModel.findByPk(id);
+        if (!fleet) {
+            return res.status(404).send('RecentFleets not found');
+        }
+        res.status(200).json(fleet);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};

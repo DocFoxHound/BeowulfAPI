@@ -115,6 +115,11 @@ HitTrack.init({
         allowNull: true,
         unique: false,
     },
+    total_cut_scu: {
+        type: DataTypes.DOUBLE,
+        allowNull: false,
+        unique: false,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

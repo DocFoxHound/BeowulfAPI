@@ -16,6 +16,9 @@ router.get('/patch', RecentFleet.getRecentFleetsByPatch);
 // GET request for retrieving recent fleets summary from view
 router.get('/usersummary', RecentFleet.getRecentFleetsSummary);
 
+// Get single recent fleet by id
+router.get('/:id', RecentFleet.getRecentFleetById);
+
 router.post('/', RecentFleet.createRecentFleets);
 
 router.put('/:id', RecentFleet.updateRecentFleets);

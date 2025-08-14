@@ -52,4 +52,11 @@ router.get('/hitoverviewbypatch', hitTrackerController.getOverviewByPatch);
 
 // GET request for retrieving all hitTracker entries between a timeframe
 router.get('/timeframe', hitTrackerController.getEntriesByTimeframe);
+
+// GET request for retrieving recent piracy summary from view
+router.get('/usersummary', hitTrackerController.getRecentPirateSummary);
+
+// GET request for retrieving recent piracy summary from view
+router.get('/totalusersummary', hitTrackerController.getTotalPirateSummary);
+
 module.exports = router;
