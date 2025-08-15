@@ -1,5 +1,6 @@
 const pool = require('../config/database');
 const BadgeModel = require('../models/badgeModel');
+const { Op } = require('sequelize');
 
 // Handle GET request for all __badge
 exports.getAllBadges = async (req, res) => {
@@ -112,6 +113,39 @@ exports.getBadgesByPatch = async (req, res) => {
         } else {
             res.status(404).send('No badges found for the specified patch.');
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for badges by multiple user IDs (CSV or repeated ids)
+exports.getBadgesByUserIds = async (req, res) => {
+    const { ids } = req.query;
+
+    if (!ids) {
+        return res.status(400).send('Query parameter "ids" is required. Example: /api/badges/users?ids=123,456');
+    }
+
+    let userIds = [];
+    if (typeof ids === 'string') {
+        userIds = ids.split(',').map(v => v.trim()).filter(Boolean);
+    } else if (Array.isArray(ids)) {
+        userIds = ids.map(v => String(v).trim()).filter(Boolean);
+    } else {
+        return res.status(400).send('Invalid "ids" format. Use comma-separated values or repeat ids.');
+    }
+
+    if (userIds.length === 0) {
+        return res.status(400).send('No valid user IDs provided.');
+    }
+
+    try {
+        const badges = await BadgeModel.findAll({
+            where: { user_id: { [Op.in]: userIds } },
+            order: [['user_id', 'ASC']]
+        });
+        // Always return 200 with an array (possibly empty) for frontend convenience
+        return res.status(200).json(badges);
     } catch (error) {
         res.status(500).send(error.message);
     }

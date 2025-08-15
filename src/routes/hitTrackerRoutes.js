@@ -41,6 +41,9 @@ router.delete('/:id', hitTrackerController.delete);
 // GET request for retrieving the count of hit entries
 router.get('/count', hitTrackerController.getHitEntryCount);
 
+// GET request for retrieving the count of hit entries by patch
+router.get('/countbypatch', hitTrackerController.getHitEntryCountByPatch);
+
 // GET request for retrieving the total value sum
 router.get('/totalsum', hitTrackerController.getTotalValueSum);
 

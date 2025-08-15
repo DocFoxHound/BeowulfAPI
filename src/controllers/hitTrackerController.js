@@ -278,6 +278,19 @@ exports.getHitEntryCount = async (req, res) => {
     }
 };
 
+exports.getHitEntryCountByPatch = async (req, res) => {
+    try {
+        const { patch } = req.query;
+        if (!patch) {
+            return res.status(400).send('patch is required');
+        }
+        const count = await HitTrack.count({ where: { patch } });
+        res.status(200).json({ patch, count });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 exports.getTotalValueSum = async (req, res) => {
     try {
         const { fn } = require('sequelize');

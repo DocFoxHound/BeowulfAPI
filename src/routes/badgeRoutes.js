@@ -14,6 +14,9 @@ router.get('/userandaccolade', badgeController.getBadgesByUserIdAndAccolade);
 // GET request for retrieving all badges by user ID
 router.get('/patch', badgeController.getBadgesByPatch);
 
+// GET request for retrieving badges for multiple users by comma-separated or JSON array ids
+router.get('/users', badgeController.getBadgesByUserIds);
+
 // POST request for creating a new user
 router.post('/', badgeController.createBadge);
 
