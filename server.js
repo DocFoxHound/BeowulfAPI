@@ -53,6 +53,7 @@ const verifyUserRoutes = require('./src/routes/verifyUserRoutes'); // Import the
 const badgeAccoladesRoutes = require('./src/routes/badgeAccoladesRoutes'); // Import the badge accolades routes
 const calendarAvailabilityRoutes = require('./src/routes/calendarAvailabilityRoutes'); // Import the calendar availability routes
 const recentFleetsRoutes = require('./src/routes/recentFleetsRoutes'); // Import the recent fleets routes
+const knowledgeRoutes = require('./src/routes/knowledgeRoutes'); // Import the knowledge routes
 
 // Load environment variables
 dotenv.config();
@@ -126,6 +127,7 @@ app.use(process.env.API_VERIFY_USER_ROUTES, verifyUserRoutes); // Use the verify
 app.use(process.env.API_BADGE_ACCOLADES_ROUTES, badgeAccoladesRoutes); // Use the badge accolades routes
 app.use(process.env.API_CALENDAR_AVAILABILITY_ROUTES, calendarAvailabilityRoutes); // Use the calendar availability routes
 app.use(process.env.API_RECENT_FLEETS, recentFleetsRoutes); // Use the recent fleets routes
+app.use(process.env.API_KNOWLEDGE_ROUTES, knowledgeRoutes); // Use the knowledge routes
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler
