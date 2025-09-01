@@ -10,6 +10,7 @@ Knowledge.init({
         primaryKey: true,
         autoIncrement: true
     },
+    // Required (NOT NULL in DB)
     source: {
         type: DataTypes.TEXT,
         allowNull: false

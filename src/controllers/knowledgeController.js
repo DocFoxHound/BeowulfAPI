@@ -12,6 +12,12 @@ function normalizeTags(tags) {
   return [];
 }
 
+function sanitizeTagsToTextArray(arr) {
+  return arr.filter(v => v !== undefined && v !== null)
+            .map(v => String(v).trim())
+            .filter(v => v.length > 0);
+}
+
 // GET / -> list with filters and pagination
 exports.list = async (req, res) => {
   try {
@@ -93,12 +99,24 @@ exports.get = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const data = { ...req.body };
-    data.tags = normalizeTags(data.tags);
+    data.tags = sanitizeTagsToTextArray(normalizeTags(data.tags));
+
+    // Basic required field guard (mirrors DB / model requirements)
+    const required = ['source','category','content'];
+    const missing = required.filter(k => data[k] == null || data[k] === '');
+    if (missing.length) return res.status(400).json({ error: 'Missing required fields', missing });
+
     const created = await Knowledge.create(data);
     res.status(201).json(created);
   } catch (err) {
+    if (err.name === 'SequelizeValidationError') {
+      return res.status(400).json({
+        error: 'Validation error',
+        details: err.errors.map(e => ({ path: e.path, message: e.message, validator: e.validatorKey }))
+      });
+    }
+    console.error('knowledge.create error full:', err);
     res.status(500).json({ error: err.message });
-    console.error("Error:", err.message);
   }
 };
 
