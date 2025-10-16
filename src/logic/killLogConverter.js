@@ -10,7 +10,7 @@ async function killLogConvert(reportKill){
         const global_ship_list = [
             'DRAK', 'ORIG', 'AEGS', 'ANVL', 'CRUS', 'BANU', 'MISC',
             'KRIG', 'XNAA', 'ARGO', 'VNCL', 'ESPR', 'RSI', 'CNOU',
-            'GRIN', 'TMBL', 'GAMA'
+            'GRIN', 'TMBL', 'GAMA', 'GLSN'
         ]
 
         const fps_weapons = [
@@ -23,26 +23,29 @@ async function killLogConvert(reportKill){
         // With this:
         const id = BigInt(Date.now()) * 1000n + BigInt(crypto.randomInt(0, 1000));
 
-        const patch = reportKill.patch;
-        // const time = reportKill.time;
-        // const player = reportKill.player;
-        const timestamp = new Date(reportKill.time).toISOString();
-        const gameModeRaw = reportKill.game_mode;
-        const victim = reportKill.victim;
-        const zone = reportKill.zone;
-        const weapon = reportKill.weapon;
-        const containsFpsWeapon = fps_weapons.some(gun => weapon.includes(gun));
-        const startsWithGlobalShip = global_ship_list.some(prefix => zone.startsWith(prefix));
+    // Backward-compatible safe defaults for possibly missing fields
+    const patch = reportKill.patch || null;
+    const timestamp = reportKill.time ? new Date(reportKill.time).toISOString() : new Date().toISOString();
+    const gameModeRaw = typeof reportKill.game_mode === 'string' ? reportKill.game_mode : '';
+    const victim = typeof reportKill.victim === 'string' ? reportKill.victim : 'unknown';
+    const zone = typeof reportKill.zone === 'string' ? reportKill.zone : '';
+    const weapon = typeof reportKill.weapon === 'string' ? reportKill.weapon : 'unknown';
+    const containsFpsWeapon = weapon ? fps_weapons.some(gun => weapon.includes(gun)) : false;
+    const startsWithGlobalShip = zone ? global_ship_list.some(prefix => zone.startsWith(prefix)) : false;
         // const rsi_profile = reportKill.rsi_profile;
         // const game_mode = reportKill.game_mode;
         // const client_ver = reportKill.client_ver;
-        let playerShip = reportKill.killers_ship;
+        let playerShip = typeof reportKill.killers_ship === 'string' ? reportKill.killers_ship : 'N/A';
         const key = reportKill.key;
         const keyUserPair = await KeyModel.findOne({
             where: {
                 key: key
             }
         });
+        if (!keyUserPair) {
+            console.warn('killLogConvert: No user found for key; skipping BlackBox creation');
+            return;
+        }
         const userId = keyUserPair.user_id;
         const damageType = reportKill.damage_type;
         // const userData = await UserModel.findByPk(userId);
@@ -126,7 +129,7 @@ async function killLogConvert(reportKill){
         
 
         let matchedPlayerShipObject = "unknown";
-        if(playerShip !== "N/A"){
+        if(playerShip && playerShip !== "N/A"){
             try{
                 playerShip = playerShip.slice(5, -14).replace(/_/g, ' ');
                 const normalizedPlayerShip = normalizeShipName(playerShip);
@@ -142,7 +145,7 @@ async function killLogConvert(reportKill){
         const newBlackBox = new BlackBox({
             id: id,
             user_id: userId,
-            ship_used: matchedPlayerShipObject !== "unknwon" ? matchedPlayerShipObject.ship : "unknown",
+            ship_used: matchedPlayerShipObject !== "unknown" ? matchedPlayerShipObject.ship : "unknown",
             ship_killed: matchedKilledShipObject !== "FPS" ? matchedKilledShipObject.ship : "FPS",
             value: matchedKilledShipObject !== "FPS" ? matchedKilledShipObject.avg_price : 0,
             kill_count: 1,

@@ -16,48 +16,53 @@ exports.getAllKills = async (req, res) => {
 // Handle POST request to create a new __kill
 exports.createKill = async (req, res) => {
     try {
-        const parentId = new Date().getTime(); // Generate a unique ID based on the current timestamp
+        const parentId = Date.now(); // Generate a unique ID based on the current timestamp
 
         // Retrieve all game versions from the database
         const patches = await GameVersionModel.findAll();
         const latestPatchesSorted = patches.sort((a, b) => b.id - a.id);
-        const latestPatch = latestPatchesSorted[0].version; // Get the latest patch
-        const key = req.headers.authorization
+        const latestPatch = latestPatchesSorted[0]?.version || null; // Get the latest patch
+        const key = req.headers.authorization;
 
-        // Sanitize and validate the time field
+        // Sanitize and validate the time field (backward compatible)
         let sanitizedTime = req.body.time;
-        if (sanitizedTime && sanitizedTime.startsWith('<') && sanitizedTime.endsWith('>')) {
-            sanitizedTime = sanitizedTime.slice(1, -1); // Remove angle brackets
+        if (sanitizedTime && typeof sanitizedTime === 'string') {
+            // Accept "<...>" or raw ISO string
+            if (sanitizedTime.startsWith('<') && sanitizedTime.endsWith('>')) {
+                sanitizedTime = sanitizedTime.slice(1, -1);
+            }
         }
-
-        const parsedTime = new Date(sanitizedTime);
+        let parsedTime = new Date(sanitizedTime);
         if (!sanitizedTime || isNaN(parsedTime.getTime())) {
-            return res.status(400).send('Invalid time format. Please provide a valid ISO 8601 date string.');
+            // Fallback to server time to keep endpoint tolerant of older clients
+            parsedTime = new Date();
         }
 
-        // Create a new KillModel object with only the required fields
+        // Create a new KillModel object with the required fields
         const new__kill = await KillModel.create({
-            id: parentId, // Set the id to the generated parentId
-            patch: latestPatch, // Add the latest patch to the kill object
-            time: parsedTime.toISOString(), // Use the sanitized and validated time
-            player: req.body.player,
-            victim: req.body.victim,
-            zone: req.body.zone,
-            weapon: req.body.weapon,
-            rsi_profile: req.body.rsi_profile,
-            game_mode: req.body.game_mode,
-            client_ver: req.body.client_ver,
-            killers_ship: req.body.killers_ship,
+            id: parentId,
+            patch: latestPatch,
+            time: parsedTime.toISOString(),
+            player: req.body.player ?? null,
+            victim: req.body.victim ?? null,
+            zone: req.body.zone ?? null,
+            location: req.body.location ?? null,           // Optional for backward compatibility
+            coordinates: typeof req.body.coordinates === 'string' ? req.body.coordinates : (Array.isArray(req.body.coordinates) ? req.body.coordinates.join(',') : null),
+            weapon: req.body.weapon ?? null,
+            rsi_profile: req.body.rsi_profile ?? null,
+            game_mode: req.body.game_mode ?? null,
+            client_ver: req.body.client_ver ?? null,
+            killers_ship: req.body.killers_ship ?? 'N/A',
             key: key,
-            damage_type: req.body.damage_type,
+            damage_type: req.body.damage_type ?? null,
         });
 
-        killLogConvert(new__kill.dataValues); // Call the killLogConvert function with the new kill object
+        killLogConvert(new__kill.dataValues);
 
-        res.status(201).json(new__kill); // Respond with the saved kill
+        res.status(201).json(new__kill);
     } catch (error) {
         console.error("Error creating kill:", error.message);
-        res.status(500).send(error.message); // Handle errors
+        res.status(500).send(error.message);
     }
 };
 
