@@ -37,6 +37,7 @@ const leaderboardSBSummaryRoutes = require('./src/routes/leaderboardSBSummaryRou
 const leaderboardPiracySummaryRoutes = require('./src/routes/leaderboardPiracySummaryRoutes');
 const leaderboardBlackboxSummaryRoutes = require('./src/routes/leaderboardBlackboxSummaryRoutes');
 const leaderboardFleetlogSummaryRoutes = require('./src/routes/leaderboardFleetlogSummaryRoutes');
+const beowulfHunterSummaryByPatchRoutes = require('./src/routes/beowulfHunterSummaryByPatchRoutes');
 const voiceChannelSessionsRoutes = require('./src/routes/voiceChannelSessionsRoutes'); // Import the new voice channel sessions routes
 const leaderboardSBLogRoutes = require('./src/routes/leaderboardSBLogRoutes'); // Import the leaderboard SB log routes
 const badgeReusableRoutes = require('./src/routes/badgeReusableRoutes'); // Import the badge reusable routes
@@ -111,6 +112,7 @@ app.use(process.env.API_LEADERBOARD_SB_SUMMARY_ROUTES, leaderboardSBSummaryRoute
 app.use(process.env.API_LEADERBOARD_PIRACY_SUMMARY_ROUTES, leaderboardPiracySummaryRoutes)
 app.use(process.env.API_LEADERBOARD_BLACKBOX_SUMMARY_ROUTES, leaderboardBlackboxSummaryRoutes)
 app.use(process.env.API_LEADERBOARD_FLEETLOG_SUMMARY_ROUTES, leaderboardFleetlogSummaryRoutes)
+app.use(process.env.API_BEOWULF_HUNTER_SUMMARY_BY_PATCH_ROUTES, beowulfHunterSummaryByPatchRoutes)
 app.use(process.env.API_VOICE_CHANNEL_SESSIONS_ROUTES, voiceChannelSessionsRoutes); 
 app.use(process.env.API_LEADERBOARD_SB_LOG_ROUTES, leaderboardSBLogRoutes); // Use the leaderboard SB log routes
 app.use(process.env.API_BADGE_REUSABLES_ROUTES, badgeReusableRoutes); // Use the badge reusable routes
