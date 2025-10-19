@@ -20,8 +20,19 @@ async function killLogConvert(reportKill){
         // Replace this line:
         // const id = reportKill.id;
 
-        // With this:
-        const id = BigInt(Date.now()) * 1000n + BigInt(crypto.randomInt(0, 1000));
+        // With this: build ID from the reportKill.time (ms epoch) and randomize the last 2 digits
+        // to reduce collision risk when multiple kills occur in the same millisecond.
+        // Falls back to Date.now() if reportKill.time is missing or invalid.
+        let timeMs = Date.now();
+        if (reportKill.time) {
+            const parsed = new Date(reportKill.time).getTime();
+            if (!Number.isNaN(parsed)) {
+                timeMs = parsed;
+            }
+        }
+        const baseMs = BigInt(timeMs);
+        // Zero-out the last two digits and replace them with a random 00-99 suffix
+        const id = baseMs - (baseMs % 100n) + BigInt(crypto.randomInt(0, 100));
 
     // Backward-compatible safe defaults for possibly missing fields
     const patch = reportKill.patch || null;
