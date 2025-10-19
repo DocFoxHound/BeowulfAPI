@@ -182,6 +182,8 @@ async function killLogConvert(reportKill){
             timestamp: timestamp,
             location: location,
             coordinates: coordinates,
+            org_sid: typeof reportKill.org_sid === 'string' ? reportKill.org_sid : null,
+            org_picture: typeof reportKill.org_picture === 'string' ? reportKill.org_picture : (typeof reportKill.org_image === 'string' ? reportKill.org_image : null),
             victim_image: typeof reportKill.victim_image === 'string' ? reportKill.victim_image : null
         });
         const savedBlackBox = await newBlackBox.save();

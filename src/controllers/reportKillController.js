@@ -65,8 +65,9 @@ exports.createKill = async (req, res) => {
 
         // Create a new KillModel object with the required fields
         // Sanitize optional org fields to ensure missing/blank values don't cause issues
-        const rawOrgSid = req.body.org_sid;
-        const rawOrgPicture = req.body.org_picture;
+    const rawOrgSid = req.body.org_sid;
+    // Accept both org_image and org_picture (prefer org_image if present)
+    const rawOrgPicture = typeof req.body.org_image === 'string' ? req.body.org_image : req.body.org_picture;
         const orgSid = typeof rawOrgSid === 'string' ? (rawOrgSid.trim() || null) : null;
         const orgPicture = typeof rawOrgPicture === 'string' ? (rawOrgPicture.trim() || null) : null;
 
