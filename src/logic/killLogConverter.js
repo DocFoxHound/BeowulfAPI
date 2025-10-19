@@ -23,11 +23,15 @@ async function killLogConvert(reportKill){
         // With this: build ID from the reportKill.time (ms epoch) and randomize the last 2 digits
         // to reduce collision risk when multiple kills occur in the same millisecond.
         // Falls back to Date.now() if reportKill.time is missing or invalid.
+        // Also sanitize time strings like "<2025-04-14T17:10:51.498Z>" by stripping angle brackets.
         let timeMs = Date.now();
+        let timestampIso = new Date(timeMs).toISOString();
         if (reportKill.time) {
-            const parsed = new Date(reportKill.time).getTime();
+            const cleanedTime = String(reportKill.time).replace(/[<>]/g, '');
+            const parsed = Date.parse(cleanedTime);
             if (!Number.isNaN(parsed)) {
                 timeMs = parsed;
+                timestampIso = new Date(parsed).toISOString();
             }
         }
         const baseMs = BigInt(timeMs);
@@ -36,11 +40,13 @@ async function killLogConvert(reportKill){
 
     // Backward-compatible safe defaults for possibly missing fields
     const patch = reportKill.patch || null;
-    const timestamp = reportKill.time ? new Date(reportKill.time).toISOString() : new Date().toISOString();
+    const timestamp = timestampIso;
     const gameModeRaw = typeof reportKill.game_mode === 'string' ? reportKill.game_mode : '';
     const victim = typeof reportKill.victim === 'string' ? reportKill.victim : 'unknown';
     const zone = typeof reportKill.zone === 'string' ? reportKill.zone : '';
     const weapon = typeof reportKill.weapon === 'string' ? reportKill.weapon : 'unknown';
+    const location = typeof reportKill.location === 'string' ? reportKill.location : null;
+    const coordinates = typeof reportKill.coordinates === 'string' ? reportKill.coordinates : null;
     const containsFpsWeapon = weapon ? fps_weapons.some(gun => weapon.includes(gun)) : false;
     const startsWithGlobalShip = zone ? global_ship_list.some(prefix => zone.startsWith(prefix)) : false;
         // const rsi_profile = reportKill.rsi_profile;
@@ -163,7 +169,9 @@ async function killLogConvert(reportKill){
             victims: [victim],
             patch: patch,
             game_mode: gameMode,
-            timestamp: timestamp
+            timestamp: timestamp,
+            location: location,
+            coordinates: coordinates
         });
         const savedBlackBox = await newBlackBox.save();
         console.log("Saved")
