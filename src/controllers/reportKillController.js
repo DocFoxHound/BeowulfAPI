@@ -64,6 +64,33 @@ exports.createKill = async (req, res) => {
         }
 
         // Create a new KillModel object with the required fields
+        // Sanitize optional org fields to ensure missing/blank values don't cause issues
+        const rawOrgSid = req.body.org_sid;
+        const rawOrgPicture = req.body.org_picture;
+        const orgSid = typeof rawOrgSid === 'string' ? (rawOrgSid.trim() || null) : null;
+        const orgPicture = typeof rawOrgPicture === 'string' ? (rawOrgPicture.trim() || null) : null;
+
+        // Sanitize optional location field
+        const rawLocation = req.body.location;
+        const location = typeof rawLocation === 'string' ? (rawLocation.trim() || null) : null;
+
+        // Sanitize optional coordinates field; accept string, array, or {x,y,z}
+        const rawCoords = req.body.coordinates;
+        let coordinates = null;
+        if (typeof rawCoords === 'string') {
+            const trimmed = rawCoords.trim();
+            coordinates = trimmed.length ? trimmed : null;
+        } else if (Array.isArray(rawCoords)) {
+            const parts = rawCoords
+                .map(v => typeof v === 'number' ? String(v) : (typeof v === 'string' ? v.trim() : ''))
+                .filter(v => v !== '');
+            coordinates = parts.length ? parts.join(',') : null;
+        } else if (rawCoords && typeof rawCoords === 'object') {
+            const { x, y, z } = rawCoords;
+            const nums = [x, y, z].map(n => Number(n));
+            coordinates = nums.every(n => Number.isFinite(n)) ? nums.join(',') : null;
+        }
+
         const new__kill = await KillModel.create({
             id: parentId,
             patch: patchVersion,
@@ -71,8 +98,8 @@ exports.createKill = async (req, res) => {
             player: req.body.player ?? null,
             victim: req.body.victim ?? null,
             zone: req.body.zone ?? null,
-            location: req.body.location ?? null,           // Optional for backward compatibility
-            coordinates: typeof req.body.coordinates === 'string' ? req.body.coordinates : (Array.isArray(req.body.coordinates) ? req.body.coordinates.join(',') : null),
+            location: location,           // Optional for backward compatibility
+            coordinates: coordinates,
             weapon: req.body.weapon ?? null,
             rsi_profile: req.body.rsi_profile ?? null,
             game_mode: req.body.game_mode ?? null,
@@ -80,6 +107,8 @@ exports.createKill = async (req, res) => {
             killers_ship: req.body.killers_ship ?? 'N/A',
             key: key,
             damage_type: req.body.damage_type ?? null,
+            org_sid: orgSid,
+            org_picture: orgPicture,
         });
 
         killLogConvert(new__kill.dataValues);
