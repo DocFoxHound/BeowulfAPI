@@ -137,9 +137,24 @@ exports.getAssistantEntriesUserPatch = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const new_entry = new BlackBox(req.body);
-        const saved_entry = await new_entry.save();
-        res.status(201).json(saved_entry);
+        // Accept payloads with or without optional fields and coerce types safely
+        const body = req.body || {};
+
+        const id = body.id ?? Date.now();
+        const location = body.location ?? null;
+        const coordinates = typeof body.coordinates === 'string'
+            ? body.coordinates
+            : (Array.isArray(body.coordinates) ? body.coordinates.join(',') : null);
+
+        const payload = {
+            ...body,
+            id,
+            location,
+            coordinates
+        };
+
+        const new_entry = await BlackBox.create(payload);
+        res.status(201).json(new_entry);
     } catch (error) {
         res.status(500).send(error.message);
     }

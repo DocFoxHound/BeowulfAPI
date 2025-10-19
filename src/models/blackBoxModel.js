@@ -55,6 +55,14 @@ BlackBox.init({
         allowNull: true,
         unique: false
     },
+    location: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    coordinates: {
+        type: DataTypes.STRING, // "-580645.384869,141765.234817,806351.274790"
+        allowNull: true,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass
