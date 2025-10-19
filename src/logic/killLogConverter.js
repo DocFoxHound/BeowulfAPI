@@ -159,12 +159,22 @@ async function killLogConvert(reportKill){
             }
         }
 
+        // Safely compute ship fields even when matches are strings like 'unknown' or 'FPS'
+        const isShipObj = (s) => s && typeof s === 'object' && 'ship' in s;
+        const shipUsed = isShipObj(matchedPlayerShipObject) ? matchedPlayerShipObject.ship : 'unknown';
+        const shipKilled = matchedKilledShipObject === 'FPS'
+            ? 'FPS'
+            : (isShipObj(matchedKilledShipObject) ? matchedKilledShipObject.ship : 'unknown');
+        const valueNum = matchedKilledShipObject === 'FPS'
+            ? 0
+            : (isShipObj(matchedKilledShipObject) && typeof matchedKilledShipObject.avg_price === 'number' ? matchedKilledShipObject.avg_price : 0);
+
         const newBlackBox = new BlackBox({
             id: id,
             user_id: userId,
-            ship_used: matchedPlayerShipObject !== "unknown" ? matchedPlayerShipObject.ship : "unknown",
-            ship_killed: matchedKilledShipObject !== "FPS" ? matchedKilledShipObject.ship : "FPS",
-            value: matchedKilledShipObject !== "FPS" ? matchedKilledShipObject.avg_price : 0,
+            ship_used: shipUsed,
+            ship_killed: shipKilled,
+            value: valueNum,
             kill_count: 1,
             victims: [victim],
             patch: patch,
