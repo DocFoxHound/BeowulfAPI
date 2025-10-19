@@ -71,6 +71,10 @@ BlackBox.init({
         type: DataTypes.STRING, // URL or path to the organization's picture
         allowNull: true,
     },
+    victim_image: {
+        type: DataTypes.STRING, // URL or path to the victim's image
+        allowNull: true,
+    },
     // Add more fields as necessary
 }, {
     sequelize, // This is the Sequelize instance you must pass

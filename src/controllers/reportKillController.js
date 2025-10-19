@@ -91,6 +91,10 @@ exports.createKill = async (req, res) => {
             coordinates = nums.every(n => Number.isFinite(n)) ? nums.join(',') : null;
         }
 
+        // Optional victim image (URL/path)
+        const rawVictimImage = req.body.victim_image;
+        const victimImage = typeof rawVictimImage === 'string' ? (rawVictimImage.trim() || null) : null;
+
         const new__kill = await KillModel.create({
             id: parentId,
             patch: patchVersion,
@@ -109,6 +113,7 @@ exports.createKill = async (req, res) => {
             damage_type: req.body.damage_type ?? null,
             org_sid: orgSid,
             org_picture: orgPicture,
+            victim_image: victimImage,
         });
 
         killLogConvert(new__kill.dataValues);

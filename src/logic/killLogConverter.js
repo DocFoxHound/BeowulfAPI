@@ -181,7 +181,8 @@ async function killLogConvert(reportKill){
             game_mode: gameMode,
             timestamp: timestamp,
             location: location,
-            coordinates: coordinates
+            coordinates: coordinates,
+            victim_image: typeof reportKill.victim_image === 'string' ? reportKill.victim_image : null
         });
         const savedBlackBox = await newBlackBox.save();
         console.log("Saved")
