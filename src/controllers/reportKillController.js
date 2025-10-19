@@ -18,11 +18,9 @@ exports.createKill = async (req, res) => {
     try {
         const parentId = Date.now(); // Generate a unique ID based on the current timestamp
 
-        // Retrieve all game versions from the database
-        const patches = await GameVersionModel.findAll();
-        const latestPatchesSorted = patches.sort((a, b) => b.id - a.id);
-        const latestPatch = latestPatchesSorted[0]?.version || null; // Get the latest patch
-        const key = req.headers.authorization;
+    // Retrieve all game versions from the database
+    const patches = await GameVersionModel.findAll();
+    const key = req.headers.authorization;
 
         // Sanitize and validate the time field (backward compatible)
         let sanitizedTime = req.body.time;
@@ -38,10 +36,37 @@ exports.createKill = async (req, res) => {
             parsedTime = new Date();
         }
 
+        // Determine patch version based on the kill time and patch creation times
+        // Assumptions: GameVersion.id is the creation time in ms (number or numeric string), GameVersion.version is the patch string
+        let patchVersion = '0.0';
+        if (Array.isArray(patches) && patches.length > 0) {
+            const sortedPatches = patches
+                .filter(p => p && p.id !== undefined && p.id !== null)
+                .sort((a, b) => Number(a.id) - Number(b.id)); // ascending by creation time
+
+            if (sortedPatches.length > 0) {
+                const timeMs = parsedTime.getTime();
+                const firstStart = Number(sortedPatches[0].id);
+                if (Number.isFinite(firstStart) && timeMs < firstStart) {
+                    patchVersion = '0.0';
+                } else {
+                    // Find interval [start_i, start_{i+1}) that contains timeMs; for the last patch, end is +Infinity
+                    for (let i = 0; i < sortedPatches.length; i++) {
+                        const start = Number(sortedPatches[i].id);
+                        const end = i + 1 < sortedPatches.length ? Number(sortedPatches[i + 1].id) : Number.POSITIVE_INFINITY;
+                        if (timeMs >= start && timeMs < end) {
+                            patchVersion = sortedPatches[i].version || patchVersion;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         // Create a new KillModel object with the required fields
         const new__kill = await KillModel.create({
             id: parentId,
-            patch: latestPatch,
+            patch: patchVersion,
             time: parsedTime.toISOString(),
             player: req.body.player ?? null,
             victim: req.body.victim ?? null,
