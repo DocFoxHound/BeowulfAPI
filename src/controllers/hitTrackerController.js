@@ -53,6 +53,24 @@ exports.getByEntryId = async (req, res) => {
     }
 };
 
+exports.getByThreadId = async (req, res) => {
+    const { id } = req.query;
+    console.log("\nid", id);
+    try {
+        const entry = await HitTrack.findOne({
+            where: {
+                thread_id: id
+            }
+        });
+        if (entry) {
+            res.status(200).json(entry);
+        } else {
+            res.status(404).send('No HitTrack found for the given thread ID');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
 
 exports.getByPatch = async (req, res) => {
     const { patch } = req.query;
