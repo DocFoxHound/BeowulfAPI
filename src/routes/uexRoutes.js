@@ -286,6 +286,63 @@ router.put('/refineryyields/:id', uexController.updateRefineryYield);
 // DELETE request for deleting all entities
 router.delete('/refineryyields/', uexController.deleteAllRefineryYields);
 
+//--------------------------------------------
+//          MARKET AVERAGES ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/marketaverages/', uexController.getAllMarketAverages);
+
+// GET request for retrieving a single entity by ID
+router.get('/marketaverages/:id', uexController.getMarketAverageById);
+
+// POST request for creating a new entity
+router.post('/marketaverages/', uexController.createMarketAverage);
+
+// PUT request for updating an existing entity by ID
+router.put('/marketaverages/:id', uexController.updateMarketAverage);
+
+// DELETE request for deleting all entities
+router.delete('/marketaverages/', uexController.deleteAllMarketAverages);
+
+//--------------------------------------------
+//                ITEMS ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/items/', uexController.getAllItems);
+
+// GET request for retrieving a single entity by ID
+router.get('/items/:id', uexController.getItemById);
+
+// POST request for creating a new entity
+router.post('/items/', uexController.createItem);
+
+// PUT request for updating an existing entity by ID
+router.put('/items/:id', uexController.updateItem);
+
+// DELETE request for deleting all entities
+router.delete('/items/', uexController.deleteAllItems);
+
+//--------------------------------------------
+//           ITEM CATEGORIES ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/itemcategories/', uexController.getAllItemCategories);
+
+// GET request for retrieving a single entity by ID
+router.get('/itemcategories/:id', uexController.getItemCategoryById);
+
+// POST request for creating a new entity
+router.post('/itemcategories/', uexController.createItemCategory);
+
+// PUT request for updating an existing entity by ID
+router.put('/itemcategories/:id', uexController.updateItemCategory);
+
+// DELETE request for deleting all entities
+router.delete('/itemcategories/', uexController.deleteAllItemCategories);
+
 
 
 module.exports = router;

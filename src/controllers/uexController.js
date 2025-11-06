@@ -14,6 +14,9 @@ const CommoditySummary = require('../models/uexCommoditySummaryModel');
 const ItemSummary = require('../models/uexItemSummaryModel');
 const MoonModel = require('../models/uexMoonModel');
 const RefineryYieldModel = require('../models/uexRefineryYieldModel');
+const MarketAverageModel = require('../models/uexMarketAverageModel');
+const UEXItemModel = require('../models/uexItemModel');
+const UEXItemCategoryModel = require('../models/uexItemCategoryModel');
 
 
 
@@ -998,6 +1001,198 @@ exports.updateRefineryYield = async (req, res) => {
 exports.deleteAllRefineryYields = async (req, res) => {
     try {
         const deleted = await RefineryYieldModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//        MARKET AVERAGES CONTROLLER          MarketAverageModel
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllMarketAverages = async (req, res) => {
+    try {
+        const entity = await MarketAverageModel.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getMarketAverageById = async (req, res) => {
+    try {
+        const id = await MarketAverageModel.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Market average not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create an entity
+exports.createMarketAverage = async (req, res) => {
+    try {
+        const newEntity = new MarketAverageModel(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateMarketAverage = async (req, res) => {
+    try {
+        const entity = await MarketAverageModel.findByPk(req.params.id);
+        if (entity) {
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Market average not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllMarketAverages = async (req, res) => {
+    try {
+        const deleted = await MarketAverageModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//               ITEMS CONTROLLER             UEXItemModel
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllItems = async (req, res) => {
+    try {
+        const entity = await UEXItemModel.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getItemById = async (req, res) => {
+    try {
+        const id = await UEXItemModel.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Item not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create an entity
+exports.createItem = async (req, res) => {
+    try {
+        const newEntity = new UEXItemModel(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateItem = async (req, res) => {
+    try {
+        const entity = await UEXItemModel.findByPk(req.params.id);
+        if (entity) {
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Item not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllItems = async (req, res) => {
+    try {
+        const deleted = await UEXItemModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//         ITEM CATEGORY CONTROLLER           UEXItemCategoryModel
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllItemCategories = async (req, res) => {
+    try {
+        const entity = await UEXItemCategoryModel.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getItemCategoryById = async (req, res) => {
+    try {
+        const id = await UEXItemCategoryModel.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Item category not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create an entity
+exports.createItemCategory = async (req, res) => {
+    try {
+        const newEntity = new UEXItemCategoryModel(req.body);
+        const savedEntity = await newEntity.save();
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateItemCategory = async (req, res) => {
+    try {
+        const entity = await UEXItemCategoryModel.findByPk(req.params.id);
+        if (entity) {
+            const updatedEntity = await entity.update(req.body);
+            res.status(200).json(updatedEntity);
+        } else {
+            res.status(404).send('Item category not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllItemCategories = async (req, res) => {
+    try {
+        const deleted = await UEXItemCategoryModel.destroy({ where: {} });
         res.status(200).json({ deleted });
     } catch (error) {
         res.status(500).send(error.message);
