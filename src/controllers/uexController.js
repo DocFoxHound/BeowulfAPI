@@ -12,6 +12,8 @@ const CommodityByTerminal = require('../models/uexCommodityByTerminalModel');
 const ItemByTerminal = require('../models/uexItemByTerminalModel');
 const CommoditySummary = require('../models/uexCommoditySummaryModel');
 const ItemSummary = require('../models/uexItemSummaryModel');
+const MoonModel = require('../models/uexMoonModel');
+const RefineryYieldModel = require('../models/uexRefineryYieldModel');
 
 
 
@@ -67,6 +69,16 @@ exports.updateCity = async (req, res) => {
         } else {
             res.status(404).send('Entity not found');
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllCities = async (req, res) => {
+    try {
+        const deleted = await CityModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -128,6 +140,16 @@ exports.updateCommodity = async (req, res) => {
     }
 };
 
+// Handle DELETE request to remove all entities
+exports.deleteAllCommodities = async (req, res) => {
+    try {
+        const deleted = await CommodityModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 //--------------------------------------------
 //      COMMODITY BY TERMINAL CONTROLLER      CommodityByTerminal
 //--------------------------------------------
@@ -179,6 +201,16 @@ exports.updateTerminalCommodity = async (req, res) => {
         } else {
             res.status(404).send('Entity not found');
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllTerminalCommodities = async (req, res) => {
+    try {
+        const deleted = await CommodityByTerminal.destroy({ where: {} });
+        res.status(200).json({ deleted });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -240,6 +272,16 @@ exports.updateSummarizedCommodity = async (req, res) => {
     }
 };
 
+// Handle DELETE request to remove all entities
+exports.deleteAllSummarizedCommodities = async (req, res) => {
+    try {
+        const deleted = await CommoditySummary.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 //--------------------------------------------
 //         ITEM BY TERMINAL CONTROLLER        ItemByTerminal
 //--------------------------------------------
@@ -291,6 +333,16 @@ exports.updateTerminalItem = async (req, res) => {
         } else {
             res.status(404).send('Entity not found');
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllTerminalItems = async (req, res) => {
+    try {
+        const deleted = await ItemByTerminal.destroy({ where: {} });
+        res.status(200).json({ deleted });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -352,6 +404,16 @@ exports.updateSummarizedItem = async (req, res) => {
     }
 };
 
+// Handle DELETE request to remove all entities
+exports.deleteAllSummarizedItems = async (req, res) => {
+    try {
+        const deleted = await ItemSummary.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 //--------------------------------------------
 //           OUTPOST CONTROLLER               OutpostModel
 //--------------------------------------------
@@ -403,6 +465,16 @@ exports.updateOutpost = async (req, res) => {
         } else {
             res.status(404).send('Entity not found');
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllOutposts = async (req, res) => {
+    try {
+        const deleted = await OutpostModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -464,6 +536,16 @@ exports.updatePlanet = async (req, res) => {
     }
 };
 
+// Handle DELETE request to remove all entities
+exports.deleteAllPlanets = async (req, res) => {
+    try {
+        const deleted = await PlanetModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 //--------------------------------------------
 //         SPACE STATION CONTROLLER           SpaceStationModel
 //--------------------------------------------
@@ -520,6 +602,16 @@ exports.updateSpaceStation = async (req, res) => {
     }
 };
 
+// Handle DELETE request to remove all entities
+exports.deleteAllSpaceStations = async (req, res) => {
+    try {
+        const deleted = await SpaceStationModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 //--------------------------------------------
 //           STAR SYSTEM CONTROLLER           StarSystemModel
 //--------------------------------------------
@@ -571,6 +663,16 @@ exports.updateStarSystem = async (req, res) => {
         } else {
             res.status(404).send('Entity not found');
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllStarSystems = async (req, res) => {
+    try {
+        const deleted = await StarSystemModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -634,6 +736,16 @@ exports.updateShip = async (req, res) => {
     }
 };
 
+// Handle DELETE request to remove all entities
+exports.deleteAllShips = async (req, res) => {
+    try {
+        const deleted = await ShipModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 //--------------------------------------------
 //           TERMINAL CONTROLLER              TerminalModel
 //--------------------------------------------
@@ -690,6 +802,16 @@ exports.updateTerminal = async (req, res) => {
     }
 };
 
+// Handle DELETE request to remove all entities
+exports.deleteAllTerminals = async (req, res) => {
+    try {
+        const deleted = await TerminalModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 //--------------------------------------------
 //           TERMINAL PRICES CONTROLLER       TerminalPricesModel
 //--------------------------------------------
@@ -741,6 +863,142 @@ exports.updateTerminalPrices = async (req, res) => {
         } else {
             res.status(404).send('Terminal Price not found');
         }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllTerminalPrices = async (req, res) => {
+    try {
+        const deleted = await TerminalPricesModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//               MOON CONTROLLER               MoonModel
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllMoons = async (req, res) => {
+    try {
+        const entity = await MoonModel.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getMoonById = async (req, res) => {
+    try {
+        const id = await MoonModel.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Moon not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create an entity
+exports.createMoon = async (req, res) => {
+    try {
+        const savedEntity = await MoonModel.create(req.body);
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateMoon = async (req, res) => {
+    try {
+        const entity = await MoonModel.findByPk(req.params.id);
+        if (entity) {
+            await entity.update(req.body);
+            res.status(200).json(entity);
+        } else {
+            res.status(404).send('Moon not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllMoons = async (req, res) => {
+    try {
+        const deleted = await MoonModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+//--------------------------------------------
+//         REFINERY YIELD CONTROLLER           RefineryYieldModel
+//--------------------------------------------
+
+// Handle GET request for all entities
+exports.getAllRefineryYields = async (req, res) => {
+    try {
+        const entity = await RefineryYieldModel.findAll();
+        res.status(200).json(entity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle GET request for a single entity by ID
+exports.getRefineryYieldById = async (req, res) => {
+    try {
+        const id = await RefineryYieldModel.findByPk(req.params.id);
+        if (id) {
+            res.status(200).json(id);
+        } else {
+            res.status(404).send('Refinery yield not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle POST request to create an entity
+exports.createRefineryYield = async (req, res) => {
+    try {
+        const savedEntity = await RefineryYieldModel.create(req.body);
+        res.status(201).json(savedEntity);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle PUT request to update an entity by ID
+exports.updateRefineryYield = async (req, res) => {
+    try {
+        const entity = await RefineryYieldModel.findByPk(req.params.id);
+        if (entity) {
+            await entity.update(req.body);
+            res.status(200).json(entity);
+        } else {
+            res.status(404).send('Refinery yield not found');
+        }
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
+// Handle DELETE request to remove all entities
+exports.deleteAllRefineryYields = async (req, res) => {
+    try {
+        const deleted = await RefineryYieldModel.destroy({ where: {} });
+        res.status(200).json({ deleted });
     } catch (error) {
         res.status(500).send(error.message);
     }

@@ -17,6 +17,8 @@ router.post('/cities/', uexController.createCity);
 
 // PUT request for updating an existing entity by ID
 router.put('/cities/:id', uexController.updateCity);
+// DELETE request for deleting all entities
+router.delete('/cities/', uexController.deleteAllCities);
 
 
 //--------------------------------------------
@@ -34,6 +36,8 @@ router.post('/commodities/', uexController.createCommodity);
 
 // PUT request for updating an existing entity by ID
 router.put('/commodities/:id', uexController.updateCommodity);
+// DELETE request for deleting all entities
+router.delete('/commodities/', uexController.deleteAllCommodities);
 
 
 //--------------------------------------------
@@ -51,6 +55,8 @@ router.post('/terminalcommodities/', uexController.createTerminalCommodity);
 
 // PUT request for updating an existing entity by ID
 router.put('/terminalcommodities/:id', uexController.updateTerminalCommodity);
+// DELETE request for deleting all entities
+router.delete('/terminalcommodities/', uexController.deleteAllTerminalCommodities);
 
 
 //--------------------------------------------
@@ -68,6 +74,8 @@ router.post('/summarizedcommodities/', uexController.createSummarizedCommodity);
 
 // PUT request for updating an existing entity by ID
 router.put('/summarizedcommodities/:id', uexController.updateSummarizedCommodity);
+// DELETE request for deleting all entities
+router.delete('/summarizedcommodities/', uexController.deleteAllSummarizedCommodities);
 
 
 //--------------------------------------------
@@ -85,6 +93,8 @@ router.post('/terminalitems/', uexController.createTerminalItem);
 
 // PUT request for updating an existing entity by ID
 router.put('/terminalitems/:id', uexController.updateTerminalItem);
+// DELETE request for deleting all entities
+router.delete('/terminalitems/', uexController.deleteAllTerminalItems);
 
 
 //--------------------------------------------
@@ -102,6 +112,8 @@ router.post('/sumarizeditems/', uexController.createSummarizedItem);
 
 // PUT request for updating an existing entity by ID
 router.put('/sumarizeditems/:id', uexController.updateSummarizedItem);
+// DELETE request for deleting all entities
+router.delete('/sumarizeditems/', uexController.deleteAllSummarizedItems);
 
 
 //--------------------------------------------
@@ -119,6 +131,8 @@ router.post('/outposts/', uexController.createOutpost);
 
 // PUT request for updating an existing entity by ID
 router.put('/outposts/:id', uexController.updateOutpost);
+// DELETE request for deleting all entities
+router.delete('/outposts/', uexController.deleteAllOutposts);
 
 
 //--------------------------------------------
@@ -136,6 +150,26 @@ router.post('/planets/', uexController.createPlanet);
 
 // PUT request for updating an existing entity by ID
 router.put('/planets/:id', uexController.updatePlanet);
+// DELETE request for deleting all entities
+router.delete('/planets/', uexController.deleteAllPlanets);
+
+//--------------------------------------------
+//                 MOON ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/moons/', uexController.getAllMoons);
+
+// GET request for retrieving a single entity by ID
+router.get('/moons/:id', uexController.getMoonById);
+
+// POST request for creating a new entity
+router.post('/moons/', uexController.createMoon);
+
+// PUT request for updating an existing entity by ID
+router.put('/moons/:id', uexController.updateMoon);
+// DELETE request for deleting all entities
+router.delete('/moons/', uexController.deleteAllMoons);
 
 
 //--------------------------------------------
@@ -153,6 +187,8 @@ router.post('/spacestations/', uexController.createSpaceStation);
 
 // PUT request for updating an existing entity by ID
 router.put('/spacestations/:id', uexController.updateSpaceStation);
+// DELETE request for deleting all entities
+router.delete('/spacestations/', uexController.deleteAllSpaceStations);
 
 
 //--------------------------------------------
@@ -170,6 +206,8 @@ router.post('/starsystems/', uexController.createStarSystem);
 
 // PUT request for updating an existing entity by ID
 router.put('/starsystems/:id', uexController.updateStarSystem);
+// DELETE request for deleting all entities
+router.delete('/starsystems/', uexController.deleteAllStarSystems);
 
 
 //--------------------------------------------
@@ -187,6 +225,8 @@ router.post('/ships/', uexController.createShip);
 
 // PUT request for updating an existing entity by ID
 router.put('/ships/:id', uexController.updateShip);
+// DELETE request for deleting all entities
+router.delete('/ships/', uexController.deleteAllShips);
 
 
 
@@ -205,6 +245,8 @@ router.post('/terminals/', uexController.createTerminal);
 
 // PUT request for updating an existing entity by ID
 router.put('/terminals/:id', uexController.updateTerminal);
+// DELETE request for deleting all entities
+router.delete('/terminals/', uexController.deleteAllTerminals);
 
 
 //--------------------------------------------
@@ -222,6 +264,27 @@ router.post('/terminalprices/', uexController.createTerminalPrices);
 
 // PUT request for updating an existing entity by ID
 router.put('/terminalprices/:id', uexController.updateTerminalPrices);
+// DELETE request for deleting all entities
+router.delete('/terminalprices/', uexController.deleteAllTerminalPrices);
+
+
+//--------------------------------------------
+//         REFINERY YIELDS ROUTES
+//--------------------------------------------
+
+// GET request for retrieving a list of all entities
+router.get('/refineryyields/', uexController.getAllRefineryYields);
+
+// GET request for retrieving a single entity by ID
+router.get('/refineryyields/:id', uexController.getRefineryYieldById);
+
+// POST request for creating a new entity
+router.post('/refineryyields/', uexController.createRefineryYield);
+
+// PUT request for updating an existing entity by ID
+router.put('/refineryyields/:id', uexController.updateRefineryYield);
+// DELETE request for deleting all entities
+router.delete('/refineryyields/', uexController.deleteAllRefineryYields);
 
 
 

@@ -17,6 +17,9 @@ router.get('/entry', hitTrackerController.getByEntryId);
 // GET request for retrieving all hits by user ID and patch
 router.get('/userandpatch', hitTrackerController.getByUserIdAndPatch);
 
+// GET request for retrieving a hit by thread ID
+router.get('/thread', hitTrackerController.getByThreadId);
+
 // GET request for retrieving all badges
 router.get('/assists', hitTrackerController.getAssistEntries);
 

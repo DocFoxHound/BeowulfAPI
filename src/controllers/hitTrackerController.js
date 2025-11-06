@@ -54,12 +54,15 @@ exports.getByEntryId = async (req, res) => {
 };
 
 exports.getByThreadId = async (req, res) => {
-    const { id } = req.query;
-    console.log("\nid", id);
+    // Support both thread_id (preferred) and legacy id query param
+    const thread_id = req.query.thread_id || req.query.id;
     try {
+        if (!thread_id) {
+            return res.status(400).send('thread_id is required');
+        }
         const entry = await HitTrack.findOne({
             where: {
-                thread_id: id
+                thread_id: thread_id
             }
         });
         if (entry) {
