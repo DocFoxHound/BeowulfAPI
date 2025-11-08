@@ -1,4 +1,4 @@
-# BeowulfAPItets
+# BeowulfAPI
 
 BeowulfAPI is an Express + Node.js backend that powers the Beowulf ecosystem. It provides authenticated endpoints (Discord OAuth2) backed by PostgreSQL (via Sequelize), with modular routes for badges, leaderboards, fleets, scheduling, and more.
 
