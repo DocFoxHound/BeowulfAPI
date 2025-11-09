@@ -150,3 +150,51 @@ exports.getUsersByFleetCommanderRole = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Generic helper for role-based queries via env var list
+async function getUsersByRoleEnvVar(envVarName, res, emptyMessage) {
+    const ids = (process.env[envVarName] || '').split(',').map(id => id.trim()).filter(Boolean);
+    try {
+        if (ids.length === 0) {
+            return res.status(400).json({ message: `Environment variable ${envVarName} is empty or not set` });
+        }
+        const users = await UserModel.findAll({
+            where: {
+                roles: {
+                    [require('sequelize').Op.overlap]: ids
+                }
+            }
+        });
+        if (users && users.length > 0) {
+            return res.status(200).json(users);
+        }
+        return res.status(404).json({ message: emptyMessage });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+// Prospect roles
+exports.getUsersByProspectRole = async (req, res) => {
+    return getUsersByRoleEnvVar('PROSPECT_IDS', res, 'No users found with Prospect roles');
+};
+
+// Crew roles
+exports.getUsersByCrewRole = async (req, res) => {
+    return getUsersByRoleEnvVar('CREW_IDS', res, 'No users found with Crew roles');
+};
+
+// Marauder roles
+exports.getUsersByMarauderRole = async (req, res) => {
+    return getUsersByRoleEnvVar('MARAUDER_IDS', res, 'No users found with Marauder roles');
+};
+
+// Blooded roles
+exports.getUsersByBloodedRole = async (req, res) => {
+    return getUsersByRoleEnvVar('BLOODED_IDS', res, 'No users found with Blooded roles');
+};
+
+// Active Member roles (aggregate set)
+exports.getUsersByActiveMemberRole = async (req, res) => {
+    return getUsersByRoleEnvVar('ACTIVE_MEMBER_IDS', res, 'No users found with Active Member roles');
+};

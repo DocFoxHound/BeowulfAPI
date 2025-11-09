@@ -14,6 +14,21 @@ router.get('/by-ronin-role', userController.getUsersByRoninRole);
 // GET request for retrieving users whose roles contain any FLEET_COMMANDER_IDS
 router.get('/by-fleet-commander-role', userController.getUsersByFleetCommanderRole);
 
+// GET request for retrieving users whose roles contain any PROSPECT_IDS
+router.get('/by-prospect-role', userController.getUsersByProspectRole);
+
+// GET request for retrieving users whose roles contain any CREW_IDS
+router.get('/by-crew-role', userController.getUsersByCrewRole);
+
+// GET request for retrieving users whose roles contain any MARAUDER_IDS
+router.get('/by-marauder-role', userController.getUsersByMarauderRole);
+
+// GET request for retrieving users whose roles contain any BLOODED_IDS
+router.get('/by-blooded-role', userController.getUsersByBloodedRole);
+
+// GET request for retrieving users whose roles contain any ACTIVE_MEMBER_IDS
+router.get('/by-active-member-role', userController.getUsersByActiveMemberRole);
+
 // GET request for retrieving a single user by ID
 router.get('/:id', userController.getUserById);
 
