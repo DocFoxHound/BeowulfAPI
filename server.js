@@ -56,6 +56,8 @@ const calendarAvailabilityRoutes = require('./src/routes/calendarAvailabilityRou
 const recentFleetsRoutes = require('./src/routes/recentFleetsRoutes'); // Import the recent fleets routes
 const knowledgeRoutes = require('./src/routes/knowledgeRoutes'); // Import the knowledge routes
 const playerTrackerRoutes = require('./src/routes/playerTrackerRoutes'); // Import the player tracker routes
+const leadershipVoiceRoutes = require('./src/routes/leadershipVoiceRoutes'); // Leadership voice helper routes
+const { initDiscordVoiceTracking, markSpeaking } = require('./src/services/discordVoiceService'); // Discord voice tracking
 
 // Load environment variables
 dotenv.config();
@@ -132,6 +134,7 @@ app.use(process.env.API_CALENDAR_AVAILABILITY_ROUTES, calendarAvailabilityRoutes
 app.use(process.env.API_RECENT_FLEETS, recentFleetsRoutes); // Use the recent fleets routes
 app.use(process.env.API_KNOWLEDGE_ROUTES, knowledgeRoutes); // Use the knowledge routes
 app.use(process.env.API_PLAYER_TRACKER_ROUTES, playerTrackerRoutes); // Use the player tracker routes
+app.use(process.env.API_LEADERSHIP_VOICE_ROUTES || '/api/leadership-voice', leadershipVoiceRoutes); // Leadership voice routes
 app.use('/auth', authRoutes);
 
 // Catch 404 and forward to error handler
@@ -152,15 +155,126 @@ app.use((err, req, res, next) => {
 });
 
 
-// Set the port and start the server
+// Set the port and create HTTP server (for Socket.IO compatibility)
 const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 3000;
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running on port http://${host}:${port}`);
+const http = require('http');
+const server = http.createServer(app);
+
+// --- Socket.IO Voice Signaling Setup --- //
+// This provides a lightweight signaling layer for clients that capture and transmit low-res/encoded audio frames.
+// Recommended client flow:
+// 1. Connect to namespace /voice
+// 2. emit('join-room', { roomId })
+// 3. Receive 'peers' list, establish WebRTC peer connections (or fall back to raw chunk relay if desired)
+// 4. Use 'signal' for SDP / ICE exchange
+// 5. Optionally, if using raw PCM/opus chunks, emit 'voice-chunk' with small Buffer/Uint8Array payload
+// 6. Handle 'voice-chunk' broadcasts from other peers
+
+const { Server } = require('socket.io');
+const io = new Server(server, {
+    cors: {
+        origin: [process.env.IS_LIVE === "true" ? process.env.LIVE_FRONTEND_URL : process.env.TEST_FRONTEND_URL, process.env.LIVE_FRONTEND_URL_SHORT],
+        credentials: true
+    }
+});
+// Expose io on app for routes to query presence
+app.io = io;
+
+// Initialize Discord voice tracking (no-op if env missing)
+try { initDiscordVoiceTracking(); } catch {}
+
+// Simple in-memory room peer registry
+const rooms = new Map(); // roomId -> Set(socket.id)
+
+const leadershipRoomId = process.env.VOICE_LEADERSHIP_ROOM_ID || 'leadership';
+
+io.of('/voice').on('connection', (socket) => {
+    let currentRoom = null;
+
+    // Join a voice room
+    socket.on('join-room', ({ roomId }) => {
+        if (!roomId) return;
+        currentRoom = roomId;
+        if (!rooms.has(roomId)) rooms.set(roomId, new Set());
+        rooms.get(roomId).add(socket.id);
+        socket.join(roomId);
+        // Send current peers (excluding the requester)
+        const peers = Array.from(rooms.get(roomId)).filter(id => id !== socket.id);
+        socket.emit('peers', peers);
+        // Notify others
+        socket.to(roomId).emit('peer-joined', socket.id);
+    });
+
+    // WebRTC signaling relay (SDP/ICE candidates)
+    socket.on('signal', ({ target, data }) => {
+        if (!target || !data) return;
+        io.of('/voice').to(target).emit('signal', { from: socket.id, data });
+    });
+
+    // Convenience: join the leadership channel
+    socket.on('join-leadership', (payload = {}) => {
+        const roomId = leadershipRoomId;
+        currentRoom = roomId;
+        if (!rooms.has(roomId)) rooms.set(roomId, new Set());
+        rooms.get(roomId).add(socket.id);
+        socket.join(roomId);
+        const peers = Array.from(rooms.get(roomId)).filter(id => id !== socket.id);
+        socket.emit('peers', peers);
+        socket.to(roomId).emit('peer-joined', socket.id);
+    });
+
+    // Low-res audio chunk relay (e.g., Opus or PCM) - keep chunks small (< ~8KB)
+    socket.on('voice-chunk', ({ roomId, chunk }) => {
+        if (!roomId || !chunk) return;
+        // Basic size guard
+        if (chunk.length > 8192) return; // drop overly large chunks
+        socket.to(roomId).emit('voice-chunk', { from: socket.id, chunk });
+    });
+
+    // Speaking indicator relay for UI tones
+    socket.on('speaking', ({ speaking, userId, roomId }) => {
+        const targetRoom = roomId || currentRoom || leadershipRoomId;
+        const isSpeaking = !!speaking;
+        if (userId) {
+            try { markSpeaking(userId, isSpeaking); } catch {}
+        }
+        if (targetRoom) {
+            socket.to(targetRoom).emit('peer-speaking', { id: socket.id, speaking: isSpeaking, userId: userId || null });
+        }
+    });
+
+    // Leave room
+    socket.on('leave-room', () => {
+        if (!currentRoom) return;
+        const set = rooms.get(currentRoom);
+        if (set) {
+            set.delete(socket.id);
+            if (set.size === 0) rooms.delete(currentRoom);
+        }
+        socket.leave(currentRoom);
+        socket.to(currentRoom).emit('peer-left', socket.id);
+        currentRoom = null;
+    });
+
+    // Disconnect cleanup
+    socket.on('disconnect', () => {
+        if (currentRoom) {
+            const set = rooms.get(currentRoom);
+            if (set) {
+                set.delete(socket.id);
+                if (set.size === 0) rooms.delete(currentRoom);
+            }
+            socket.to(currentRoom).emit('peer-left', socket.id);
+        }
+    });
 });
 
-// app.listen(3000, () => console.log("API listening on http://localhost:3000"));
+server.listen(port, () => {
+    console.log(`HTTP + Voice signaling server running at http://${host}:${port}`);
+});
 
-// Export the app for testing purposes
+// Preserve original export shape for compatibility (tests or other modules may expect `app`)
 module.exports = app;
+module.exports.server = server;
+module.exports.io = io;

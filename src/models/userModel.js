@@ -75,6 +75,11 @@ User.init({
         allowNull: true,
         unique: false
     },
+    promote_date: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        unique: false
+    },
 }, {
     sequelize, // This is the Sequelize instance you must pass
     modelName: 'User', // We need to choose the model name
