@@ -33,7 +33,6 @@
     "passport-discord": "^0.1.4",
     "pm2": "^6.0.5",
     "sequelize": "^6.37.5",
-    "string-similarity": "^4.0.4",
-    "socket.io": "^4.7.5"
+    "string-similarity": "^4.0.4"
   }
 }

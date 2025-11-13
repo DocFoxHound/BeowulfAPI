@@ -38,7 +38,7 @@ const leaderboardPiracySummaryRoutes = require('./src/routes/leaderboardPiracySu
 const leaderboardBlackboxSummaryRoutes = require('./src/routes/leaderboardBlackboxSummaryRoutes');
 const leaderboardFleetlogSummaryRoutes = require('./src/routes/leaderboardFleetlogSummaryRoutes');
 const beowulfHunterSummaryByPatchRoutes = require('./src/routes/beowulfHunterSummaryByPatchRoutes');
-const voiceChannelSessionsRoutes = require('./src/routes/voiceChannelSessionsRoutes');
+// Removed voiceChannelSessionsRoutes (voice logic moved to separate service)
 const leaderboardSBLogRoutes = require('./src/routes/leaderboardSBLogRoutes');
 const badgeReusableRoutes = require('./src/routes/badgeReusableRoutes');
 const emojiRoutes = require('./src/routes/emojiRoutes');
@@ -114,7 +114,7 @@ app.use(process.env.API_LEADERBOARD_PIRACY_SUMMARY_ROUTES, leaderboardPiracySumm
 app.use(process.env.API_LEADERBOARD_BLACKBOX_SUMMARY_ROUTES, leaderboardBlackboxSummaryRoutes);
 app.use(process.env.API_LEADERBOARD_FLEETLOG_SUMMARY_ROUTES, leaderboardFleetlogSummaryRoutes);
 app.use(process.env.API_BEOWULF_HUNTER_SUMMARY_BY_PATCH_ROUTES, beowulfHunterSummaryByPatchRoutes);
-app.use(process.env.API_VOICE_CHANNEL_SESSIONS_ROUTES, voiceChannelSessionsRoutes);
+// Voice channel sessions routes removed (migrated to dedicated voice service)
 app.use(process.env.API_LEADERBOARD_SB_LOG_ROUTES, leaderboardSBLogRoutes);
 app.use(process.env.API_BADGE_REUSABLES_ROUTES, badgeReusableRoutes);
 app.use(process.env.API_EMOJI_ROUTES, emojiRoutes);
