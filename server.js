@@ -56,6 +56,15 @@ const calendarAvailabilityRoutes = require('./src/routes/calendarAvailabilityRou
 const recentFleetsRoutes = require('./src/routes/recentFleetsRoutes'); // Import the recent fleets routes
 const knowledgeRoutes = require('./src/routes/knowledgeRoutes'); // Import the knowledge routes
 const playerTrackerRoutes = require('./src/routes/playerTrackerRoutes'); // Import the player tracker routes
+const memoryRoutes = require('./src/routes/memoryRoutes'); // Import the memory routes
+const userProfileRoutes = require('./src/routes/userProfileRoutes'); // Import the user profile routes
+const chatMessageRoutes = require('./src/routes/chatMessageRoutes'); // Import the chat message routes
+const knowledgeDocRoutes = require('./src/routes/knowledgeDocRoutes'); // Import the knowledge docs routes
+const gameEntityRoutes = require('./src/routes/gameEntityRoutes'); // Import the game entity routes
+const itemsFpsRoutes = require('./src/routes/itemsFpsRoutes'); // Import the FPS items routes
+const itemsComponentsRoutes = require('./src/routes/itemsComponentsRoutes'); // Import the components items routes
+const listShipsRoutes = require('./src/routes/listShipsRoutes'); // Import the list ships routes
+const rcoMiningDataRoutes = require('./src/routes/rcoMiningDataRoutes'); // Import the RCO mining data routes
 // Removed leadershipVoiceRoutes and discordVoiceService (voice logic moved to separate service)
 
 // Load environment variables
@@ -133,6 +142,15 @@ app.use(process.env.API_CALENDAR_AVAILABILITY_ROUTES, calendarAvailabilityRoutes
 app.use(process.env.API_RECENT_FLEETS, recentFleetsRoutes); // Use the recent fleets routes
 app.use(process.env.API_KNOWLEDGE_ROUTES, knowledgeRoutes); // Use the knowledge routes
 app.use(process.env.API_PLAYER_TRACKER_ROUTES, playerTrackerRoutes); // Use the player tracker routes
+app.use(process.env.API_MEMORIES_ROUTES, memoryRoutes); // Use the memories routes
+app.use(process.env.API_USER_PROFILES_ROUTES, userProfileRoutes); // Use the user profiles routes
+app.use(process.env.API_CHAT_MESSAGES_ROUTES, chatMessageRoutes); // Use the chat messages routes
+app.use(process.env.API_KNOWLEDGE_DOCS_ROUTES, knowledgeDocRoutes); // Use the knowledge docs routes
+app.use(process.env.API_GAME_ENTITY_ROUTES || '/api/game-entities', gameEntityRoutes); // Use the game entities routes
+app.use(process.env.API_ITEMS_FPS_ROUTES || '/api/items-fps', itemsFpsRoutes); // Use the FPS items routes
+app.use(process.env.API_ITEMS_COMPONENTS_ROUTES || '/api/items-components', itemsComponentsRoutes); // Use the components items routes
+app.use(process.env.API_LIST_SHIPS_ROUTES || '/api/list-ships', listShipsRoutes); // Use the list ships routes
+app.use(process.env.API_RCO_MINING_DATA_ROUTES || '/api/rco-mining-data', rcoMiningDataRoutes); // Use the RCO mining data routes
 // Leadership voice routes removed (migrated to dedicated voice service)
 app.use('/auth', authRoutes);
 
