@@ -83,3 +83,4 @@ To enhance API discoverability:
 - `POST /api/voicechannelsessions` — create a session (requires `guild_id` and `channel_id`; accepts metadata and optional timestamps).
 - `PUT /api/voicechannelsessions/:id` — update or close a session (set `ended_at` to mark inactive).
 - `DELETE /api/voicechannelsessions/:id` — remove a record outright when cleanup is needed.
+- Auto-provisioning: when `VOICE_SESSIONS_AUTO_MIGRATE=true` the API will sync the `voice_channel_sessions` table automatically on first access.

@@ -2,6 +2,20 @@ const { Op } = require('sequelize');
 const VoiceChannelSession = require('../models/voiceChannelSessionModel');
 
 const MAX_LIMIT = 500;
+const autoMigrate = process.env.VOICE_SESSIONS_AUTO_MIGRATE !== 'false';
+let schemaReadyPromise = null;
+
+async function ensureSchema() {
+    if (!autoMigrate) return;
+    if (!schemaReadyPromise) {
+        schemaReadyPromise = VoiceChannelSession.sync({ alter: true })
+            .catch(err => {
+                schemaReadyPromise = null;
+                throw err;
+            });
+    }
+    return schemaReadyPromise;
+}
 
 function parseMetadata(raw) {
     if (raw === undefined || raw === null || raw === '') return {};
@@ -57,6 +71,7 @@ function sendError(res, err) {
 
 exports.list = async (req, res) => {
     try {
+        await ensureSchema();
         const { guild_id, channel_id, is_active } = req.query;
         const where = {};
         if (guild_id) where.guild_id = guild_id;
@@ -86,6 +101,7 @@ exports.list = async (req, res) => {
 
 exports.getById = async (req, res) => {
     try {
+        await ensureSchema();
         const row = await VoiceChannelSession.findByPk(req.params.id);
         if (!row) return res.status(404).json({ error: 'Not found' });
         res.json(row);
@@ -96,6 +112,7 @@ exports.getById = async (req, res) => {
 
 exports.getActive = async (_req, res) => {
     try {
+        await ensureSchema();
         const rows = await VoiceChannelSession.findAll({
             where: { ended_at: { [Op.is]: null } },
             order: [['started_at', 'DESC']]
@@ -108,6 +125,7 @@ exports.getActive = async (_req, res) => {
 
 exports.getLastHour = async (_req, res) => {
     try {
+        await ensureSchema();
         const cutoff = new Date(Date.now() - 60 * 60 * 1000);
         const rows = await VoiceChannelSession.findAll({
             where: {
@@ -126,6 +144,7 @@ exports.getLastHour = async (_req, res) => {
 
 exports.create = async (req, res) => {
     try {
+        await ensureSchema();
         const { guild_id, channel_id } = req.body;
         if (!guild_id || !channel_id) {
             return res.status(400).json({ error: 'guild_id and channel_id are required' });
@@ -156,6 +175,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
+        await ensureSchema();
         const updates = {};
         if (req.body.guild_id !== undefined) updates.guild_id = req.body.guild_id;
         if (req.body.channel_id !== undefined) updates.channel_id = req.body.channel_id;
@@ -184,6 +204,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
     try {
+        await ensureSchema();
         const count = await VoiceChannelSession.destroy({ where: { id: req.params.id } });
         if (!count) return res.status(404).json({ error: 'Not found' });
         res.json({ deleted: true });
