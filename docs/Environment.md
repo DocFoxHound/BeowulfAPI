@@ -112,4 +112,4 @@ VOICE_SESSIONS_AUTO_MIGRATE
 
 - `API_VOICE_CHANNEL_SESSIONS_ROUTES` defines the mount point for the voice session REST endpoints (default `/api/voicechannelsessions`).
 - `VOICE_SESSIONS_ENABLE` defaults to `true`. Set it to `false` to short-circuit the router entirely when the frontend should not make requests (useful in lower environments that have not applied the `voice_channel_sessions` table).
-- `VOICE_SESSIONS_AUTO_MIGRATE` defaults to `true`. When enabled the API will run `VoiceChannelSession.sync({ alter: true })` once to auto-create/patch the table. Disable it in environments where migrations are applied separately.
+- `VOICE_SESSIONS_AUTO_MIGRATE` defaults to `true`. When enabled the API will create the `voice_channel_sessions` table on first use if it does not exist. It will not alter existing schemas, so keep it enabled for greenfield environments only.

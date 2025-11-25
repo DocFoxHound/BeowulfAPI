@@ -8,11 +8,22 @@ let schemaReadyPromise = null;
 async function ensureSchema() {
     if (!autoMigrate) return;
     if (!schemaReadyPromise) {
-        schemaReadyPromise = VoiceChannelSession.sync({ alter: true })
-            .catch(err => {
-                schemaReadyPromise = null;
-                throw err;
-            });
+        schemaReadyPromise = (async () => {
+            const qi = VoiceChannelSession.sequelize.getQueryInterface();
+            try {
+                await qi.describeTable('voice_channel_sessions');
+                return true; // table already exists
+            } catch (err) {
+                const msg = err.message || '';
+                const missing = err.original?.code === '42P01' || msg.includes('does not exist');
+                if (!missing) throw err;
+                await VoiceChannelSession.sync();
+                return true;
+            }
+        })().catch(err => {
+            schemaReadyPromise = null;
+            throw err;
+        });
     }
     return schemaReadyPromise;
 }
