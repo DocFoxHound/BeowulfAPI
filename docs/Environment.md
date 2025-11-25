@@ -94,6 +94,7 @@ API_VERIFY_USER_ROUTES
 API_CALENDAR_AVAILABILITY_ROUTES
 API_KNOWLEDGE_ROUTES
 API_PLAYER_TRACKER_ROUTES
+VOICE_SESSIONS_ENABLE
 ```
 
 ## Strategy
@@ -105,3 +106,8 @@ API_PLAYER_TRACKER_ROUTES
 
 - Empty or undefined prefix variables will cause `app.use(undefined, router)` to fail; always set a value.
 - Store secrets (Discord, DB) securely outside of version control. `.env.example` is safe to commit.
+
+### Voice Sessions Feature Flag
+
+- `API_VOICE_CHANNEL_SESSIONS_ROUTES` defines the mount point for the voice session REST endpoints (default `/api/voicechannelsessions`).
+- `VOICE_SESSIONS_ENABLE` defaults to `true`. Set it to `false` to short-circuit the router entirely when the frontend should not make requests (useful in lower environments that have not applied the `voice_channel_sessions` table).

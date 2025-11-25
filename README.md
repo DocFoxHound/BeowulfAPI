@@ -19,6 +19,7 @@ See docs/GettingStarted.md for details.
 - Discord OAuth2 login using passport-discord
 - PostgreSQL via Sequelize
 - Modular route mounts controlled by environment variables (flexible prefixes)
+- Feature-flagged modules such as the voice channel session tracker (toggle via `VOICE_SESSIONS_ENABLE`)
 - Structured controllers and models per feature domain
 
 ## Architecture overview

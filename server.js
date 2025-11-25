@@ -38,7 +38,7 @@ const leaderboardPiracySummaryRoutes = require('./src/routes/leaderboardPiracySu
 const leaderboardBlackboxSummaryRoutes = require('./src/routes/leaderboardBlackboxSummaryRoutes');
 const leaderboardFleetlogSummaryRoutes = require('./src/routes/leaderboardFleetlogSummaryRoutes');
 const beowulfHunterSummaryByPatchRoutes = require('./src/routes/beowulfHunterSummaryByPatchRoutes');
-// Removed voiceChannelSessionsRoutes (voice logic moved to separate service)
+const voiceChannelSessionsRoutes = require('./src/routes/voiceChannelSessionsRoutes'); // Voice channel session tracking
 const leaderboardSBLogRoutes = require('./src/routes/leaderboardSBLogRoutes'); // Import the leaderboard SB log routes
 const badgeReusableRoutes = require('./src/routes/badgeReusableRoutes'); // Import the badge reusable routes
 const emojiRoutes = require('./src/routes/emojiRoutes'); // Import the emoji routes
@@ -69,6 +69,7 @@ const rcoMiningDataRoutes = require('./src/routes/rcoMiningDataRoutes'); // Impo
 
 // Load environment variables
 dotenv.config();
+const voiceSessionsEnabled = process.env.VOICE_SESSIONS_ENABLE !== 'false';
 // Create an Express application
 const app = express();
 
@@ -124,7 +125,12 @@ app.use(process.env.API_LEADERBOARD_PIRACY_SUMMARY_ROUTES, leaderboardPiracySumm
 app.use(process.env.API_LEADERBOARD_BLACKBOX_SUMMARY_ROUTES, leaderboardBlackboxSummaryRoutes)
 app.use(process.env.API_LEADERBOARD_FLEETLOG_SUMMARY_ROUTES, leaderboardFleetlogSummaryRoutes)
 app.use(process.env.API_BEOWULF_HUNTER_SUMMARY_BY_PATCH_ROUTES, beowulfHunterSummaryByPatchRoutes)
-// Voice channel sessions routes removed (migrated to dedicated voice service)
+if (voiceSessionsEnabled) {
+    const voiceSessionsPrefix = process.env.API_VOICE_CHANNEL_SESSIONS_ROUTES || '/api/voicechannelsessions';
+    app.use(voiceSessionsPrefix, voiceChannelSessionsRoutes);
+} else {
+    console.warn('Voice channel sessions routes disabled (VOICE_SESSIONS_ENABLE=false)');
+}
 app.use(process.env.API_LEADERBOARD_SB_LOG_ROUTES, leaderboardSBLogRoutes); // Use the leaderboard SB log routes
 app.use(process.env.API_BADGE_REUSABLES_ROUTES, badgeReusableRoutes); // Use the badge reusable routes
 app.use(process.env.API_EMOJI_ROUTES, emojiRoutes); // Use the emoji routes

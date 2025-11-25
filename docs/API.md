@@ -74,3 +74,12 @@ To enhance API discoverability:
 - Add Swagger/OpenAPI spec generation.
 - Provide example requests/responses per domain.
 - Document auth requirements per endpoint.
+
+### Voice Channel Sessions Quick Reference
+
+- `GET /api/voicechannelsessions` — list sessions with optional `guild_id`, `channel_id`, `is_active`, `limit`, and `offset` filters.
+- `GET /api/voicechannelsessions/active` — return sessions that have not been closed (`ended_at IS NULL`).
+- `GET /api/voicechannelsessions/lasthour` — fetch sessions that started or ended within the previous hour.
+- `POST /api/voicechannelsessions` — create a session (requires `guild_id` and `channel_id`; accepts metadata and optional timestamps).
+- `PUT /api/voicechannelsessions/:id` — update or close a session (set `ended_at` to mark inactive).
+- `DELETE /api/voicechannelsessions/:id` — remove a record outright when cleanup is needed.

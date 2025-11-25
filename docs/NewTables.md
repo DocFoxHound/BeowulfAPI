@@ -200,3 +200,53 @@ CREATE INDEX IF NOT EXISTS idx_knowledge_docs_vector
 -- Fast title lookups
 CREATE INDEX IF NOT EXISTS idx_knowledge_docs_title
     ON knowledge_docs (title);
+
+
+
+-- ============================================================
+--  Table: voice_channel_sessions
+--  Purpose: Track Discord voice usage for leadership dashboards
+-- ============================================================
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS voice_channel_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    guild_id        TEXT NOT NULL,
+    channel_id      TEXT NOT NULL,
+    channel_name    TEXT,
+
+    created_by      TEXT,
+    created_by_name TEXT,
+
+    started_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    ended_at        TIMESTAMPTZ,
+
+    metadata        JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE OR REPLACE FUNCTION update_voice_channel_sessions_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_voice_channel_sessions_timestamp
+BEFORE UPDATE ON voice_channel_sessions
+FOR EACH ROW
+EXECUTE FUNCTION update_voice_channel_sessions_timestamp();
+
+CREATE INDEX IF NOT EXISTS idx_voice_channel_sessions_active
+    ON voice_channel_sessions (ended_at);
+
+CREATE INDEX IF NOT EXISTS idx_voice_channel_sessions_guild_channel
+    ON voice_channel_sessions (guild_id, channel_id);
+
+CREATE INDEX IF NOT EXISTS idx_voice_channel_sessions_started_at
+    ON voice_channel_sessions (started_at DESC);
