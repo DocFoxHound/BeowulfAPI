@@ -80,6 +80,16 @@ function sendError(res, err) {
     return res.status(500).json({ error: err.message || 'Unexpected error' });
 }
 
+function parseRequiredDate(value, fieldName) {
+    const date = parseDateValue(value, fieldName);
+    if (!date) {
+        const error = new Error(`${fieldName} query parameter is required`);
+        error.statusCode = 400;
+        throw error;
+    }
+    return date;
+}
+
 exports.list = async (req, res) => {
     try {
         await ensureSchema();
@@ -145,6 +155,45 @@ exports.getLastHour = async (_req, res) => {
                     { ended_at: { [Op.gte]: cutoff } }
                 ]
             },
+            order: [['started_at', 'DESC']]
+        });
+        res.json(rows);
+    } catch (err) {
+        sendError(res, err);
+    }
+};
+
+exports.getTimeframe = async (req, res) => {
+    try {
+        await ensureSchema();
+        const windowStart = parseRequiredDate(req.query.start, 'start');
+        const windowEnd = parseRequiredDate(req.query.end, 'end');
+        if (windowStart > windowEnd) {
+            return res.status(400).json({ error: 'start must be <= end' });
+        }
+
+        const where = {
+            [Op.and]: [
+                { started_at: { [Op.lte]: windowEnd } },
+                {
+                    [Op.or]: [
+                        { ended_at: { [Op.gte]: windowStart } },
+                        { ended_at: { [Op.is]: null } }
+                    ]
+                }
+            ]
+        };
+
+        if (req.query.guild_id) where.guild_id = req.query.guild_id;
+        if (req.query.channel_id) where.channel_id = req.query.channel_id;
+
+        const limit = coerceLimit(req.query.limit);
+        const offset = coerceOffset(req.query.offset);
+
+        const rows = await VoiceChannelSession.findAll({
+            where,
+            limit,
+            offset,
             order: [['started_at', 'DESC']]
         });
         res.json(rows);

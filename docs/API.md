@@ -80,6 +80,7 @@ To enhance API discoverability:
 - `GET /api/voicechannelsessions` — list sessions with optional `guild_id`, `channel_id`, `is_active`, `limit`, and `offset` filters.
 - `GET /api/voicechannelsessions/active` — return sessions that have not been closed (`ended_at IS NULL`).
 - `GET /api/voicechannelsessions/lasthour` — fetch sessions that started or ended within the previous hour.
+- `GET /api/voicechannelsessions/timeframe?start=ISO&end=ISO` — list sessions overlapping the supplied window (optional `guild_id`, `channel_id`, `limit`, `offset`).
 - `POST /api/voicechannelsessions` — create a session (requires `guild_id` and `channel_id`; accepts metadata and optional timestamps).
 - `PUT /api/voicechannelsessions/:id` — update or close a session (set `ended_at` to mark inactive).
 - `DELETE /api/voicechannelsessions/:id` — remove a record outright when cleanup is needed.
