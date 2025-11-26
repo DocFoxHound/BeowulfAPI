@@ -73,11 +73,22 @@ function coerceOffset(value) {
     return Math.floor(num);
 }
 
+function disableCache(res) {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    res.set('Surrogate-Control', 'no-store');
+    res.set('ETag', `voice-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+}
+
+function sendJson(res, payload, status = 200) {
+    disableCache(res);
+    return res.status(status).json(payload);
+}
+
 function sendError(res, err) {
-    if (err && err.statusCode) {
-        return res.status(err.statusCode).json({ error: err.message });
-    }
-    return res.status(500).json({ error: err.message || 'Unexpected error' });
+    const status = err && err.statusCode ? err.statusCode : 500;
+    return sendJson(res, { error: err.message || 'Unexpected error' }, status);
 }
 
 function parseRequiredDate(value, fieldName) {
@@ -114,7 +125,7 @@ exports.list = async (req, res) => {
             offset,
             order: [['started_at', 'DESC']]
         });
-        res.json(rows);
+        sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
     }
@@ -124,8 +135,8 @@ exports.getById = async (req, res) => {
     try {
         await ensureSchema();
         const row = await VoiceChannelSession.findByPk(req.params.id);
-        if (!row) return res.status(404).json({ error: 'Not found' });
-        res.json(row);
+        if (!row) return sendJson(res, { error: 'Not found' }, 404);
+        sendJson(res, row);
     } catch (err) {
         sendError(res, err);
     }
@@ -138,7 +149,7 @@ exports.getActive = async (_req, res) => {
             where: { ended_at: { [Op.is]: null } },
             order: [['started_at', 'DESC']]
         });
-        res.json(rows);
+        sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
     }
@@ -157,7 +168,7 @@ exports.getLastHour = async (_req, res) => {
             },
             order: [['started_at', 'DESC']]
         });
-        res.json(rows);
+        sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
     }
@@ -169,7 +180,7 @@ exports.getTimeframe = async (req, res) => {
         const windowStart = parseRequiredDate(req.query.start, 'start');
         const windowEnd = parseRequiredDate(req.query.end, 'end');
         if (windowStart > windowEnd) {
-            return res.status(400).json({ error: 'start must be <= end' });
+            return sendJson(res, { error: 'start must be <= end' }, 400);
         }
 
         const where = {
@@ -196,7 +207,7 @@ exports.getTimeframe = async (req, res) => {
             offset,
             order: [['started_at', 'DESC']]
         });
-        res.json(rows);
+        sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
     }
@@ -207,7 +218,7 @@ exports.create = async (req, res) => {
         await ensureSchema();
         const { guild_id, channel_id } = req.body;
         if (!guild_id || !channel_id) {
-            return res.status(400).json({ error: 'guild_id and channel_id are required' });
+            return sendJson(res, { error: 'guild_id and channel_id are required' }, 400);
         }
 
         const payload = {
@@ -227,7 +238,7 @@ exports.create = async (req, res) => {
         if (endedAt) payload.ended_at = endedAt;
 
         const created = await VoiceChannelSession.create(payload);
-        res.status(201).json(created);
+        sendJson(res, created, 201);
     } catch (err) {
         sendError(res, err);
     }
@@ -247,7 +258,7 @@ exports.update = async (req, res) => {
         if (req.body.metadata !== undefined) updates.metadata = parseMetadata(req.body.metadata);
 
         if (!Object.keys(updates).length) {
-            return res.status(400).json({ error: 'No fields provided to update' });
+            return sendJson(res, { error: 'No fields provided to update' }, 400);
         }
         updates.updated_at = new Date();
 
@@ -255,8 +266,8 @@ exports.update = async (req, res) => {
             where: { id: req.params.id },
             returning: true
         });
-        if (!count) return res.status(404).json({ error: 'Not found' });
-        res.json(rows[0]);
+        if (!count) return sendJson(res, { error: 'Not found' }, 404);
+        sendJson(res, rows[0]);
     } catch (err) {
         sendError(res, err);
     }
@@ -266,8 +277,8 @@ exports.remove = async (req, res) => {
     try {
         await ensureSchema();
         const count = await VoiceChannelSession.destroy({ where: { id: req.params.id } });
-        if (!count) return res.status(404).json({ error: 'Not found' });
-        res.json({ deleted: true });
+        if (!count) return sendJson(res, { error: 'Not found' }, 404);
+        sendJson(res, { deleted: true });
     } catch (err) {
         sendError(res, err);
     }

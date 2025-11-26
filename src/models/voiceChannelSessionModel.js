@@ -5,34 +5,49 @@ class VoiceChannelSession extends Model {}
 
 VoiceChannelSession.init({
     id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.STRING,
+        allowNull: false,
         primaryKey: true
     },
+    user_id: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
     guild_id: {
-        type: DataTypes.TEXT,
-        allowNull: false
+        type: DataTypes.STRING,
+        allowNull: true
     },
     channel_id: {
-        type: DataTypes.TEXT,
-        allowNull: false
+        type: DataTypes.BIGINT,
+        allowNull: true
     },
     channel_name: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    joined_at: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    left_at: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    minutes: {
+        type: DataTypes.SMALLINT,
         allowNull: true
     },
     created_by: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true
     },
     created_by_name: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: true
     },
     started_at: {
         type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
+        allowNull: true
     },
     ended_at: {
         type: DataTypes.DATE,
@@ -40,18 +55,15 @@ VoiceChannelSession.init({
     },
     metadata: {
         type: DataTypes.JSONB,
-        allowNull: false,
-        defaultValue: {}
+        allowNull: true
     },
     created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
+        type: DataTypes.TIME,
+        allowNull: true
     },
     updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
+        type: DataTypes.TIME,
+        allowNull: true
     }
 }, {
     sequelize,
