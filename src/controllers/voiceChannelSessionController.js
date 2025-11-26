@@ -162,7 +162,7 @@ exports.getActive = async (_req, res) => {
     try {
         await ensureSchema();
         const rows = await VoiceChannelSession.findAll({
-            where: { ended_at: { [Op.is]: null } },
+            where: { left_at: { [Op.is]: null } },
             order: [['started_at', 'DESC']]
         });
         sendJson(res, rows);
