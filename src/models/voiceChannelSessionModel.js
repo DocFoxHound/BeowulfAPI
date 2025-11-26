@@ -7,7 +7,8 @@ VoiceChannelSession.init({
     id: {
         type: DataTypes.STRING,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4
     },
     user_id: {
         type: DataTypes.BIGINT,
