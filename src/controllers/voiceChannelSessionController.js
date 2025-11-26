@@ -107,14 +107,6 @@ function sendError(res, err) {
     return sendJson(res, { error: err.message || 'Unexpected error' }, status);
 }
 
-function logVoicePayload(label, payload) {
-    try {
-        console.log(`[VoiceChannelSessions] ${label}:`, JSON.stringify(payload, null, 2));
-    } catch (err) {
-        console.log(`[VoiceChannelSessions] ${label} (log failed):`, err.message);
-    }
-}
-
 function parseRequiredDate(value, fieldName) {
     const date = parseDateValue(value, fieldName);
     if (!date) {
@@ -149,7 +141,6 @@ exports.list = async (req, res) => {
             offset,
             order: [['started_at', 'DESC']]
         });
-        logVoicePayload('list', rows);
         sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
@@ -161,7 +152,6 @@ exports.getById = async (req, res) => {
         await ensureSchema();
         const row = await VoiceChannelSession.findByPk(req.params.id);
         if (!row) return sendJson(res, { error: 'Not found' }, 404);
-        logVoicePayload('getById', row);
         sendJson(res, row);
     } catch (err) {
         sendError(res, err);
@@ -175,7 +165,6 @@ exports.getActive = async (_req, res) => {
             where: { ended_at: { [Op.is]: null } },
             order: [['started_at', 'DESC']]
         });
-        logVoicePayload('getActive', rows);
         sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
@@ -195,7 +184,6 @@ exports.getLastHour = async (_req, res) => {
             },
             order: [['started_at', 'DESC']]
         });
-        logVoicePayload('getLastHour', rows);
         sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
@@ -235,7 +223,6 @@ exports.getTimeframe = async (req, res) => {
             offset,
             order: [['started_at', 'DESC']]
         });
-        logVoicePayload('getTimeframe', rows);
         sendJson(res, rows);
     } catch (err) {
         sendError(res, err);
