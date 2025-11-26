@@ -34,7 +34,7 @@ VoiceChannelSession.init({
         allowNull: true
     },
     minutes: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.INTEGER,
         allowNull: true
     },
     created_by: {
