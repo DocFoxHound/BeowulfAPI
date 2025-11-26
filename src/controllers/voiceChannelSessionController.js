@@ -81,6 +81,22 @@ function disableCache(res) {
     res.set('ETag', `voice-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 }
 
+function parseSmallInt(value, fieldName) {
+    if (value === undefined || value === null || value === '') return undefined;
+    const num = Number(value);
+    if (!Number.isInteger(num)) {
+        const error = new Error(`${fieldName} must be an integer`);
+        error.statusCode = 400;
+        throw error;
+    }
+    if (num < -32768 || num > 32767) {
+        const error = new Error(`${fieldName} must be between -32768 and 32767`);
+        error.statusCode = 400;
+        throw error;
+    }
+    return num;
+}
+
 function sendJson(res, payload, status = 200) {
     disableCache(res);
     return res.status(status).json(payload);
@@ -232,6 +248,14 @@ exports.create = async (req, res) => {
             updated_at: new Date()
         };
 
+        if (req.body.user_id !== undefined) payload.user_id = req.body.user_id;
+        const joinedAt = parseDateValue(req.body.joined_at, 'joined_at');
+        if (joinedAt) payload.joined_at = joinedAt;
+        const leftAt = parseDateValue(req.body.left_at, 'left_at');
+        if (leftAt) payload.left_at = leftAt;
+        const minutes = parseSmallInt(req.body.minutes, 'minutes');
+        if (minutes !== undefined) payload.minutes = minutes;
+
         const startedAt = parseDateValue(req.body.started_at, 'started_at');
         if (startedAt) payload.started_at = startedAt;
         const endedAt = parseDateValue(req.body.ended_at, 'ended_at');
@@ -253,9 +277,21 @@ exports.update = async (req, res) => {
         if (req.body.channel_name !== undefined) updates.channel_name = req.body.channel_name;
         if (req.body.created_by !== undefined) updates.created_by = req.body.created_by;
         if (req.body.created_by_name !== undefined) updates.created_by_name = req.body.created_by_name;
-        if (req.body.started_at !== undefined) updates.started_at = parseDateValue(req.body.started_at, 'started_at');
+        if (req.body.user_id !== undefined) updates.user_id = req.body.user_id;
+        if (req.body.joined_at !== undefined) {
+            updates.joined_at = req.body.joined_at === null ? null : parseDateValue(req.body.joined_at, 'joined_at');
+        }
+        if (req.body.left_at !== undefined) {
+            updates.left_at = req.body.left_at === null ? null : parseDateValue(req.body.left_at, 'left_at');
+        }
+        if (req.body.started_at !== undefined) {
+            updates.started_at = req.body.started_at === null ? null : parseDateValue(req.body.started_at, 'started_at');
+        }
         if (req.body.ended_at !== undefined) updates.ended_at = req.body.ended_at === null ? null : parseDateValue(req.body.ended_at, 'ended_at');
         if (req.body.metadata !== undefined) updates.metadata = parseMetadata(req.body.metadata);
+        if (req.body.minutes !== undefined) {
+            updates.minutes = req.body.minutes === null ? null : parseSmallInt(req.body.minutes, 'minutes');
+        }
 
         if (!Object.keys(updates).length) {
             return sendJson(res, { error: 'No fields provided to update' }, 400);
