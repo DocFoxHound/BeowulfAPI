@@ -201,11 +201,11 @@ exports.getTimeframe = async (req, res) => {
 
         const where = {
             [Op.and]: [
-                { started_at: { [Op.lte]: windowEnd } },
+                { joined_at: { [Op.lte]: windowEnd } },
                 {
                     [Op.or]: [
-                        { ended_at: { [Op.gte]: windowStart } },
-                        { ended_at: { [Op.is]: null } }
+                        { left_at: { [Op.gte]: windowStart } },
+                        { left_at: { [Op.is]: null } }
                     ]
                 }
             ]
